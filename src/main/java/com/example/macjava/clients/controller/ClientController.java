@@ -4,18 +4,19 @@ import com.example.macjava.clients.dto.ClientdtoNew;
 import com.example.macjava.clients.dto.ClientdtoUpdated;
 import com.example.macjava.clients.models.Client;
 import com.example.macjava.clients.service.ClientService;
+import com.example.macjava.clients.utils.PageResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class ClientController {
@@ -25,8 +26,21 @@ public class ClientController {
         this.service = service;
     }
     @GetMapping("/clientes")
-    public ResponseEntity<List<Client>> getProducts() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<PageResponse<Client>> getProducts(
+            @RequestParam(required = false) Optional<String> name,
+            @RequestParam(required = false) Optional<String> last_name,
+            @RequestParam(required = false) Optional<Integer> age,
+            @RequestParam(required = false) Optional<String> phone,
+            @RequestParam(defaultValue = "false", required = false) Optional<Boolean> deleted,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Page<Client> pageResult = service.findAll(name, last_name, age, phone, deleted, PageRequest.of(page, size, sort));
+        return ResponseEntity.ok()
+                .body(PageResponse.of(pageResult, sortBy, direction));
     }
     @GetMapping("/clientes/{id}")
     public ResponseEntity<Client> getProduct(@PathVariable UUID id) {

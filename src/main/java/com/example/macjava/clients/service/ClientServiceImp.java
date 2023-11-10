@@ -18,11 +18,15 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 @CacheConfig(cacheNames = {"clientes"})
 @Service
@@ -43,8 +47,33 @@ public class ClientServiceImp implements ClientService{
         webSocketService = webSocketConfig.webSocketClientsHandler();
     }
     @Override
-    public List<Client> findAll() {
-        return repository.findAll();
+    public Page<Client> findAll(Optional<String> name, Optional<String> last_name, Optional<Integer> age, Optional<String> phone, Optional<Boolean> deleted, Pageable pageable) {
+        // Criterio de búsqueda por nombre
+        Specification<Client> specNameClient = (root, query, criteriaBuilder) ->
+                name.map(m -> criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + m.toLowerCase() + "%")) // Buscamos por nombre
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); // Si no hay nombre, no filtramos
+        // Criterio de búsqueda por apellido
+        Specification<Client> speclastNameClient = (root, query, criteriaBuilder) ->
+                last_name.map(m -> criteriaBuilder.like(criteriaBuilder.lower(root.get("last_name")), "%" + m.toLowerCase() + "%")) // Buscamos por apellido
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); // Si no hay apellido, no filtramos
+        // Criterio de búsqueda por edad
+        Specification<Client> specAgeClient = (root, query, criteriaBuilder) ->
+                age.map(m -> criteriaBuilder.equal(root.get("age"), m)) // Buscamos por edad
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); // Si no hay edad, no filtramos
+        // Criterio de búsqueda por telefono
+        Specification<Client> specPhoneClient = (root, query, criteriaBuilder) ->
+                phone.map(m -> criteriaBuilder.equal(root.get("phone"), m)) // Buscamos por telefono
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); // Si no hay telefono, no filtramos
+        // Criterio de búsqueda por deleted
+        Specification<Client> specdeleted = (root, query, criteriaBuilder) ->
+                deleted.map(d -> criteriaBuilder.equal(root.get("deleted"), d)) // Buscamos por deleted
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); // Si no hay deleted, no filtramos
+        Specification<Client> criterio = Specification.where(specNameClient)
+                .and(speclastNameClient)
+                .and(specAgeClient)
+                .and(specPhoneClient)
+                .and(specdeleted);
+        return repository.findAll(criterio, pageable);
     }
 
     @Override
