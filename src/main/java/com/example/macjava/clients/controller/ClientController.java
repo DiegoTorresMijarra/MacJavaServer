@@ -26,6 +26,7 @@ public class ClientController {
     }
     @GetMapping("/clientes")
     public ResponseEntity<PageResponse<Client>> getProducts(
+            @RequestParam(required = false) Optional<String> dni,
             @RequestParam(required = false) Optional<String> name,
             @RequestParam(required = false) Optional<String> last_name,
             @RequestParam(required = false) Optional<Integer> age,
@@ -37,7 +38,7 @@ public class ClientController {
             @RequestParam(defaultValue = "asc") String direction
     ) {
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Page<Client> pageResult = service.findAll(name, last_name, age, phone, deleted, PageRequest.of(page, size, sort));
+        Page<Client> pageResult = service.findAll(dni,name, last_name, age, phone, deleted, PageRequest.of(page, size, sort));
         return ResponseEntity.ok()
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }

@@ -47,7 +47,11 @@ public class ClientServiceImp implements ClientService{
         webSocketService = webSocketConfig.webSocketClientsHandler();
     }
     @Override
-    public Page<Client> findAll(Optional<String> name, Optional<String> last_name, Optional<Integer> age, Optional<String> phone, Optional<Boolean> deleted, Pageable pageable) {
+    public Page<Client> findAll(Optional<String> dni,Optional<String> name, Optional<String> last_name, Optional<Integer> age, Optional<String> phone, Optional<Boolean> deleted, Pageable pageable) {
+        // Criterio de búsqueda por dni
+        Specification<Client> specDniClient = (root, query, criteriaBuilder) ->
+                dni.map(m -> criteriaBuilder.equal(root.get("dni"), m)) // Buscamos por dni
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); // Si no hay dni, no filtramos
         // Criterio de búsqueda por nombre
         Specification<Client> specNameClient = (root, query, criteriaBuilder) ->
                 name.map(m -> criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + m.toLowerCase() + "%")) // Buscamos por nombre
@@ -72,7 +76,8 @@ public class ClientServiceImp implements ClientService{
                 .and(speclastNameClient)
                 .and(specAgeClient)
                 .and(specPhoneClient)
-                .and(specdeleted);
+                .and(specdeleted)
+                .and(specDniClient);
         return repository.findAll(criterio, pageable);
     }
 
