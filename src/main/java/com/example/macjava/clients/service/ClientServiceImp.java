@@ -7,10 +7,16 @@ import com.example.macjava.clients.mapper.ClientMapper;
 import com.example.macjava.clients.models.Client;
 import com.example.macjava.clients.repository.ClientsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+@CacheConfig(cacheNames = {"clientes"})
 @Service
 public class ClientServiceImp implements ClientService{
     ClientsRepository repository;
@@ -25,17 +31,20 @@ public class ClientServiceImp implements ClientService{
     }
 
     @Override
+    @Cacheable
     public Client findById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ClientNotFound(id));
     }
 
     @Override
+    @CachePut
     public Client save(ClientdtoNew client) {
         Client ClientSave = map.toClientNew(client);
         return repository.save(ClientSave);
     }
-
     @Override
+    @CachePut
+    @Transactional
     public Client update(UUID id, ClientdtoUpdated client) {
         Client OptionalClient = findById(id);
         Client ClientUpdate = map.toClientUpdate(client, OptionalClient);
@@ -43,6 +52,8 @@ public class ClientServiceImp implements ClientService{
     }
 
     @Override
+    @CacheEvict
+    @Transactional
     public void deleteById(UUID id) {
         Client OptionalClient = findById(id);
         repository.updateIsDeletedToTrueById(id);

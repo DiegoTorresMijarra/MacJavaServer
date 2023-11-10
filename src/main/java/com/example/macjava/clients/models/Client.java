@@ -1,7 +1,11 @@
 package com.example.macjava.clients.models;
 
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +26,6 @@ public class Client {
     private UUID id;
     @Column(nullable = false,unique = true)
     @NotBlank(message = "El DNI no puede estar vacío")
-    @Size(min = 9, max = 9, message = "El DNI debe tener 9 caracteres")
     @Pattern(regexp = "\\d{8}[A-HJ-NP-TV-Z]", message = "El DNI debe tener el formato válido")
     String dni;
     @Column(nullable = false)
@@ -36,11 +39,11 @@ public class Client {
     @Positive(message = "La edad no puede ser negativa")
     int age;
     @Column(nullable = false)
-    @NotNull(message = "El telefono no puede estar vacío")
-    @Positive(message = "El telefono no puede ser negativo")
-    @Size(min = 9, max = 9, message = "El telefono debe tener 9 dígitos")
-    int phone;
-    @Column(columnDefinition = "boolean default false")
+    @NotBlank(message = "El telefono no puede estar vacío")
+    @Pattern(regexp = "\\d{9}", message = "El teléfono debe tener exactamente 9 dígitos")
+    String phone;
+    @Column()
+    @Builder.Default
     boolean deleted= false;
     @Column(nullable = false)
     LocalDate fecha_cre;
