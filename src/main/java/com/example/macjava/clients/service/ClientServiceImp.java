@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 @CacheConfig(cacheNames = {"clientes"})
@@ -33,7 +32,6 @@ import java.util.UUID;
 public class ClientServiceImp implements ClientService{
     ClientsRepository repository;
     ClientMapper map=new ClientMapper();
-
     private final WebSocketConfig webSocketConfig;
     private final ObjectMapper mapper;
     private final ClientNotificationMapper clientNotificationMapper;

@@ -22,7 +22,6 @@ import java.util.UUID;
 @Table(name = "CLIENTS")
 public class Client {
     @Id
-    @GeneratedValue
     private UUID id;
     @Column(nullable = false,unique = true)
     @NotBlank(message = "El DNI no puede estar vacío")
