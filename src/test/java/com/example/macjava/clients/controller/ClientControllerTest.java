@@ -90,6 +90,7 @@ class ClientControllerTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> page = new PageImpl<>(clientsList);
         when(service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), pageable)).thenReturn(page);
+        System.out.println(page.getContent());
         MockHttpServletResponse response = mockMvc.perform(
                         get(myEndpoint)
                                 .accept(MediaType.APPLICATION_JSON))

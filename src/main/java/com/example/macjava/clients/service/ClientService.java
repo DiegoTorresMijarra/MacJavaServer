@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ClientService {
-Page<Client> findAll(Optional<String> dni,Optional<String> name, Optional<String> last_name, Optional<Integer> age, Optional<String> phone, Optional<Boolean> deleted, Pageable pageable);
+Page<Client> findAll(Optional<String> dni,Optional<String> name, Optional<String> last_name, Optional<Integer> age, Optional<Integer> ageMax, Optional<Integer> ageMin, Optional<String> phone, Optional<Boolean> deleted, Pageable pageable);
 Client findById(UUID id);
 Client save(ClientdtoNew client);
 Client update(UUID id, ClientdtoUpdated client);

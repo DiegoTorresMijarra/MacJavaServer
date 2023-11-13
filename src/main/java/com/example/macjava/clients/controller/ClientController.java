@@ -30,6 +30,8 @@ public class ClientController {
             @RequestParam(required = false) Optional<String> name,
             @RequestParam(required = false) Optional<String> last_name,
             @RequestParam(required = false) Optional<Integer> age,
+            @RequestParam(required = false) Optional<Integer> ageMax,
+            @RequestParam(required = false) Optional<Integer> ageMin,
             @RequestParam(required = false) Optional<String> phone,
             @RequestParam(defaultValue = "false", required = false) Optional<Boolean> deleted,
             @RequestParam(defaultValue = "0") int page,
@@ -38,7 +40,7 @@ public class ClientController {
             @RequestParam(defaultValue = "asc") String direction
     ) {
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Page<Client> pageResult = service.findAll(dni,name, last_name, age, phone, deleted, PageRequest.of(page, size, sort));
+        Page<Client> pageResult = service.findAll(dni,name, last_name, age, ageMax, ageMin, phone, deleted, PageRequest.of(page, size, sort));
         return ResponseEntity.ok()
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }

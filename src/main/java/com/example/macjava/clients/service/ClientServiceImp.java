@@ -45,7 +45,7 @@ public class ClientServiceImp implements ClientService{
         webSocketService = webSocketConfig.webSocketClientsHandler();
     }
     @Override
-    public Page<Client> findAll(Optional<String> dni,Optional<String> name, Optional<String> last_name, Optional<Integer> age, Optional<String> phone, Optional<Boolean> deleted, Pageable pageable) {
+    public Page<Client> findAll(Optional<String> dni,Optional<String> name, Optional<String> last_name, Optional<Integer> age, Optional<Integer> ageMax, Optional<Integer> ageMin, Optional<String> phone, Optional<Boolean> deleted, Pageable pageable) {
         // Criterio de búsqueda por dni
         Specification<Client> specDniClient = (root, query, criteriaBuilder) ->
                 dni.map(m -> criteriaBuilder.equal(root.get("dni"), m)) // Buscamos por dni
@@ -70,12 +70,21 @@ public class ClientServiceImp implements ClientService{
         Specification<Client> specdeleted = (root, query, criteriaBuilder) ->
                 deleted.map(d -> criteriaBuilder.equal(root.get("deleted"), d)) // Buscamos por deleted
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); // Si no hay deleted, no filtramos
+        Specification<Client> specAgeMax = (root, query, criteriaBuilder) ->
+                ageMax.map(p -> criteriaBuilder.lessThanOrEqualTo(root.get("age"), p))
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
+        Specification<Client> specAgeMin = (root, query, criteriaBuilder) ->
+                ageMin.map(p -> criteriaBuilder.greaterThanOrEqualTo(root.get("age"), p))
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
+
         Specification<Client> criterio = Specification.where(specNameClient)
                 .and(speclastNameClient)
                 .and(specAgeClient)
                 .and(specPhoneClient)
                 .and(specdeleted)
-                .and(specDniClient);
+                .and(specDniClient)
+                .and(specAgeMax)
+                .and(specAgeMin);
         return repository.findAll(criterio, pageable);
     }
 
