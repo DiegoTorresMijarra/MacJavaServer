@@ -104,7 +104,7 @@ class ClientServiceImpTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> expectedPage = new PageImpl<>(expectedClients);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), pageable);
+        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty(),Optional.empty(), Optional.empty(), pageable);
         assertAll("findAll",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -119,7 +119,7 @@ class ClientServiceImpTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> expectedPage = new PageImpl<>(expectedClients);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Client> actualPage = service.findAll(dni, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), pageable);
+        Page<Client> actualPage = service.findAll(dni, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty(), Optional.empty(), pageable);
         assertAll("findAllWithDni",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -134,7 +134,7 @@ class ClientServiceImpTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> expectedPage = new PageImpl<>(expectedClients);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Client> actualPage = service.findAll(Optional.empty(), name, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), pageable);
+        Page<Client> actualPage = service.findAll(Optional.empty(), name, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty(),Optional.empty(), pageable);
         assertAll("findAllWithName",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -149,7 +149,7 @@ class ClientServiceImpTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> expectedPage = new PageImpl<>(expectedClients);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(), last_name, Optional.empty(), Optional.empty(), Optional.empty(), pageable);
+        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(), last_name, Optional.empty(),Optional.empty(),Optional.empty(), Optional.empty(), Optional.empty(), pageable);
         assertAll("findAllWithLast_name",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -164,7 +164,7 @@ class ClientServiceImpTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> expectedPage = new PageImpl<>(expectedClients);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), age, Optional.empty(), Optional.empty(), pageable);
+        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(),Optional.empty(), age,Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), pageable);
         assertAll("findAllWithAge",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -179,7 +179,7 @@ class ClientServiceImpTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> expectedPage = new PageImpl<>(expectedClients);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), phone, Optional.empty(), pageable);
+        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(),Optional.empty(),Optional.empty(), Optional.empty(), Optional.empty(), phone, Optional.empty(), pageable);
         assertAll("findAllWithPhone",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -194,7 +194,7 @@ class ClientServiceImpTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> expectedPage = new PageImpl<>(expectedClients);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), deleted, pageable);
+        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(),Optional.empty(),Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), deleted, pageable);
         assertAll("findAllWithDeleted",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -210,7 +210,7 @@ class ClientServiceImpTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> expectedPage = new PageImpl<>(expectedClients);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), age, phone, Optional.empty(), pageable);
+        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(),Optional.empty(), age,Optional.empty(), Optional.empty(), phone,Optional.empty(), pageable);
         assertAll("findAllWithAgeAndPhone",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -219,6 +219,37 @@ class ClientServiceImpTest {
         verify(repository, times(1)).findAll(any(Specification.class), any(Pageable.class));
     }
 
+    @Test
+    void findAll_ShouldReturnClientsByAgeMax_WhenAgeMaxParameterProvided() {
+        Optional<Integer> AgeMax = Optional.of(35);
+        List<Client> expectedClients = List.of(client1);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Client> expectedPage = new PageImpl<>(expectedClients);
+        when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
+        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(),Optional.empty(),Optional.empty(), AgeMax, Optional.empty(), Optional.empty(), Optional.empty(), pageable);
+        assertAll("findAllWithDeleted",
+                () -> assertNotNull(actualPage),
+                () -> assertFalse(actualPage.isEmpty()),
+                () -> assertTrue(actualPage.getTotalElements() > 0)
+        );
+        verify(repository, times(1)).findAll(any(Specification.class), any(Pageable.class));
+    }
+
+    @Test
+    void findAll_ShouldReturnClientsByAgeMin_WhenAgeMinParameterProvided() {
+        Optional<Integer> AgeMin = Optional.of(25);
+        List<Client> expectedClients = List.of(client1);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Client> expectedPage = new PageImpl<>(expectedClients);
+        when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
+        Page<Client> actualPage = service.findAll(Optional.empty(), Optional.empty(),Optional.empty(),Optional.empty(), Optional.empty(), AgeMin, Optional.empty(), Optional.empty(), pageable);
+        assertAll("findAllWithDeleted",
+                () -> assertNotNull(actualPage),
+                () -> assertFalse(actualPage.isEmpty()),
+                () -> assertTrue(actualPage.getTotalElements() > 0)
+        );
+        verify(repository, times(1)).findAll(any(Specification.class), any(Pageable.class));
+    }
     @Test
     void findById() {
         when(repository.findById(client1.getId())).thenReturn(Optional.of(client1));

@@ -1,9 +1,12 @@
 package com.example.macjava.clients.controller;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.example.macjava.clients.dto.ClientdtoNew;
 import com.example.macjava.clients.dto.ClientdtoUpdated;
 import com.example.macjava.clients.exceptions.ClientNotFound;
 import com.example.macjava.clients.models.Client;
 import com.example.macjava.clients.service.ClientService;
+import com.example.macjava.clients.utils.PageResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
@@ -89,17 +92,20 @@ class ClientControllerTest {
         List<Client> clientsList = List.of(client1, client2,client3);
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> page = new PageImpl<>(clientsList);
-        when(service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), pageable)).thenReturn(page);
+        when(service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty() , pageable)).thenReturn(page);
         System.out.println(page.getContent());
         MockHttpServletResponse response = mockMvc.perform(
                         get(myEndpoint)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
 
         assertAll("findall",
-                () -> assertEquals(200, response.getStatus())
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(3, res.content().size())
         );
-        verify(service, times(1)).findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), pageable);
+        verify(service, times(1)).findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty(),Optional.empty(), pageable);
     }
     @Test
     void getProduct() throws Exception {
