@@ -22,10 +22,29 @@ repositories {
 }
 
 dependencies {
+	// Dependencias de Spring Web for HTML Apps y Rest
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	// Spring Data JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// Cache
+	implementation'org.springframework.boot:spring-boot-starter-cache'
+	// Validación
+	implementation'org.springframework.boot:spring-boot-starter-validation'
+	// H2 Database
+	runtimeOnly 'com.h2database:h2'
+	// Websocket
+	implementation'org.springframework.boot:spring-boot-starter-websocket'
+
+	// Lombook para generar código
+	implementation'org.projectlombok:lombok:1.18.28'
+	testImplementation'org.projectlombok:lombok:1.18.28'
+	annotationProcessor'org.projectlombok:lombok:1.18.28'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+
+	// Dependencias para Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	//jacoco
+	testImplementation 'org.jacoco:org.jacoco.agent:0.8.11'
 }
 
 tasks.named('bootBuildImage') {
