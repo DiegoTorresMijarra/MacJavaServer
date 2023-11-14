@@ -94,29 +94,205 @@ class ClientControllerTest {
     }
     @Test
     void getAllProducts() throws Exception {
-        List<Client> clientsList = List.of(client3);
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        List<Client> clientsList = List.of(client1, client2, client3);
         Page<Client> page = new PageImpl<>(clientsList);
 
-        when(service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty() , pageable)).thenReturn(page);
+        when(service.findAll(any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class),any(Optional.class) , any(PageRequest.class))).thenReturn(page);
 
         MockHttpServletResponse response = mockMvc.perform(
                 get(myEndpoint)
-                        .param("dni", "null")
-                        .param("name", "null")
-                        .param("last_name", "null")
-                        .param("age", "null")
-                        .param("ageMax", "null")
-                        .param("ageMin", "null")
-                        .param("phone", "null")
-                        .param("deleted", "false")
-        ).andReturn().getResponse();
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
 
         assertAll("findall",
-                () -> assertEquals(200, response.getStatus())
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(3,res.content().size())
         );
+    }
 
-        verify(service, times(1)).findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty(),Optional.empty(), pageable);
+    @Test
+    void getAllProducts_Dni() throws Exception {
+        List<Client> clientsList = List.of(client1);
+        Page<Client> page = new PageImpl<>(clientsList);
+        Optional<String> dni = Optional.of("12345678A");
+        when(service.findAll(eq(dni), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class),any(Optional.class) , any(PageRequest.class))).thenReturn(page);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        get(myEndpoint+"?dni=12345678A")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+
+        assertAll("findall",
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(1,res.content().size())
+        );
+    }
+    @Test
+    void getAllProducts_Name() throws Exception {
+        List<Client> clientsList = List.of(client1);
+        Page<Client> page = new PageImpl<>(clientsList);
+        Optional<String> name = Optional.of("John");
+        when(service.findAll(any(Optional.class), eq(name), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class),any(Optional.class) , any(PageRequest.class))).thenReturn(page);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        get(myEndpoint+"?name=John")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+
+        assertAll("findall",
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(1,res.content().size())
+        );
+    }
+    @Test
+    void getAllProducts_LastName() throws Exception {
+        List<Client> clientsList = List.of(client1);
+        Page<Client> page = new PageImpl<>(clientsList);
+        Optional<String> last_name = Optional.of("Doe");
+        when(service.findAll(any(Optional.class), any(Optional.class), eq(last_name), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class),any(Optional.class) , any(PageRequest.class))).thenReturn(page);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        get(myEndpoint+"?last_name=Doe")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+
+        assertAll("findall",
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(1,res.content().size())
+        );
+    }
+
+    @Test
+    void getAllProducts_Age() throws Exception {
+        List<Client> clientsList = List.of(client1);
+        Page<Client> page = new PageImpl<>(clientsList);
+        Optional<Integer> age = Optional.of(30);
+        when(service.findAll(any(Optional.class), any(Optional.class), any(Optional.class), eq(age), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(PageRequest.class))).thenReturn(page);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        get(myEndpoint+"?age=30")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+
+        assertAll("findall",
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(1,res.content().size())
+        );
+    }
+
+    @Test
+    void getAllProducts_AgeMax() throws Exception {
+        List<Client> clientsList = List.of(client1);
+        Page<Client> page = new PageImpl<>(clientsList);
+        Optional<Integer> ageMax = Optional.of(30);
+        when(service.findAll(any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), eq(ageMax), any(Optional.class), any(Optional.class), any(Optional.class), any(PageRequest.class))).thenReturn(page);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        get(myEndpoint+"?ageMax=30")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+
+        assertAll("findall",
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(1,res.content().size())
+        );
+    }
+
+    @Test
+    void getAllProducts_AgeMin() throws Exception {
+        List<Client> clientsList = List.of(client1);
+        Page<Client> page = new PageImpl<>(clientsList);
+        Optional<Integer> ageMin = Optional.of(30);
+        when(service.findAll(any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), eq(ageMin), any(Optional.class), any(Optional.class), any(PageRequest.class))).thenReturn(page);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        get(myEndpoint+"?ageMin=30")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+
+        assertAll("findall",
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(1,res.content().size())
+        );
+    }
+
+    @Test
+    void getAllProducts_Phone() throws Exception {
+        List<Client> clientsList = List.of(client1);
+        Page<Client> page = new PageImpl<>(clientsList);
+        Optional<String> phone = Optional.of("123456789");
+        when(service.findAll(any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), eq(phone), any(Optional.class), any(PageRequest.class))).thenReturn(page);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        get(myEndpoint+"?phone=123456789")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+
+        assertAll("findall",
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(1,res.content().size())
+        );
+    }
+    @Test
+    void getAllProducts_Deleted() throws Exception {
+        List<Client> clientsList = List.of(client3);
+        Page<Client> page = new PageImpl<>(clientsList);
+        Optional<Boolean> deleted = Optional.of(true);
+        when(service.findAll(any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), eq(deleted), any(PageRequest.class))).thenReturn(page);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        get(myEndpoint+"?deleted=true")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+
+        assertAll("findall",
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(1,res.content().size())
+        );
+    }
+    @Test
+    void getAllProducts_AllParams() throws Exception {
+        List<Client> clientsList = List.of(client1);
+        Page<Client> page = new PageImpl<>(clientsList);
+        Optional<Boolean> deleted = Optional.of(false);
+        Optional<Integer> age = Optional.of(30);
+        Optional<Integer> ageMax = Optional.of(30);
+        Optional<Integer> ageMin = Optional.of(30);
+        Optional<String> dni = Optional.of("12345678A");
+        Optional<String> name = Optional.of("John");
+        Optional<String> last_name = Optional.of("Doe");
+        Optional<String> phone = Optional.of("123456789");
+        when(service.findAll(eq(dni), eq(name), eq(last_name), eq(age), eq(ageMax), eq(ageMin), eq(phone), eq(deleted), any(PageRequest.class))).thenReturn(page);
+
+        MockHttpServletResponse response = mockMvc.perform(
+                        get(myEndpoint+"?dni=12345678A&name=John&last_name=Doe&age=30&ageMax=30&ageMin=30&phone=123456789&deleted=false")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
+        });
+
+        assertAll("findall",
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(1,res.content().size())
+        );
     }
     @Test
     void getProduct() throws Exception {
