@@ -21,7 +21,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,6 +49,7 @@ class ClientControllerTest {
             .last_name("Doe")
             .age(30)
             .phone("123456789")
+            .image("http://")
             .deleted(false)
             .fecha_act(LocalDate.now())
             .fecha_cre(LocalDate.now())
@@ -57,6 +61,7 @@ class ClientControllerTest {
             .last_name("Smith")
             .age(25)
             .phone("987654321")
+            .image("http://")
             .deleted(false)
             .fecha_act(LocalDate.now())
             .fecha_cre(LocalDate.now())
@@ -68,6 +73,7 @@ class ClientControllerTest {
             .last_name("zarza")
             .age(23)
             .phone("123456789")
+            .image("http://")
             .deleted(true)
             .fecha_act(LocalDate.now())
             .fecha_cre(LocalDate.now())
@@ -148,6 +154,7 @@ class ClientControllerTest {
                 .name("jacobo")
                 .last_name("hernandez")
                 .age(30)
+                .image("http://")
                 .phone("123456789")
                 .build();
         when(service.save(clientdtoNew)).thenReturn(client1);
@@ -169,6 +176,7 @@ class ClientControllerTest {
                 .last_name("hernandez")
                 .age(30)
                 .phone("123456789")
+                .image("http://")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
                         post(myEndpoint)
@@ -188,6 +196,7 @@ class ClientControllerTest {
                 .last_name("hernandez")
                 .age(30)
                 .phone("123456789")
+                .image("http://")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
                         post(myEndpoint)
@@ -207,6 +216,7 @@ class ClientControllerTest {
                 .last_name("")
                 .age(30)
                 .phone("123456789")
+                .image("http://")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
                         post(myEndpoint)
@@ -225,6 +235,7 @@ class ClientControllerTest {
                 .name("jacobo")
                 .last_name("hernandez")
                 .age(0)
+                .image("http://")
                 .phone("123456789")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
@@ -244,7 +255,28 @@ class ClientControllerTest {
                 .name("jacobo")
                 .last_name("hernandez")
                 .age(30)
+                .image("http://")
                 .phone("126789")
+                .build();
+        MockHttpServletResponse response = mockMvc.perform(
+                        post(myEndpoint)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonClientCreateDto.write(clientdtoNew).getJson())
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        assertEquals(400, response.getStatus());
+    }
+
+    @Test
+    void createProduct_InvalidImage() throws Exception {
+        ClientdtoNew clientdtoNew = ClientdtoNew.builder()
+                .dni("48546678A")
+                .name("jacobo")
+                .last_name("hernandez")
+                .age(30)
+                .image("")
+                .phone("126789543")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
                         post(myEndpoint)
@@ -263,6 +295,7 @@ class ClientControllerTest {
                 .last_name("alias")
                 .age(30)
                 .phone("123456789")
+                .image("http://")
                 .build();
         when(service.findById(client1.getId())).thenReturn(client1);
         when(service.update(client1.getId(), clientdtoUpdated)).thenReturn(client1);
@@ -284,6 +317,7 @@ class ClientControllerTest {
                 .last_name("alias")
                 .age(30)
                 .phone("123456789")
+                .image("http://")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
                         put(myEndpoint + "/" + client1.getId())
@@ -302,6 +336,7 @@ class ClientControllerTest {
                 .last_name("alias")
                 .age(30)
                 .phone("123456789")
+                .image("http://")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
                         put(myEndpoint + "/" + client1.getId())
@@ -320,6 +355,7 @@ class ClientControllerTest {
                 .last_name("")
                 .age(30)
                 .phone("123456789")
+                .image("http://")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
                         put(myEndpoint + "/" + client1.getId())
@@ -338,6 +374,7 @@ class ClientControllerTest {
                 .last_name("alias")
                 .age(0)
                 .phone("123456789")
+                .image("http://")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
                         put(myEndpoint + "/" + client1.getId())
@@ -356,6 +393,26 @@ class ClientControllerTest {
                 .last_name("alias")
                 .age(30)
                 .phone("123789")
+                .image("http://")
+                .build();
+        MockHttpServletResponse response = mockMvc.perform(
+                        put(myEndpoint + "/" + client1.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonClientUpdateDto.write(clientdtoUpdated).getJson())
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+        assertEquals(400, response.getStatus());
+    }
+
+    @Test
+    void updateProduct_InvalidImage() throws Exception {
+        ClientdtoUpdated clientdtoUpdated = ClientdtoUpdated.builder()
+                .dni("58535785A")
+                .name("juan")
+                .last_name("alias")
+                .age(30)
+                .phone("123789543")
+                .image("")
                 .build();
         MockHttpServletResponse response = mockMvc.perform(
                         put(myEndpoint + "/" + client1.getId())
@@ -373,6 +430,7 @@ class ClientControllerTest {
                 .name("juan")
                 .last_name("alias")
                 .age(30)
+                .image("http://")
                 .phone("123456789")
                 .build();
         when(service.update(client1.getId(), clientdtoUpdated)).thenThrow(new ClientNotFound(client1.getId()));
@@ -411,5 +469,36 @@ class ClientControllerTest {
                 () -> assertEquals(404, response.getStatus())
         );
         verify(service, times(1)).deleteById(client1.getId());
+    }
+    @Test
+    void actualizarImagen() throws Exception{
+        String localEndpoint = "http://localhost:8080/image";
+        UUID id = UUID.randomUUID();
+
+        when(service.updateImage(eq(id), any(MultipartFile.class), anyBoolean())).thenReturn(client1);
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "filename.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                "contenido del archivo".getBytes()
+        );
+
+        MockHttpServletResponse response = mockMvc.perform(
+                multipart(localEndpoint+"/"+ id)
+                        .file(file)
+                        .with(req -> {
+                            req.setMethod("PATCH");
+                            return req;
+                        })
+        ).andReturn().getResponse();
+
+        Client res = mapper.readValue(response.getContentAsString(), Client.class);
+
+        assertAll(
+                () -> assertEquals(200, response.getStatus()),
+                () -> assertEquals(client1, res)
+        );
+        verify(service, times(1)).updateImage(eq(id), any(MultipartFile.class), anyBoolean());
     }
 }

@@ -1,7 +1,6 @@
 package com.example.macjava.clients.storage.controller;
 
-import com.example.macjava.clients.dto.ClientdtoUpdated;
-import com.example.macjava.clients.models.Client;
+
 import com.example.macjava.clients.service.ClientService;
 import com.example.macjava.clients.storage.service.storageService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @Slf4j
