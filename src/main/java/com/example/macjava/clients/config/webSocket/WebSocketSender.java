@@ -1,4 +1,4 @@
-package com.example.macjava.clients.config;
+package com.example.macjava.clients.config.webSocket;
 
 import java.io.IOException;
 

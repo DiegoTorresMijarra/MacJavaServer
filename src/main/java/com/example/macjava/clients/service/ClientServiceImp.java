@@ -1,13 +1,14 @@
 package com.example.macjava.clients.service;
 
-import com.example.macjava.clients.config.WebSocketConfig;
-import com.example.macjava.clients.config.WebSocketHandler;
+import com.example.macjava.clients.config.webSocket.WebSocketConfig;
+import com.example.macjava.clients.config.webSocket.WebSocketHandler;
 import com.example.macjava.clients.dto.ClientdtoNew;
 import com.example.macjava.clients.dto.ClientdtoUpdated;
 import com.example.macjava.clients.exceptions.ClientNotFound;
 import com.example.macjava.clients.mapper.ClientMapper;
 import com.example.macjava.clients.models.Client;
 import com.example.macjava.clients.repository.ClientsRepository;
+import com.example.macjava.clients.storage.service.storageService;
 import com.example.macjava.clients.webSocket.dto.ClientNotificationResponse;
 import com.example.macjava.clients.webSocket.mapper.ClientNotificationMapper;
 import com.example.macjava.clients.webSocket.models.Notification;
@@ -23,7 +24,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,14 +34,16 @@ import java.util.UUID;
 @Service
 public class ClientServiceImp implements ClientService{
     ClientsRepository repository;
+    storageService storageService;
     ClientMapper map=new ClientMapper();
     private final WebSocketConfig webSocketConfig;
     private final ObjectMapper mapper;
     private final ClientNotificationMapper clientNotificationMapper;
     private WebSocketHandler webSocketService;
     @Autowired
-    public ClientServiceImp(ClientsRepository repository, WebSocketConfig webSocketConfig, ClientNotificationMapper clientNotificationMapper){
+    public ClientServiceImp(ClientsRepository repository,storageService storageService ,WebSocketConfig webSocketConfig, ClientNotificationMapper clientNotificationMapper){
         this.repository = repository;
+        this.storageService = storageService;
         mapper= new ObjectMapper();
         this.webSocketConfig = webSocketConfig;
         this.clientNotificationMapper = clientNotificationMapper;
@@ -70,13 +75,15 @@ public class ClientServiceImp implements ClientService{
         Specification<Client> specdeleted = (root, query, criteriaBuilder) ->
                 deleted.map(d -> criteriaBuilder.equal(root.get("deleted"), d)) // Buscamos por deleted
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); // Si no hay deleted, no filtramos
+        // Criterio de búsqueda por año maximo
         Specification<Client> specAgeMax = (root, query, criteriaBuilder) ->
                 ageMax.map(p -> criteriaBuilder.lessThanOrEqualTo(root.get("age"), p))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
+        // Criterio de búsqueda por año minimo
         Specification<Client> specAgeMin = (root, query, criteriaBuilder) ->
                 ageMin.map(p -> criteriaBuilder.greaterThanOrEqualTo(root.get("age"), p))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
-
+        // Union de todas las especificaciones en una
         Specification<Client> criterio = Specification.where(specNameClient)
                 .and(speclastNameClient)
                 .and(specAgeClient)
@@ -116,8 +123,41 @@ public class ClientServiceImp implements ClientService{
     @Transactional
     public void deleteById(UUID id) {
         Client OptionalClient = findById(id);
+        if (OptionalClient.getImage() != null && !OptionalClient.getImage().equals("https://via.placeholder.com/150")) {
+            storageService.delete(OptionalClient.getImage());
+        }
         onChange(Notification.Tipo.DELETE, OptionalClient);
         repository.updateIsDeletedToTrueById(id);
+    }
+
+    @Override
+    @CachePut
+    @Transactional
+    public Client updateImage(UUID id, MultipartFile image, Boolean withUrl) {
+        var clientActual = repository.findById(id).orElseThrow(() -> new ClientNotFound(id));
+
+        if (clientActual.getImage() != null && !clientActual.getImage().equals("https://via.placeholder.com/150")) {
+            storageService.delete(clientActual.getImage());
+        }
+
+        String imageStored = storageService.store(image);
+        String imageUrl = !withUrl ? imageStored : storageService.getUrl(imageStored);
+        var clientActualized = Client.builder()
+                .id(clientActual.getId())
+                .dni(clientActual.getDni())
+                .name(clientActual.getName())
+                .last_name(clientActual.getLast_name())
+                .age(clientActual.getAge())
+                .phone(clientActual.getPhone())
+                .image(imageUrl)
+                .deleted(clientActual.isDeleted())
+                .fecha_cre(clientActual.getFecha_cre())
+                .fecha_act(LocalDate.now())
+                .build();
+
+        var clientUpdated = repository.save(clientActualized);
+        onChange(Notification.Tipo.UPDATE, clientUpdated);
+        return clientUpdated;
     }
 
     void onChange(Notification.Tipo tipo, Client data) {
@@ -136,9 +176,6 @@ public class ClientServiceImp implements ClientService{
 
             String json = mapper.writeValueAsString((notification));
 
-
-            // Enviamos el mensaje a los clientes ws con un hilo, si hay muchos clientes, puede tardar
-            // no bloqueamos el hilo principal que atiende las peticiones http
             Thread senderThread = new Thread(() -> {
                 try {
                     webSocketService.sendMessage(json);

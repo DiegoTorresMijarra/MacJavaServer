@@ -7,6 +7,7 @@ public record ClientNotificationResponse(
         String last_name,
         int age,
         String phone,
+        String image,
         boolean deleted,
         String fecha_cre,
         String fecha_act

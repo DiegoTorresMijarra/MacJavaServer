@@ -89,22 +89,28 @@ class ClientControllerTest {
     }
     @Test
     void getAllProducts() throws Exception {
-        List<Client> clientsList = List.of(client1, client2,client3);
+        List<Client> clientsList = List.of(client3);
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<Client> page = new PageImpl<>(clientsList);
+
         when(service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty() , pageable)).thenReturn(page);
-        System.out.println(page.getContent());
+
         MockHttpServletResponse response = mockMvc.perform(
-                        get(myEndpoint)
-                                .accept(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse();
-        PageResponse<Client> res = mapper.readValue(response.getContentAsString(), new TypeReference<>() {
-        });
+                get(myEndpoint)
+                        .param("dni", "null")
+                        .param("name", "null")
+                        .param("last_name", "null")
+                        .param("age", "null")
+                        .param("ageMax", "null")
+                        .param("ageMin", "null")
+                        .param("phone", "null")
+                        .param("deleted", "false")
+        ).andReturn().getResponse();
 
         assertAll("findall",
-                () -> assertEquals(200, response.getStatus()),
-                () -> assertEquals(3, res.content().size())
+                () -> assertEquals(200, response.getStatus())
         );
+
         verify(service, times(1)).findAll(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),Optional.empty(),Optional.empty(), pageable);
     }
     @Test

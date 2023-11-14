@@ -14,6 +14,7 @@ public class ClientNotificationMapper {
                 client.getLast_name(),
                 client.getAge(),
                 client.getPhone(),
+                client.getImage(),
                 client.isDeleted(),
                 client.getFecha_cre().toString(),
                 client.getFecha_act().toString()

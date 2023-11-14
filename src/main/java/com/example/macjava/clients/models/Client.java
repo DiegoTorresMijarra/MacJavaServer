@@ -6,16 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -41,6 +39,9 @@ public class Client {
     @NotBlank(message = "El telefono no puede estar vacío")
     @Pattern(regexp = "\\d{9}", message = "El teléfono debe tener exactamente 9 dígitos")
     String phone;
+    @Column(nullable = false)
+    @NotBlank(message = "La imagen no puede estar vacía")
+    String image;
     @Column()
     @Builder.Default
     boolean deleted= false;

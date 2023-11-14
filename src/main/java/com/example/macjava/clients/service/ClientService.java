@@ -5,6 +5,7 @@ import com.example.macjava.clients.dto.ClientdtoUpdated;
 import com.example.macjava.clients.models.Client;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -15,4 +16,5 @@ Client findById(UUID id);
 Client save(ClientdtoNew client);
 Client update(UUID id, ClientdtoUpdated client);
 void deleteById(UUID id);
+Client updateImage (UUID id, MultipartFile image, Boolean withUrl);
 }

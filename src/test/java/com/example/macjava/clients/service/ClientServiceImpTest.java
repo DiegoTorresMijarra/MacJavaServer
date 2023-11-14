@@ -1,7 +1,7 @@
 package com.example.macjava.clients.service;
 
-import com.example.macjava.clients.config.WebSocketConfig;
-import com.example.macjava.clients.config.WebSocketHandler;
+import com.example.macjava.clients.config.webSocket.WebSocketConfig;
+import com.example.macjava.clients.config.webSocket.WebSocketHandler;
 import com.example.macjava.clients.dto.ClientdtoNew;
 import com.example.macjava.clients.dto.ClientdtoUpdated;
 import com.example.macjava.clients.exceptions.ClientNotFound;

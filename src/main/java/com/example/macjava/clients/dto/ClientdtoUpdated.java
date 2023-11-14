@@ -28,6 +28,8 @@ public class ClientdtoUpdated {
     @NotBlank(message = "El telefono no puede estar vacío")
     @Pattern(regexp = "\\d{9}", message = "El teléfono debe tener exactamente 9 dígitos")
     String phone;
+    @NotBlank(message = "La imagen no puede estar vacía")
+    String image;
     @Builder.Default
     boolean deleted = false;
 }
