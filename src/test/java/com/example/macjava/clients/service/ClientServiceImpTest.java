@@ -8,8 +8,10 @@ import com.example.macjava.clients.exceptions.ClientNotFound;
 import com.example.macjava.clients.mapper.ClientMapper;
 import com.example.macjava.clients.models.Client;
 import com.example.macjava.clients.repository.ClientsRepository;
+import com.example.macjava.clients.storage.service.storageService;
 import com.example.macjava.clients.webSocket.mapper.ClientNotificationMapper;
 import com.example.macjava.clients.webSocket.models.Notification;
+import org.hibernate.sql.Update;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -41,6 +44,7 @@ class ClientServiceImpTest {
             .last_name("Doe")
             .age(30)
             .phone("123456789")
+            .image("https://via.placeholder.com/150")
             .deleted(false)
             .fecha_act(LocalDate.now())
             .fecha_cre(LocalDate.now())
@@ -53,6 +57,7 @@ class ClientServiceImpTest {
             .last_name("Smith")
             .age(25)
             .phone("987654321")
+            .image("https://via.placeholder.com/150")
             .deleted(false)
             .fecha_act(LocalDate.now())
             .fecha_cre(LocalDate.now())
@@ -64,6 +69,7 @@ class ClientServiceImpTest {
             .last_name("zarza")
             .age(23)
             .phone("123456789")
+            .image("https://via.placeholder.com/150")
             .deleted(true)
             .fecha_act(LocalDate.now())
             .fecha_cre(LocalDate.now())
@@ -74,6 +80,7 @@ class ClientServiceImpTest {
             .last_name("hernandez")
             .age(30)
             .phone("123456789")
+            .image("https://via.placeholder.com/150")
             .build();
     ClientdtoUpdated clientdtoUpdated = ClientdtoUpdated.builder()
             .dni("58439078A")
@@ -81,6 +88,7 @@ class ClientServiceImpTest {
             .last_name("alias")
             .age(30)
             .phone("123456789")
+            .image("https://via.placeholder.com/150")
             .build();
     WebSocketHandler webSocketHandlerMock = mock(WebSocketHandler.class);
     @Mock
@@ -88,6 +96,8 @@ class ClientServiceImpTest {
     private final ClientMapper clientMapper=new ClientMapper();
     @Mock
     private WebSocketConfig webSocketConfig;
+    @Mock
+    storageService storageService;
     @Mock
     private ClientNotificationMapper clientNotificationMapper;
     @InjectMocks
@@ -325,6 +335,37 @@ class ClientServiceImpTest {
         when(repository.findById(client1.getId())).thenReturn(Optional.empty());
         assertThrows(ClientNotFound.class, () -> service.deleteById(client1.getId()));
         verify(repository, times(1)).findById(client1.getId());
+    }
+
+    @Test
+    void updateImage_ShouldUpdateImageAndReturnProduct_WhenValidIdAndImageProvided() throws IOException {
+        Client clientupdated = Client.builder()
+                .id(client1.getId())
+                .dni(client1.getDni())
+                .name(client1.getName())
+                .last_name(client1.getLast_name())
+                .age(client1.getAge())
+                .image("https://example.com/images/image.jpg")
+                .phone(client1.getPhone())
+                .deleted(client1.isDeleted())
+                .fecha_act(LocalDate.now())
+                .fecha_cre(client1.getFecha_cre())
+                .build();
+
+        when(repository.findById(client1.getId())).thenReturn(Optional.of(client1));
+        when(storageService.store(any(MultipartFile.class))).thenReturn("image-stored.jpg");
+        when(storageService.getUrl("image-stored.jpg")).thenReturn("https://example.com/images/image-stored.jpg");
+        doReturn(clientupdated).when(repository).save(any(Client.class));
+
+        Client updatedClient = service.updateImage(client1.getId(), mock(MultipartFile.class), true);
+
+        assertEquals(clientupdated.getImage(), updatedClient.getImage());
+
+        verify(repository, times(1)).findById(client1.getId());
+        verify(storageService, times(1)).store(any(MultipartFile.class));
+        verify(storageService, times(1)).getUrl("image-stored.jpg");
+        verify(repository, times(1)).save(any(Client.class));
+
     }
 
     @Test
