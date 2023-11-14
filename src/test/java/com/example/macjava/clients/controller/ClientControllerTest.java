@@ -31,8 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -500,5 +499,58 @@ class ClientControllerTest {
                 () -> assertEquals(client1, res)
         );
         verify(service, times(1)).updateImage(eq(id), any(MultipartFile.class), anyBoolean());
+    }
+    @Test
+    void actualizarImagenErrorArchivoNoValido() throws Exception {
+        String localEndpoint = "http://localhost:8080/image";
+        UUID id = UUID.randomUUID();
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "filename.txt", // Extensión de archivo no válida
+                MediaType.TEXT_PLAIN_VALUE, // Tipo de contenido no válido
+                "contenido del archivo".getBytes()
+        );
+
+        MockHttpServletResponse response = mockMvc.perform(
+                multipart(localEndpoint + "/" + id)
+                        .file(file)
+                        .with(req -> {
+                            req.setMethod("PATCH");
+                            return req;
+                        })
+        ).andReturn().getResponse();
+
+        assertAll(
+                () -> assertEquals(400, response.getStatus())
+        );
+
+        verify(service, times(0)).updateImage(any(UUID.class), any(MultipartFile.class), anyBoolean()); // No se debe llamar al servicio
+    }
+
+    @Test
+    void actualizarImagenErrorArchivoVacio() throws Exception {
+        String localEndpoint = "http://localhost:8080/image";
+        UUID id = UUID.randomUUID();
+
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                new byte[0] // Archivo vacío
+        );
+
+        MockHttpServletResponse response = mockMvc.perform(
+                multipart(localEndpoint + "/" + id)
+                        .file(file)
+                        .with(req -> {
+                            req.setMethod("PATCH");
+                            return req;
+                        })
+        ).andReturn().getResponse();
+
+        assertAll(
+                () -> assertEquals(400, response.getStatus())
+        );
+
+        verify(service, times(0)).updateImage(any(UUID.class), any(MultipartFile.class), anyBoolean()); // No se debe llamar al servicio
     }
 }
