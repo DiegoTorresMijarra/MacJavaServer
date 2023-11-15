@@ -65,9 +65,8 @@ public class Workers {
     @Column (columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedAt=LocalDateTime.now();
 
-   /* @ManyToOne()
-    @JoinColumn(name="position_id")
-    @JsonManagedReference
-    */
+    @ManyToOne
+    @JoinColumn(name = "position_id")
+    @NotNull(message = "La categoria no puede estar vacía")
     private Position position;
 }

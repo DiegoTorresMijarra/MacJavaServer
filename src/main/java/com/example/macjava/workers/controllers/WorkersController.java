@@ -9,7 +9,6 @@ import com.example.macjava.workers.mappers.WorkersMapper;
 import com.example.macjava.workers.models.Workers;
 import com.example.macjava.workers.services.WorkersServiceImpl;
 import jakarta.validation.Valid;
-import javafx.geometry.Pos;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
