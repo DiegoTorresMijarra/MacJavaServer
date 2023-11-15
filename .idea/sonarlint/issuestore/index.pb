@@ -35,3 +35,7 @@ u
 Esrc/main/java/com/example/macjava/workers/dto/WorkersResponseDto.java,2\8\286a5f6d1af920c72aaa470d16c1136633390c82
 t
 Dsrc/main/java/com/example/macjava/workers/mappers/WorkersMapper.java,d\5\d51281e1a3795a0355471d86fe8c82698bdf750f
+~
+Nsrc/main/java/com/example/macjava/categories/services/PositionServiceImpl.java,3\9\3928b627b4d551ce43a9b82e9f72b41e6767705d
+i
+9src/main/java/com/example/macjava/MacJavaApplication.java,5\7\57dd7cd94ef184e148ed9b51d47d7b3db547038f

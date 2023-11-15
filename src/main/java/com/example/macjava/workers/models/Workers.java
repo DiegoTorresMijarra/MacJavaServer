@@ -42,7 +42,7 @@ public class Workers {
     @Column(nullable = false)
     @NotNull(message = "La edad no puede estar vacía")
     @Positive(message = "La edad no puede ser negativa")
-    int age;
+    private int age;
 
     @Column(nullable = false)
     @NotBlank(message = "El telefono no puede estar vacío")

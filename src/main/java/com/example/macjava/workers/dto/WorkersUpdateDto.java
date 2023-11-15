@@ -17,4 +17,5 @@ public class WorkersUpdateDto {
     @Pattern(regexp = "\\d{9}", message = "El teléfono debe tener exactamente 9 dígitos")
     private String phone;
     private Boolean isDeleted;
+    private int positionId;
 }
