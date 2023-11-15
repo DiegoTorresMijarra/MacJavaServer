@@ -29,7 +29,7 @@ public class Position {
     private Long id;
 
     @NotBlank(message = "El nombre no puede estar vacío")
-    @Column(nullable = false,columnDefinition = "VARCHAR (13) UNIQUE CONSTRAINT CHECK_NAME CHECK NOMBRE IN ('MANAGER','COOKER','CLEANER','WAITER','NOT_ASSIGNED')")
+    @Column(nullable = false,columnDefinition = "VARCHAR (13) UNIQUE CONSTRAINT CHECK_NAME CHECK name IN ('MANAGER','COOKER','CLEANER','WAITER','NOT_ASSIGNED')")
     private String name;
 
     @Column(nullable = false,columnDefinition = "BOOLEAN DEFAULT FALSE")

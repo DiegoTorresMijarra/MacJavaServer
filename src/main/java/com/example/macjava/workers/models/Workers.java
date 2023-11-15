@@ -23,7 +23,7 @@ import java.util.UUID;
 public class Workers {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    //@Column(columnDefinition = "UUID DEFAULT RANDOM_UUID()")
+    @Column(columnDefinition = "UUID DEFAULT RANDOM_UUID()")
     private UUID uuid;
 
     @Column(unique = true, nullable = false)

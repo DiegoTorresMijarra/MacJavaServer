@@ -32,5 +32,5 @@ public class WorkersSaveDto {
 
     @NotNull(message="El Cargo no puede estar vacío")
     @Positive(message = "El cargo no puede ser negativo o 0")
-    private int positionId;
+    private Long positionId;
 }

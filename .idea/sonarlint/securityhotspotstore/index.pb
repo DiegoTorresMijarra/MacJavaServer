@@ -61,3 +61,5 @@ Lsrc/main/java/com/example/macjava/categories/exceptions/WorkersNotFound.java,e
 Msrc/main/java/com/example/macjava/categories/exceptions/PositionNotFound.java,8\b\8b135c1a289677211471fc2f9384191a01110da3
 x
 Hsrc/main/java/com/example/macjava/categories/mappers/PositionMapper.java,7\d\7dd76a413e133d21c05e90579baa2a39bef39b14
+€
+Psrc/main/java/com/example/macjava/categories/controllers/PositionController.java,a\0\a0cfecb6218919e430932c2c4827b2fd8b19395d
