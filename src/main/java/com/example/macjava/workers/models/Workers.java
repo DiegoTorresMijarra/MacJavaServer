@@ -25,6 +25,7 @@ public class Workers {
     @GeneratedValue(strategy = GenerationType.UUID)
     //@Column(columnDefinition = "UUID DEFAULT RANDOM_UUID()")
     private UUID uuid;
+
     @Column(unique = true, nullable = false)
     @NotBlank(message ="DNI cannot be blank")
     @Pattern(regexp = "\\d{8}[A-HJ-NP-TV-Z]", message = "El DNI debe tener el formato válido")
@@ -50,7 +51,7 @@ public class Workers {
 
     @Column(nullable = false,columnDefinition = "BOOLEAN DEFAULT FALSE")
     @Builder.Default
-    private boolean isDeleted =false;
+    private Boolean isDeleted =false;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)

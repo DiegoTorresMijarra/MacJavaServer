@@ -15,4 +15,7 @@ public interface WorkersService {
     Workers save(WorkersSaveDto workers, Position position);
     Workers update(UUID uuid, WorkersUpdateDto workers, Position position);
     void deleteByUUID(UUID uuid);
+    Workers findByDni(String dni);
+    List<Workers> findByIsDeleted(Boolean isDeleted);
+    void updateIsDeletedToTrueById(UUID uuid); //podria ser workers
 }

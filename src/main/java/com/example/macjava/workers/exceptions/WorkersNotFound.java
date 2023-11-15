@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @ResponseStatus(value= HttpStatus.NOT_FOUND)
 public class WorkersNotFound extends WorkersException{
-    public WorkersNotFound(UUID uuid) {
-        super("No se puede encontrar el Empleado con el UUID: " + uuid);
+    public WorkersNotFound(String message) {
+        super("No se puede encontrar el Empleado con el " + message);
     }
 }
