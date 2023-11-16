@@ -426,7 +426,7 @@ class WorkersControllerTest {
 
 
     @Test
-    void createFunko_getCorrect_WhenValidPassed() throws Exception{
+    void createWorkers_getCorrect_WhenValidPassed() throws Exception{
         String localEndPoint=myEndpoint+"/worker";
         WorkersSaveDto workersSaveDto = WorkersSaveDto.builder()
                 .name("Nuevo")
@@ -452,13 +452,13 @@ class WorkersControllerTest {
 
         WorkersResponseDto res = mapper.readValue(response.getContentAsString(), WorkersResponseDto.class);
 
-        assertAll("createFunko_getCorrect_WhenValidPassed",
+        assertAll("createWorkers_getCorrect_WhenValidPassed",
                 ()->assertEquals(200, response.getStatus()),
                 ()->assertEquals(uuid,res.getUuid())
         );
     }
     @Test
-    void createFunko_ThrowsBadRequest_WhenInvalidPassed() throws Exception{
+    void createWorkers_ThrowsBadRequest_WhenInvalidPassed() throws Exception{
         String localEndPoint=myEndpoint+"/worker";
         WorkersSaveDto workersSaveDto = WorkersSaveDto.builder()
                 .name("Nuevo")
@@ -483,7 +483,7 @@ class WorkersControllerTest {
                 .andReturn().getResponse();
 
 
-        assertAll("createFunko_ThrowsBadRequest_WhenInvalidPassed",
+        assertAll("createWorkers_ThrowsBadRequest_WhenInvalidPassed",
                 ()->assertEquals(400, response.getStatus()),
                 ()->assertEquals("{\"phone\":\"El telefono no puede estar vacÃ\u00ADo\"}",response.getContentAsString())
         );

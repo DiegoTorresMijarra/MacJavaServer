@@ -35,7 +35,7 @@ public class PositionController {
         this.positionService = positionService;
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Position> findByUUID(@PathVariable Long id){
+    public ResponseEntity<Position> findById(@PathVariable Long id){
         log.info("Buscando Posicion con id: " + id);
         return ResponseEntity.ok(positionService.findById(id));
     }
@@ -73,7 +73,7 @@ public class PositionController {
         log.info("Eliminando Posicion con Id: " + id);
         positionService.deleteById(id);
     }
-    @PutMapping("/worker/isDeleted/{id}")
+    @PutMapping("position/isDeleted/{id}")
     public void updateIsDeletedToTrueById(@PathVariable Long id){
         log.info("Actualizando a TRUE isDeleted de la Posición con el id: " + id);
         positionService.updateIsDeletedToTrueById(id);
