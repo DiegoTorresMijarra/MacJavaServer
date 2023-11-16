@@ -5,11 +5,13 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Data
 @Builder
-public class PositionUpdateDto {
+@Data
+public class PositionResponseDto {
+    private Long id;
     private String name;
-    private Boolean isDeleted;
     private Double salary;
-    //private LocalDateTime createdAt;
+    private Boolean isDeleted;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

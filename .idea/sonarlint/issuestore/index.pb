@@ -47,14 +47,8 @@ u
 Esrc/main/java/com/example/macjava/categories/dto/PositionSaveDto.java,3\0\304e73ac5894b7f10c7dbc0f66fb408b8e49b70b
 w
 Gsrc/main/java/com/example/macjava/categories/dto/PositionUpdateDto.java,a\5\a55c36cb0601ca68e8bb28ad4728a7027695a9a3
-}
-Msrc/main/java/com/example/macjava/categories/exceptions/WorkersException.java,4\e\4e346575c290647dc1c4b09425cd7edc018ffa06
 ~
 Nsrc/main/java/com/example/macjava/categories/exceptions/PositionException.java,5\4\547e82c882bbd92729492e236230cedd341f4af7
-~
-Nsrc/main/java/com/example/macjava/categories/exceptions/WorkersBadRequest.java,5\b\5b9b075d6fb0c54958c21d80b68e8881ddba490f
-|
-Lsrc/main/java/com/example/macjava/categories/exceptions/WorkersNotFound.java,e\5\e546c7b726999f1631beaaa038fd95f8f7a69e0f
 
 Osrc/main/java/com/example/macjava/categories/exceptions/PositionBadRequest.java,9\8\98b54492eb7b4ecd215c13b4bc31babea3b27385
 }
@@ -63,3 +57,9 @@ x
 Hsrc/main/java/com/example/macjava/categories/mappers/PositionMapper.java,7\d\7dd76a413e133d21c05e90579baa2a39bef39b14
 €
 Psrc/main/java/com/example/macjava/categories/controllers/PositionController.java,a\0\a0cfecb6218919e430932c2c4827b2fd8b19395d
+t
+Dsrc/main/java/com/example/macjava/utils/pagination/PageResponse.java,3\4\3425dedc0762bd4172cd1e6710bd887bfaf1e825
+y
+Isrc/main/java/com/example/macjava/categories/dto/PositionResponseDto.java,7\4\74303a60262ed2bb2ac68ecb02d1f0f74eb0abd7
+~
+Nsrc/test/java/com/example/macjava/workers/services/WorkersServiceImplTest.java,3\b\3b1fd502fc302676110fc97cd37adc57cdb0cec2

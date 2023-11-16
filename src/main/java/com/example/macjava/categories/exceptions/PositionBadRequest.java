@@ -3,7 +3,7 @@ package com.example.macjava.categories.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value=HttpStatus.BAD_REQUEST)
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class PositionBadRequest extends PositionException {
     public PositionBadRequest(String message) {
         super(message);

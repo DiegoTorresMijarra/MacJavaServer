@@ -21,6 +21,7 @@ public class WorkersMapper {
 
     public static Workers toModel(Workers workersOriginal, WorkersUpdateDto workersUpdate, Position position) {
         return Workers.builder()
+                .uuid(workersOriginal.getUuid())
                 .dni((workersUpdate.getDni()==null) ?   workersOriginal.getDni() : workersUpdate.getDni())
                 .name((workersUpdate.getName()==null) ? workersOriginal.getName() : workersUpdate.getName())
                 .surname((workersUpdate.getSurname()==null) ? workersOriginal.getSurname() : workersUpdate.getSurname())
@@ -28,6 +29,7 @@ public class WorkersMapper {
                 .phone((workersUpdate.getPhone()==null) ? workersOriginal.getPhone() : workersUpdate.getPhone())
                 .isDeleted((workersUpdate.getIsDeleted()==null) ? workersOriginal.getIsDeleted() : workersUpdate.getIsDeleted())
                 .position(position.equals(Position.SIN_CATEGORIA) ? workersOriginal.getPosition() : position)
+                .createdAt(workersOriginal.getCreatedAt())
                 .build();
     }
     public static WorkersResponseDto toWorkersResponseDto(Workers workers){

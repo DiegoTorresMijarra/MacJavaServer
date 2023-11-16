@@ -26,7 +26,7 @@ public class Workers {
     @Column(columnDefinition = "UUID DEFAULT RANDOM_UUID()")
     private UUID uuid;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)//podria ser unique
     @NotBlank(message ="DNI cannot be blank")
     @Pattern(regexp = "\\d{8}[A-HJ-NP-TV-Z]", message = "El DNI debe tener el formato válido")
     private String dni;

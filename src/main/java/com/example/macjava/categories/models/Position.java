@@ -3,7 +3,8 @@ package com.example.macjava.categories.models;
 import com.example.macjava.workers.models.Workers;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
+import javafx.geometry.Pos;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,14 +24,21 @@ import java.util.List;
 @Table
 @EntityListeners(AuditingEntityListener.class)
 public class Position {
-    public static final Position SIN_CATEGORIA = null;
+    public static final Position SIN_CATEGORIA = Position.builder() //no es igual a la de la base
+            .id(-1L)
+            .name("NOT_ASSIGNED")
+            .build();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "El nombre no puede estar vacío")
-    @Column(nullable = false,columnDefinition = "VARCHAR (13) UNIQUE CONSTRAINT CHECK_NAME CHECK name IN ('MANAGER','COOKER','CLEANER','WAITER','NOT_ASSIGNED')")
+    @Column(nullable = false,columnDefinition = "VARCHAR (13) CONSTRAINT CHECK_NAME CHECK name IN ('MANAGER','COOKER','CLEANER','WAITER','NOT_ASSIGNED')") //podria ser unique
     private String name;
+
+    @NotNull
+    @DecimalMin(value = "1000.00", message = "El salario no puede ser menor de 1000.00")
+    private Double salary;
 
     @Column(nullable = false,columnDefinition = "BOOLEAN DEFAULT FALSE")
     @Builder.Default
