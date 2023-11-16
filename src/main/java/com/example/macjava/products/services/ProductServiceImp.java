@@ -1,11 +1,11 @@
-package com.example.macjava.services;
+package com.example.macjava.products.services;
 
-import com.example.macjava.dto.ProductdtoNew;
-import com.example.macjava.dto.ProductdtoUpdate;
-import com.example.macjava.exceptions.ProductNotFound;
-import com.example.macjava.mapper.ProductMapper;
-import com.example.macjava.models.Product;
-import com.example.macjava.repository.ProductRepository;
+import com.example.macjava.products.dto.ProductdtoNew;
+import com.example.macjava.products.dto.ProductdtoUpdate;
+import com.example.macjava.products.exceptions.ProductNotFound;
+import com.example.macjava.products.mapper.ProductMapper;
+import com.example.macjava.products.models.Product;
+import com.example.macjava.products.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;

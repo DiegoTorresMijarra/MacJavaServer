@@ -1,4 +1,4 @@
-package com.example.macjava.utils;
+package com.example.macjava.products.utils;
 
 import org.springframework.data.domain.Page;
 

@@ -1,10 +1,10 @@
-package com.example.macjava.controller;
+package com.example.macjava.products.controller;
 
-import com.example.macjava.dto.ProductdtoNew;
-import com.example.macjava.dto.ProductdtoUpdate;
-import com.example.macjava.models.Product;
-import com.example.macjava.services.ProductService;
-import com.example.macjava.utils.PageResponse;
+import com.example.macjava.products.dto.ProductdtoNew;
+import com.example.macjava.products.dto.ProductdtoUpdate;
+import com.example.macjava.products.models.Product;
+import com.example.macjava.products.services.ProductService;
+import com.example.macjava.products.utils.PageResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

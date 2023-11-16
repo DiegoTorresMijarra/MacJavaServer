@@ -1,8 +1,8 @@
-package com.example.macjava.mapper;
+package com.example.macjava.products.mapper;
 
-import com.example.macjava.dto.ProductdtoNew;
-import com.example.macjava.dto.ProductdtoUpdate;
-import com.example.macjava.models.Product;
+import com.example.macjava.products.dto.ProductdtoNew;
+import com.example.macjava.products.dto.ProductdtoUpdate;
+import com.example.macjava.products.models.Product;
 
 import java.time.LocalDate;
 

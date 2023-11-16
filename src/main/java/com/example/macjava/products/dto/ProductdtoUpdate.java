@@ -1,4 +1,4 @@
-package com.example.macjava.dto;
+package com.example.macjava.products.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductdtoNew {
+public class ProductdtoUpdate {
     @NotBlank(message = "El nombre no puede estar vacío")
     private String nombre;
     @Positive(message = "El precio no puede ser negativo")
@@ -24,4 +24,6 @@ public class ProductdtoNew {
     private Integer stock;
     @Builder.Default
     private boolean gluten = true;
+    @Builder.Default
+    private boolean is_deleted = false;
 }
