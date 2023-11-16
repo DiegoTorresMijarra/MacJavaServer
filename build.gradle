@@ -35,6 +35,10 @@ dependencies {
 	// Websocket
 	implementation'org.springframework.boot:spring-boot-starter-websocket'
 
+	// Para usar con jackson el controlador las fechas: LocalDate, LocalDateTime, etc
+	// Lo podemos usar en el test o en el controlador, si hiciese falta, por eso está aquí
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
 	// Lombook para generar código
 	implementation'org.projectlombok:lombok:1.18.28'
 	testImplementation'org.projectlombok:lombok:1.18.28'

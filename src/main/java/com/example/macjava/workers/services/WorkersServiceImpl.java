@@ -39,7 +39,8 @@ public class WorkersServiceImpl implements WorkersService{
 
     @Override
     public Page<Workers> findAll(Optional<String> name, Optional<String> surname, Optional<Integer> age, Optional<String> phone,
-                                 Optional<Boolean> isDeleted, Optional<Integer> antiquierityMin, Optional<Integer> antiquierityMax, Pageable pageable) {
+                                 Optional<Boolean> isDeleted, Optional<Integer> antiquierityMin, Optional<Integer> antiquierityMax,
+                                 Optional<Integer> positionId, Pageable pageable) {
 
         log.info("Buscando Empleados");
         //Criterio por nombre
@@ -65,12 +66,16 @@ public class WorkersServiceImpl implements WorkersService{
         //Criterio por antiguedad minima
         Specification<Workers> specAntiquierityMin=(root, query, criteriaBuilder)->
                 antiquierityMin.map(d-> LocalDateTime.now().minusYears(d))
-                        .map(e-> criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"),e))
+                        .map(e-> criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"),e))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
         //Criterio por antiguedad maxima
         Specification<Workers> specAntiquierityMax=(root, query, criteriaBuilder)->
                 antiquierityMax.map(d-> LocalDateTime.now().minusYears(d))
-                        .map(e-> criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"),e))
+                        .map(e-> criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"),e))
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
+        //	Criterio por position
+        Specification<Workers> specPosition=(root, query, criteriaBuilder)->
+                positionId.map(d->criteriaBuilder.equal(root.get("position").get("id"),d))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
 
         Specification<Workers> specification=Specification.where(specName)
@@ -79,7 +84,8 @@ public class WorkersServiceImpl implements WorkersService{
                 .and(specPhone)
                 .and(specIsDeleted)
                 .and(specAntiquierityMin)
-                .and(specAntiquierityMax);
+                .and(specAntiquierityMax)
+                .and(specPosition);
         return workersCrudRepository.findAll(specification, pageable);
     }
 

@@ -24,7 +24,8 @@ public class Workers {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "UUID DEFAULT RANDOM_UUID()")
-    private UUID uuid;
+    @Builder.Default
+    private UUID uuid=UUID.randomUUID();
 
     @Column(nullable = false)//podria ser unique
     @NotBlank(message ="DNI cannot be blank")

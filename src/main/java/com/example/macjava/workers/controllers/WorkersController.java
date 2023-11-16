@@ -46,6 +46,7 @@ public class WorkersController {
             @RequestParam(required = false) Optional<Boolean> isDeleted,
             @RequestParam(required = false) Optional<Integer> antiquierityMin,
             @RequestParam(required = false) Optional<Integer> antiquierityMax,
+            @RequestParam(required = false) Optional<Integer> positionId, //me da algun problema al hacerlo long
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "uuid") String sortBy,
@@ -53,7 +54,7 @@ public class WorkersController {
     ){
         log.info("Buscando Empleados");
         Sort sort= direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Page<Workers> pageResult = workersService.findAll(name, surname, age, phone, isDeleted, antiquierityMin, antiquierityMax, PageRequest.of(page, size, sort));
+        Page<Workers> pageResult = workersService.findAll(name, surname, age, phone, isDeleted, antiquierityMin, antiquierityMax,positionId, PageRequest.of(page, size, sort));
         return ResponseEntity.ok()
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }

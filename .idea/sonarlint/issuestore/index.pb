@@ -63,3 +63,9 @@ y
 Isrc/main/java/com/example/macjava/categories/dto/PositionResponseDto.java,7\4\74303a60262ed2bb2ac68ecb02d1f0f74eb0abd7
 ~
 Nsrc/test/java/com/example/macjava/workers/services/WorkersServiceImplTest.java,3\b\3b1fd502fc302676110fc97cd37adc57cdb0cec2
+€
+Psrc/test/java/com/example/macjava/workers/controllers/WorkersControllerTest.java,1\2\129009967be8772012d273301186c16e1f244848
+‚
+Rsrc/test/java/com/example/macjava/categories/services/PositionServiceImplTest.java,6\e\6eeff239c17a718dbce8655cf6900e30f8476460
+„
+Tsrc/test/java/com/example/macjava/categories/controllers/PositionControllerTest.java,1\b\1b27698e55442359098e918a7ebed86c660467de

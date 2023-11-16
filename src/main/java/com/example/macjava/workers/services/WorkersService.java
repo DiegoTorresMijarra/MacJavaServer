@@ -13,7 +13,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface WorkersService {
-    Page<Workers> findAll(Optional<String> name, Optional<String> surname, Optional<Integer> age, Optional<String> phone, Optional<Boolean> isDeleted, Optional<Integer> antiquierityMin, Optional<Integer> antiquierityMax, Pageable pageable);
+    Page<Workers> findAll(Optional<String> name, Optional<String> surname, Optional<Integer> age, Optional<String> phone,
+                          Optional<Boolean> isDeleted, Optional<Integer> antiquierityMin, Optional<Integer> antiquierityMax,Optional<Integer> positionId, Pageable pageable);
     Workers findByUUID(UUID uuid);
     Workers save(WorkersSaveDto workers);
     Workers update(UUID uuid, WorkersUpdateDto workers);
