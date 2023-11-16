@@ -24,3 +24,8 @@ INSERT INTO PRODUCTS (nombre, precio, stock, gluten, is_deleted, fecha_cre, fech
 ('Producto3', 20.00, 75, true, false, '2023-01-03', '2023-01-03'),
 ('Producto4', 8.99, 120, false, true, '2023-01-04', '2023-01-04'),
 ('Producto5', 25.50, 200, true, false, '2023-01-05', '2023-01-05');
+INSERT INTO RESTAURANTS ( name, number, is_deleted, creationd,modificationd) VALUES
+( 'res1', 123456789, false, '2023-10-10', '2023-10-10'),
+( 'res2', 123456778, false, '2023-10-10', '2023-10-10'),
+( 'res3', 123456877, true, '2023-10-10', '2023-10-10');
+

@@ -50,7 +50,6 @@ dependencies {
 	//jacoco
 	testImplementation 'org.jacoco:org.jacoco.agent:0.8.11'
 }
-
 tasks.named('bootBuildImage') {
 	builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
