@@ -32,7 +32,6 @@ public class ProductController {
             @RequestParam(required = false) Optional<String> nombre,
             @RequestParam(required = false) Optional<Integer> stockMax,
             @RequestParam(required = false) Optional<Integer> stockMin,
-            @RequestParam(required = false) Optional<Double> precio,
             @RequestParam(required = false) Optional<Double> precioMax,
             @RequestParam(required = false) Optional<Double> precioMin,
             @RequestParam(required = false) Optional<Boolean> gluten,
@@ -43,7 +42,7 @@ public class ProductController {
             @RequestParam(defaultValue = "asc") String direction
     ) {
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Page<Product> pageResult = service.findAll(nombre,stockMax,stockMin,precio,precioMax,precioMin,gluten,is_deleted, PageRequest.of(page, size, sort));
+        Page<Product> pageResult = service.findAll(nombre,stockMax,stockMin,precioMax,precioMin,gluten,is_deleted, PageRequest.of(page, size, sort));
         return ResponseEntity.ok()
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }

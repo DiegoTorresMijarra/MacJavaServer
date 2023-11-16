@@ -28,7 +28,7 @@ public class ProductServiceImp implements ProductService{
         this.repository = repository;
     }
     @Override
-    public Page<Product> findAll(Optional<String> nombre, Optional<Integer> stockMax, Optional<Integer> stockMin, Optional<Double> precio, Optional<Double> precioMax, Optional<Double> precioMin, Optional<Boolean> gluten, Optional<Boolean> is_deleted, Pageable pageable) {
+    public Page<Product> findAll(Optional<String> nombre, Optional<Integer> stockMax, Optional<Integer> stockMin, Optional<Double> precioMax, Optional<Double> precioMin, Optional<Boolean> gluten, Optional<Boolean> is_deleted, Pageable pageable) {
         Specification<Product> specNombre = (root, query, criteriaBuilder) ->
                 nombre.map(m -> criteriaBuilder.equal(root.get("nombre"), m))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
@@ -38,14 +38,11 @@ public class ProductServiceImp implements ProductService{
         Specification<Product> specStockMin = (root, query, criteriaBuilder) ->
                 stockMin.map(p -> criteriaBuilder.greaterThanOrEqualTo(root.get("stock"), p))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
-        Specification<Product> specPrecio = (root, query, criteriaBuilder) ->
-                precio.map(m -> criteriaBuilder.equal(root.get("precio"), m))
-                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
         Specification<Product> specPrecioMax = (root, query, criteriaBuilder) ->
                 precioMax.map(p -> criteriaBuilder.lessThanOrEqualTo(root.get("precio"), p))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
         Specification<Product> specPrecioMin = (root, query, criteriaBuilder) ->
-                precioMin.map(p -> criteriaBuilder.lessThanOrEqualTo(root.get("precio"), p))
+                precioMin.map(p -> criteriaBuilder.greaterThanOrEqualTo(root.get("precio"), p))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
         Specification<Product> specIs_Deleted = (root, query, criteriaBuilder) ->
                 is_deleted.map(d -> criteriaBuilder.equal(root.get("is_deleted"), d))
@@ -56,7 +53,6 @@ public class ProductServiceImp implements ProductService{
         Specification<Product> criterio = Specification.where(specNombre)
                 .and(specStockMax)
                 .and(specStockMin)
-                .and(specPrecio)
                 .and(specPrecioMax)
                 .and(specPrecioMin)
                 .and(specIs_Deleted)
