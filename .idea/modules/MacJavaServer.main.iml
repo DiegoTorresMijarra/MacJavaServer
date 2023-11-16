@@ -18,8 +18,6 @@
           <factory-entry name="entityManagerFactory" />
         </datasource-mapping>
         <naming-strategy-map />
-      </configuration>
-    </facet>
   </component>
   <component name="NewModuleRootManager">
     <output url="file://$MODULE_DIR$/../../build/classes/java/main" />
