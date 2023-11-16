@@ -1,0 +1,5 @@
+https://api.postman.com/collections/30696572-817e4f26-818f-466a-8c10-2248213dd3b4?access_key=PMAT-01HFCDGVD5P94AA1BAPMSPBAW5
+
+
+Websocket httpRequest:
+ws://localhost:8080/ws/v1/clientes
