@@ -1,33 +1,27 @@
-package com.example.macjava.models;
+package com.example.macjava.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.*;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "PRODUCTS")
-public class Products {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(nullable = false)
+public class ProductdtoNew {
     @NotBlank(message = "El nombre no puede estar vacío")
     private String nombre;
-    @Column(nullable = false)
     @Positive(message = "El precio no puede ser negativo")
     @NotNull(message = "El precio no puede estar vacío")
     private double precio;
-    @Column()
+    @PositiveOrZero(message = "El stock no puede ser negativo")
+    @NotNull(message = "El stock no puede estar vacío")
+    private Integer stock;
     @Builder.Default
     private boolean gluten = true;
-    @Column()
-    @Builder.Default
-    private boolean is_deleted = false;
 }
