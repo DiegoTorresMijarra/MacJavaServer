@@ -1,5 +1,6 @@
 package com.example.macjava.rest.auth.dto;
 
+import com.example.macjava.rest.user.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

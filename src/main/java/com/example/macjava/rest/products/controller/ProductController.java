@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -51,14 +52,17 @@ public class ProductController {
         return ResponseEntity.ok(service.findById(id));
     }
     @PostMapping("/productos")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductdtoNew productdto)  {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(productdto));
     }
     @PutMapping("/productos/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductdtoUpdate productdto) {
         return ResponseEntity.ok(service.update(id,productdto));
     }
     @DeleteMapping("/productos/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();

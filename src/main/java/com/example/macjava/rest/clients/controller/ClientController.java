@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.*;
 
 @RestController
+@PreAuthorize("hasRole('USER')")
 public class ClientController {
     ClientService service;
     @Autowired
@@ -29,6 +31,7 @@ public class ClientController {
         this.service = service;
     }
     @GetMapping("/clientes")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PageResponse<Client>> getProducts(
             @RequestParam(required = false) Optional<String> dni,
             @RequestParam(required = false) Optional<String> name,
@@ -49,24 +52,29 @@ public class ClientController {
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
     @GetMapping("/clientes/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Client> getProduct(@PathVariable UUID id) {
         return ResponseEntity.ok(service.findById(id));
     }
     @PostMapping("/clientes")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Client> createProduct(@Valid @RequestBody ClientdtoNew client)  {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
     }
     @PutMapping("/clientes/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Client> updateProduct(@PathVariable UUID id, @Valid @RequestBody ClientdtoUpdated client) {
         return ResponseEntity.ok(service.update(id,client));
     }
     @DeleteMapping("/clientes/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Client> nuevoProducto(
             @PathVariable UUID id,
             @RequestPart("file") MultipartFile file) {
