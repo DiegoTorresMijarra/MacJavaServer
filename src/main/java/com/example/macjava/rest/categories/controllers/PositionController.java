@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
+@PreAuthorize("hasRole('USER')")
 @RequestMapping(value = "/positions")
 public class PositionController {
     private final PositionServiceImpl positionService;
@@ -57,17 +59,20 @@ public class PositionController {
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
     @PostMapping("position")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity <PositionResponseDto> createPosition(@Valid @RequestBody PositionSaveDto position){
         log.info("Guardando Posicion con nombre: " + position.getName());
         return ResponseEntity.ok(PositionMapper.toPositionResponseDto(positionService.save(position)));
     }
     @PutMapping("position/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PositionResponseDto> updatePosition(@PathVariable Long id, @Valid @RequestBody PositionUpdateDto position){
         log.info("Actualizando Posicion con id: " + id);
         return ResponseEntity.ok(PositionMapper.toPositionResponseDto(positionService.update(id, position)));
     }
 
     @DeleteMapping("position/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deletePosition(@PathVariable Long id){
         log.info("Eliminando Posicion con Id: " + id);
         positionService.deleteById(id);
