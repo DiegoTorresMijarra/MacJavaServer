@@ -30,8 +30,17 @@ dependencies {
 	implementation'org.springframework.boot:spring-boot-starter-cache'
 	// Validación
 	implementation'org.springframework.boot:spring-boot-starter-validation'
+
+	  ////////////////////////
+	 //     Databases      //
+	////////////////////////
 	// H2 Database
 	runtimeOnly 'com.h2database:h2'
+	// PostgreSQL - Para producción
+	implementation 'org.postgresql:postgresql'
+	// Spring Data JPA para MongoDB
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
 	// Websocket
 	implementation'org.springframework.boot:spring-boot-starter-websocket'
 
@@ -49,6 +58,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	//jacoco
 	testImplementation 'org.jacoco:org.jacoco.agent:0.8.11'
+
+
 }
 tasks.named('bootBuildImage') {
 	builder = 'paketobuildpacks/builder-jammy-base:latest'
