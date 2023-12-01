@@ -44,8 +44,19 @@ dependencies {
 	testImplementation'org.projectlombok:lombok:1.18.28'
 	annotationProcessor'org.projectlombok:lombok:1.18.28'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
+	// Swagger
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
-	// Dependencias para Test
+	// Spring Security
+	implementation("org.springframework.boot:spring-boot-starter-security")
+
+	// Para manejar los JWT tokens
+	// JWT (Json Web Token)
+	implementation("com.auth0:java-jwt:4.4.0")
+    // Dependencias para Test
+	// Test Spring Security
+	testImplementation("org.springframework.security:spring-security-test")
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	//jacoco
 	testImplementation 'org.jacoco:org.jacoco.agent:0.8.11'
