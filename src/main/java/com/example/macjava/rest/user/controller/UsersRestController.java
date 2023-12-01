@@ -1,5 +1,11 @@
 package com.example.macjava.rest.user.controller;
 
+import com.example.macjava.rest.orders.dto.OrderSaveDto;
+import com.example.macjava.rest.orders.dto.OrderUpdateDto;
+import com.example.macjava.rest.orders.exceptions.OrderBadRequest;
+import com.example.macjava.rest.orders.exceptions.OrderNotFound;
+import com.example.macjava.rest.orders.models.Order;
+import com.example.macjava.rest.orders.services.OrdersServiceImpl;
 import com.example.macjava.rest.user.dto.UserInfoResponse;
 import com.example.macjava.rest.user.dto.UserRequest;
 import com.example.macjava.rest.user.dto.UserResponse;
@@ -13,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @PreAuthorize("hasRole('USER')")
@@ -36,11 +44,11 @@ import java.util.Optional;
 @Tag(name = "Usuarios", description = "Endpoint usuarios de la tienda")
 public class UsersRestController {
     private final UsersService usersService;
-    private final PedidosService pedidosService;
+    private final OrdersServiceImpl ordersService;
     @Autowired
-    public UsersRestController(UsersService usersService, PedidosService pedidosService) {
+    public UsersRestController(UsersService usersService, OrdersServiceImpl pedidosService) {
         this.usersService = usersService;
-        this.pedidosService = pedidosService;
+        this.ordersService = pedidosService;
     }
 
     @Operation(summary = "Listar todos los usuarios", description = "Listar todos los usuarios")
@@ -85,7 +93,7 @@ public class UsersRestController {
     })
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')") // Solo los admin pueden acceder
-    public ResponseEntity<UserInfoResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<UserInfoResponse> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(usersService.findById(id));
     }
     @Operation(summary = "Crear usuario", description = "Crear usuario")
@@ -111,7 +119,7 @@ public class UsersRestController {
     })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')") // Solo los admin pueden acceder
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID id, @Valid @RequestBody UserRequest userRequest) {
         return ResponseEntity.ok(usersService.update(id, userRequest));
     }
 
@@ -125,7 +133,7 @@ public class UsersRestController {
     })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')") // Solo los admin pueden acceder
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         usersService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
@@ -187,9 +195,9 @@ public class UsersRestController {
             @ApiResponse(responseCode = "200", description = "Pagina de pedidos"),
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
-    @GetMapping("/me/pedidos")
+    @GetMapping("/me/orders")
     @PreAuthorize("hasRole('USER')") // Solo los usuarios pueden acceder
-    public ResponseEntity<PageResponse<Pedido>> getPedidosByUsuario(
+    public ResponseEntity<PageResponse<Order>> getPedidosByUsuario(
             @AuthenticationPrincipal User user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -198,7 +206,7 @@ public class UsersRestController {
     ) {
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        return ResponseEntity.ok(PageResponse.of(pedidosService.findByIdUsuario(user.getId(), pageable), sortBy, direction));
+        return ResponseEntity.ok(PageResponse.of(ordersService.findByWorkerUUID(user.getId(), pageable), sortBy, direction));
     }
 
     @Operation(summary = "Obtener pedido por ID", description = "Obtener pedido por ID")
@@ -211,15 +219,15 @@ public class UsersRestController {
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
             @ApiResponse(responseCode = "404", description = "Pedido no encontrado")
     })
-    @GetMapping("/me/pedidos/{id}")
+    @GetMapping("/me/orders/{id}")
     @PreAuthorize("hasRole('USER')") // Solo los usuarios pueden acceder
-    public ResponseEntity<Pedido> getPedido(
+    public ResponseEntity<Order> getPedido(
             @AuthenticationPrincipal User user,
             @PathVariable("id") ObjectId idPedido
     ) {
-        var pedido = pedidosService.findById(idPedido);
-        if (!pedido.getIdUsuario().equals(user.getId())) {
-            throw new PedidoNotFound(pedido.get_id());
+        var pedido = ordersService.findById(idPedido);
+        if (pedido.getWorkerUUID().equals(user.getId())) {
+            throw new OrderNotFound(idPedido.toHexString());
         }
         return ResponseEntity.ok(pedido);
     }
@@ -234,14 +242,16 @@ public class UsersRestController {
             @ApiResponse(responseCode = "400", description = "Error de validación"),
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     })
-    @PostMapping("/me/pedidos")
+    @PostMapping("/me/orders")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Pedido> savePedido(
+    public ResponseEntity<Order> savePedido(
             @AuthenticationPrincipal User user,
-            @Valid @RequestBody Pedido pedido
+            @Valid @RequestBody OrderSaveDto pedido
     ) {
-        pedido.setIdUsuario(user.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(pedidosService.save(pedido));
+        if (!pedido.getWorkerUUID().equals(user.getId())) {
+            throw new OrderBadRequest(" El usuario no puede crear un pedido a nombre de otro user");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(ordersService.save(pedido));
     }
 
     @Operation(summary = "Actualizar pedido", description = "Actualizar pedido")
@@ -256,17 +266,16 @@ public class UsersRestController {
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
             @ApiResponse(responseCode = "404", description = "Pedido no encontrado")
     })
-    @PutMapping("/me/pedidos/{id}")
+    @PutMapping("/me/orders/{id}")
     @PreAuthorize("hasRole('USER')") // Solo los usuarios pueden acceder
-    public ResponseEntity<Pedido> updatePedido(
+    public ResponseEntity<Order> updatePedido(
             @AuthenticationPrincipal User user,
             @PathVariable("id") ObjectId idPedido,
-            @Valid @RequestBody Pedido pedido) {
-        pedido.setIdUsuario(user.getId());
-        var pedidoFinal = pedidosService.update(idPedido, pedido);
-        if (!pedidoFinal.getIdUsuario().equals(user.getId())) {
-            throw new PedidoNotFound(pedido.get_id());
+            @Valid @RequestBody OrderUpdateDto pedido) {
+        if (!pedido.getWorkerUUID().equals(user.getId())) {
+            throw new OrderBadRequest(" El usuario no puede Actualizar un pedido a nombre de otro user");
         }
+        var pedidoFinal = ordersService.updateOrder(idPedido, pedido);
         return ResponseEntity.ok(pedidoFinal);
     }
 
@@ -280,17 +289,17 @@ public class UsersRestController {
             @ApiResponse(responseCode = "404", description = "Usuario no encontrado"),
             @ApiResponse(responseCode = "404", description = "Pedido no encontrado")
     })
-    @DeleteMapping("/me/pedidos/{id}")
+    @DeleteMapping("/me/orders/{id}")
     @PreAuthorize("hasRole('USER')") // Solo los usuarios pueden acceder
     public ResponseEntity<Void> deletePedido(
             @AuthenticationPrincipal User user,
             @PathVariable("id") ObjectId idPedido
     ) {
-        var pedido = pedidosService.findById(idPedido);
-        if (!pedido.getIdUsuario().equals(user.getId())) {
-            throw new PedidoNotFound(pedido.get_id());
+        var pedido = ordersService.findById(idPedido);
+        if (!pedido.getWorkerUUID().equals(user.getId())) {
+            throw new OrderBadRequest(" El usuario no puede Borrar un pedido a nombre de otro user");
         }
-        pedidosService.delete(idPedido);
+        ordersService.deleteById(idPedido);
         return ResponseEntity.noContent().build();
     }
 

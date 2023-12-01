@@ -2,6 +2,7 @@ package com.example.macjava.rest.user.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.example.macjava.rest.orders.repositories.OrdersCrudRepository;
 import com.example.macjava.rest.user.dto.UserInfoResponse;
 import com.example.macjava.rest.user.dto.UserRequest;
 import com.example.macjava.rest.user.dto.UserResponse;
@@ -24,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,7 +33,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UsersServiceImpTest {
     private final UserRequest userRequest = UserRequest.builder().username("test").email("test@test.com").build();
-    private final User user = User.builder().id(99L).username("test").email("test@test.com").build();
+    private final User user = User.builder().id(UUID.fromString("12345678-1234-1234-1234-123456789012")).username("test").email("test@test.com").build();
     private final UserResponse userResponse = UserResponse.builder().username("test").email("test@test.com").build();
     private final UserInfoResponse userIResponse = UserInfoResponse.builder().username("test").email("test@test.com").build();
     @Mock
@@ -39,7 +41,7 @@ class UsersServiceImpTest {
     @Mock
     PasswordEncoder passwordEncoder;
     @Mock
-    private PedidosRepository pedidosRepository;
+    private OrdersCrudRepository pedidosRepository;
     @Mock
     private UsersMapper usersMapper;
     @InjectMocks
@@ -69,14 +71,13 @@ class UsersServiceImpTest {
     }
 
     @Test
-    public void testFindById() {
+    void testFindById() {
         // Arrange
-        Long userId = 1L;
+
+        UUID userId = UUID.fromString("12345678-1234-1234-1234-123456789012");
         when(usersRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(pedidosRepository.findPedidosIdsByIdUsuario(userId)).thenReturn(List.of());
+        when(pedidosRepository.findByWorkerUUID(userId,any(Pageable.class))).thenReturn(Page.empty());
         when(usersMapper.toUserInfoResponse(any(User.class), anyList())).thenReturn(userIResponse);
-
-
         // Act
         UserInfoResponse result = usersService.findById(userId);
 

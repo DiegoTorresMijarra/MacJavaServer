@@ -7,6 +7,7 @@ import com.example.macjava.rest.user.models.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class UsersMapper {
@@ -22,7 +23,7 @@ public class UsersMapper {
                 .build();
     }
 
-    public User toUser(UserRequest request, Long id) {
+    public User toUser(UserRequest request, UUID id) {
         return User.builder()
                 .id(id)
                 .nombre(request.getNombre())

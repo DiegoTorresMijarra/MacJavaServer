@@ -1,5 +1,7 @@
 package com.example.macjava.rest.user.service;
 
+import com.example.macjava.rest.orders.models.Order;
+import com.example.macjava.rest.orders.repositories.OrdersCrudRepository;
 import com.example.macjava.rest.user.dto.UserInfoResponse;
 import com.example.macjava.rest.user.dto.UserRequest;
 import com.example.macjava.rest.user.dto.UserResponse;
@@ -13,24 +15,28 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
+
 @Service
 @CacheConfig(cacheNames = {"users"})
 public class UsersServiceImp implements UsersService{
     UsersRepository usersRepository;
     PasswordEncoder passwordEncoder;
-    PedidosRepository pedidosRepository;
+    OrdersCrudRepository ordersCrudRepository;
     private final UsersMapper usersMapper;
 
-    public UsersServiceImp(UsersRepository usersRepository, PedidosRepository pedidosRepository, UsersMapper usersMapper, PasswordEncoder passwordEncoder) {
+    public UsersServiceImp(UsersRepository usersRepository, OrdersCrudRepository pedidosRepository, UsersMapper usersMapper, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
-        this.pedidosRepository = pedidosRepository;
+        this.ordersCrudRepository = pedidosRepository;
         this.usersMapper = usersMapper;
         this.passwordEncoder = passwordEncoder;
     }
@@ -62,11 +68,13 @@ public class UsersServiceImp implements UsersService{
 
     @Override
     @Cacheable(key = "#id")
-    public UserInfoResponse findById(Long id) {
+    public UserInfoResponse findById(UUID id) {
+        //Creamos un pageable base, cambiar mas adelante
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         // Buscamos el usuario
         var user = usersRepository.findById(id).orElseThrow(() -> new UserNotFound(id));
         // Buscamos sus pedidos
-        var pedidos = pedidosRepository.findPedidosIdsByIdUsuario(id).stream().map(p -> p.getId().toHexString()).toList();
+        var pedidos = ordersCrudRepository.findByWorkerUUID(id,pageable).stream().map(Order::toString).toList();//todo
         return usersMapper.toUserInfoResponse(user, pedidos);
     }
 
@@ -84,7 +92,7 @@ public class UsersServiceImp implements UsersService{
 
     @Override
     @CachePut(key = "#result.id")
-    public UserResponse update(Long id, UserRequest userRequest) {
+    public UserResponse update(UUID id, UserRequest userRequest) {
         userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         usersRepository.findById(id).orElseThrow(() -> new UserNotFound(id));
         // No debe existir otro con el mismo username o email, y si existe soy yo mismo
@@ -101,10 +109,11 @@ public class UsersServiceImp implements UsersService{
     @Override
     @Transactional
     @CacheEvict(key = "#id")
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         User user = usersRepository.findById(id).orElseThrow(() -> new UserNotFound(id));
         //Hacemos el borrado fisico si no hay pedidos
-        if (pedidosRepository.existsByIdUsuario(id)) {
+        if (ordersCrudRepository.existsByWorkerUUID(id)) {
+
             // Si no, lo marcamos como borrado lógico
             usersRepository.updateIsDeletedToTrueById(id);
         } else {
