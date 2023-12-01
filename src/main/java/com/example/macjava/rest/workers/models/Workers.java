@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @Entity
-@Table
+@Table(name="WORKERS")
 @EntityListeners(AuditingEntityListener.class)
 public class Workers {
     @Id
