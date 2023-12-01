@@ -1,4 +1,4 @@
-package com.example.macjava.rest.restaurantes.service;
+package com.example.macjava.rest.restaurants.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,13 +7,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
-import com.example.macjava.rest.restaurantes.dto.NewRestaurantDTO;
-import com.example.macjava.rest.restaurantes.dto.UpdatedRestaurantDTO;
-import com.example.macjava.rest.restaurantes.exceptions.RestaurantNotFound;
-import com.example.macjava.rest.restaurantes.mapper.RestaurantMapper;
-import com.example.macjava.rest.restaurantes.modelos.Restaurante;
-import com.example.macjava.rest.restaurantes.repositories.RestaurantRepository;
-import com.example.macjava.rest.restaurantes.servicios.RestaurantServiceImpl;
+import com.example.macjava.rest.restaurants.dto.NewRestaurantDTO;
+import com.example.macjava.rest.restaurants.dto.UpdatedRestaurantDTO;
+import com.example.macjava.rest.restaurants.exceptions.RestaurantNotFound;
+import com.example.macjava.rest.restaurants.mapper.RestaurantMapper;
+import com.example.macjava.rest.restaurants.modelos.Restaurant;
+import com.example.macjava.rest.restaurants.repositories.RestaurantRepository;
+import com.example.macjava.rest.restaurants.servicios.RestaurantServiceImpl;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class RestaurantServiceImplTest {
 
-    private Restaurante res1 = Restaurante.builder()
+    private Restaurant res1 = Restaurant.builder()
             .id(1L)
             .name("Restaurante 1")
             .number(String.valueOf(123456789))
@@ -38,7 +38,7 @@ public class RestaurantServiceImplTest {
             .modificationD(LocalDate.now())
             .build();
 
-    private Restaurante res2 = Restaurante.builder()
+    private Restaurant res2 = Restaurant.builder()
             .id(2L)
             .name("Restaurante 2")
             .number(String.valueOf(987654321))
@@ -46,7 +46,7 @@ public class RestaurantServiceImplTest {
             .creationD(LocalDate.now())
             .modificationD(LocalDate.now())
             .build();
-    private Restaurante res3= Restaurante.builder()
+    private Restaurant res3= Restaurant.builder()
             .id(3L)
             .name("Restaurante 3")
             .number(String.valueOf(123455789))
@@ -72,11 +72,11 @@ public class RestaurantServiceImplTest {
     RestaurantServiceImpl service;
     @Test
     void findAll_ShouldReturnAllRestaurantWithoutParameters() {
-        List<Restaurante> expectedRestau = Arrays.asList(res1, res2);
+        List<Restaurant> expectedRestau = Arrays.asList(res1, res2);
         Pageable pageable = PageRequest.of(0, 10, Sort.by("cod").ascending());
-        Page<Restaurante> expectedPage = new PageImpl<>(expectedRestau);
+        Page<Restaurant> expectedPage = new PageImpl<>(expectedRestau);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Restaurante> actualPage = service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), pageable);
+        Page<Restaurant> actualPage = service.findAll(Optional.empty(), Optional.empty(), Optional.empty(), pageable);
         assertAll("findAll",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -88,11 +88,11 @@ public class RestaurantServiceImplTest {
     @Test
     void findAll_ShouldReturnRestaurantsByName_WhenNameParameterProvided() {
         Optional<String> name = Optional.of("Restaurante 1");
-        List<Restaurante> expectedRestau = List.of(res1);
+        List<Restaurant> expectedRestau = List.of(res1);
         Pageable pageable = PageRequest.of(0, 10, Sort.by("cod").ascending());
-        Page<Restaurante> expectedPage = new PageImpl<>(expectedRestau);
+        Page<Restaurant> expectedPage = new PageImpl<>(expectedRestau);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Restaurante> actualPage = service.findAll(name, Optional.empty(), Optional.empty(),  pageable);
+        Page<Restaurant> actualPage = service.findAll(name, Optional.empty(), Optional.empty(),  pageable);
         assertAll("findAllWithName",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -103,11 +103,11 @@ public class RestaurantServiceImplTest {
     @Test
     void findAll_ShouldReturnRestaurantByNumber_WhenNumberParameterProvided() {
         Optional<String> number = Optional.of((String.valueOf(123456789)));
-        List<Restaurante> expectedRestau = List.of(res1);
+        List<Restaurant> expectedRestau = List.of(res1);
         Pageable pageable = PageRequest.of(0, 10, Sort.by("cod").ascending());
-        Page<Restaurante> expectedPage = new PageImpl<>(expectedRestau);
+        Page<Restaurant> expectedPage = new PageImpl<>(expectedRestau);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Restaurante> actualPage = service.findAll(Optional.empty(), number,Optional.empty(), pageable);
+        Page<Restaurant> actualPage = service.findAll(Optional.empty(), number,Optional.empty(), pageable);
         assertAll("findAllWithNumber",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -119,11 +119,11 @@ public class RestaurantServiceImplTest {
     @Test
     void findAll_ShouldReturnRestaurantsByDeleted_WhenDeletedParameterProvided() {
         Optional<Boolean> isDeleted = Optional.of(true);
-        List<Restaurante> expectedRestaurants = List.of(res3);
+        List<Restaurant> expectedRestaurants = List.of(res3);
         Pageable pageable = PageRequest.of(0, 10, Sort.by("cod").ascending());
-        Page<Restaurante> expectedPage = new PageImpl<>(expectedRestaurants);
+        Page<Restaurant> expectedPage = new PageImpl<>(expectedRestaurants);
         when(repository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
-        Page<Restaurante> actualPage = service.findAll(Optional.empty(), Optional.empty(),isDeleted, pageable);
+        Page<Restaurant> actualPage = service.findAll(Optional.empty(), Optional.empty(),isDeleted, pageable);
         assertAll("findAllWithDeleted",
                 () -> assertNotNull(actualPage),
                 () -> assertFalse(actualPage.isEmpty()),
@@ -135,7 +135,7 @@ public class RestaurantServiceImplTest {
     void findById() {
         when(repository.findById(res1.getId())).thenReturn(Optional.of(res1));
 
-        Restaurante result=service.findById(res1.getId());
+        Restaurant result=service.findById(res1.getId());
 
         assertAll("FindById",
                 () -> assertNotNull(result),
@@ -158,24 +158,24 @@ public class RestaurantServiceImplTest {
 
     @Test
     void save() {
-        Restaurante newRes = mapper.toRestaurantNew(newDto);
-        when(repository.save(any(Restaurante.class))).thenReturn(newRes);
+        Restaurant newRes = mapper.toRestaurantNew(newDto);
+        when(repository.save(any(Restaurant.class))).thenReturn(newRes);
 
-        Restaurante result = service.save(newDto);
+        Restaurant result = service.save(newDto);
 
         assertAll("Save",
                 () -> assertNotNull(result),
                 () -> assertEquals(newRes.getId(), result.getId()),
-                () -> verify(repository, times(1)).save(any(Restaurante.class))
+                () -> verify(repository, times(1)).save(any(Restaurant.class))
         );
     }
 
     @Test
     void update() {
         when(repository.findById(res1.getId())).thenReturn(Optional.of(res1));
-        Restaurante updatedRestau = mapper.toRestaurantUpdate(updatedDto, res1);
+        Restaurant updatedRestau = mapper.toRestaurantUpdate(updatedDto, res1);
         when(repository.save(updatedRestau)).thenReturn(updatedRestau);
-        Restaurante result = service.update(res1.getId(), updatedDto);
+        Restaurant result = service.update(res1.getId(), updatedDto);
         assertAll("Update",
                 () -> assertNotNull(result),
                 () -> assertEquals(res1.getId(), result.getId()),

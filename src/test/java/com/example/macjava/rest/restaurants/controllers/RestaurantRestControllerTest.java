@@ -1,10 +1,10 @@
-package com.example.macjava.rest.restaurantes.controllers;
+package com.example.macjava.rest.restaurants.controllers;
 
-import com.example.macjava.rest.restaurantes.dto.NewRestaurantDTO;
-import com.example.macjava.rest.restaurantes.dto.UpdatedRestaurantDTO;
-import com.example.macjava.rest.restaurantes.exceptions.RestaurantNotFound;
-import com.example.macjava.rest.restaurantes.modelos.Restaurante;
-import com.example.macjava.rest.restaurantes.servicios.RestaurantServiceImpl;
+import com.example.macjava.rest.restaurants.dto.NewRestaurantDTO;
+import com.example.macjava.rest.restaurants.dto.UpdatedRestaurantDTO;
+import com.example.macjava.rest.restaurants.exceptions.RestaurantNotFound;
+import com.example.macjava.rest.restaurants.modelos.Restaurant;
+import com.example.macjava.rest.restaurants.servicios.RestaurantServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(MockitoExtension.class)
 public class RestaurantRestControllerTest {
 
-    private Restaurante res1 = Restaurante.builder()
+    private Restaurant res1 = Restaurant.builder()
             .id(1L)
             .name("Restaurante 1")
             .number(String.valueOf(123456789))
@@ -43,7 +43,7 @@ public class RestaurantRestControllerTest {
             .modificationD(LocalDate.now())
             .build();
 
-    private Restaurante res2 = Restaurante.builder()
+    private Restaurant res2 = Restaurant.builder()
             .id(2L)
             .name("Restaurante 2")
             .number(String.valueOf(987654321))
@@ -64,7 +64,7 @@ public class RestaurantRestControllerTest {
             .isDeleted(false)
             .build();
 
-    private final String myEndPoint = "http://localhost:8080/restaurantes";
+    private final String myEndPoint = "http://localhost:8080/restaurant";
     private final ObjectMapper mapper = new ObjectMapper();
     @Autowired
     MockMvc mockMvc;

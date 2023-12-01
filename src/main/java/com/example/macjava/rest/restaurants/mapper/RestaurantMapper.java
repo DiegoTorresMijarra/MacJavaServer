@@ -1,15 +1,15 @@
-package com.example.macjava.rest.restaurantes.mapper;
+package com.example.macjava.rest.restaurants.mapper;
 
-import com.example.macjava.rest.restaurantes.dto.NewRestaurantDTO;
-import com.example.macjava.rest.restaurantes.dto.UpdatedRestaurantDTO;
-import com.example.macjava.rest.restaurantes.modelos.Restaurante;
+import com.example.macjava.rest.restaurants.dto.NewRestaurantDTO;
+import com.example.macjava.rest.restaurants.dto.UpdatedRestaurantDTO;
+import com.example.macjava.rest.restaurants.modelos.Restaurant;
 
 import java.time.LocalDate;
 
 public class RestaurantMapper {
 
-    public Restaurante toRestaurantNew(NewRestaurantDTO restau){
-        return Restaurante.builder()
+    public Restaurant toRestaurantNew(NewRestaurantDTO restau){
+        return Restaurant.builder()
                 .name(restau.getName())
                 .number(restau.getNumber())
                 .creationD(LocalDate.now())
@@ -17,8 +17,8 @@ public class RestaurantMapper {
                 .build();
     }
 
-    public Restaurante toRestaurantUpdate (UpdatedRestaurantDTO restaudto , Restaurante realRestau){
-        return Restaurante.builder()
+    public Restaurant toRestaurantUpdate (UpdatedRestaurantDTO restaudto , Restaurant realRestau){
+        return Restaurant.builder()
                 .id(realRestau.getId())
                 .name(restaudto.getName())
                 .number(restaudto.getNumber())

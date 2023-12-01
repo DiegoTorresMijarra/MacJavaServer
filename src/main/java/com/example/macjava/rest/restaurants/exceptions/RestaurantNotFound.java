@@ -1,4 +1,4 @@
-package com.example.macjava.rest.restaurantes.exceptions;
+package com.example.macjava.rest.restaurants.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

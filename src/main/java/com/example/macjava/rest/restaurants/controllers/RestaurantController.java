@@ -1,7 +1,7 @@
-package com.example.macjava.rest.restaurantes.controllers;
+package com.example.macjava.rest.restaurants.controllers;
 
-import com.example.macjava.rest.restaurantes.servicios.RestaurantService;
-import com.example.macjava.rest.restaurantes.dto.NewRestaurantDTO;
+import com.example.macjava.rest.restaurants.servicios.RestaurantService;
+import com.example.macjava.rest.restaurants.dto.NewRestaurantDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import com.example.macjava.rest.restaurantes.dto.UpdatedRestaurantDTO;
-import com.example.macjava.rest.restaurantes.modelos.Restaurante;
+import com.example.macjava.rest.restaurants.dto.UpdatedRestaurantDTO;
+import com.example.macjava.rest.restaurants.modelos.Restaurant;
 import com.example.macjava.utils.pagination.PageResponse;
 
 import java.util.HashMap;
@@ -33,8 +33,8 @@ public class RestaurantController {
         this.service=service;
     }
 
-    @GetMapping("/restaurantes")
-    public ResponseEntity<PageResponse<Restaurante>> getRestaurants(
+    @GetMapping("/restaurant")
+    public ResponseEntity<PageResponse<Restaurant>> getRestaurants(
             @RequestParam(required=false) Optional<String> name,
             @RequestParam(required = false)Optional<String> number,
             @RequestParam(defaultValue = "false",required = false)Optional<Boolean> isDeleted,
@@ -44,26 +44,26 @@ public class RestaurantController {
             @RequestParam(defaultValue = "asc") String direction
             ){
         Sort sort=direction.equalsIgnoreCase(Sort.Direction.ASC.name())? Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
-        Page<Restaurante> pageResult= service.findAll(name, number,isDeleted, PageRequest.of(page,size,sort));
+        Page<Restaurant> pageResult= service.findAll(name, number,isDeleted, PageRequest.of(page,size,sort));
         return ResponseEntity.ok().body(PageResponse.of(pageResult,sortBy,direction));
     }
 
-    @GetMapping ("/restaurantes/{id}")
-    public ResponseEntity<Restaurante> getRestaurant(@PathVariable Long id){
+    @GetMapping ("/restaurant/{id}")
+    public ResponseEntity<Restaurant> getRestaurant(@PathVariable Long id){
         return ResponseEntity.ok(service.findById(id));
     }
 
-    @PostMapping("/restaurantes")
-    public ResponseEntity<Restaurante> createRestaurant(@Valid @RequestBody NewRestaurantDTO restaurantDTO){
+    @PostMapping("/restaurant")
+    public ResponseEntity<Restaurant> createRestaurant(@Valid @RequestBody NewRestaurantDTO restaurantDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(restaurantDTO));
     }
 
-    @PutMapping("/restaurantes/{id}")
-    public ResponseEntity<Restaurante> updateRestaurant(@PathVariable Long id, @Valid @RequestBody UpdatedRestaurantDTO restaurantDTO){
+    @PutMapping("/restaurant/{id}")
+    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable Long id, @Valid @RequestBody UpdatedRestaurantDTO restaurantDTO){
         return ResponseEntity.ok(service.update(id, restaurantDTO));
     }
 
-    @DeleteMapping("/restaurantes/{id}")
+    @DeleteMapping("/restaurant/{id}")
     public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id){
         service.deleteById(id);
         return ResponseEntity.noContent().build();
