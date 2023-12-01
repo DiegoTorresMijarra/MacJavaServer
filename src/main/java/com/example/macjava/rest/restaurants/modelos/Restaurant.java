@@ -1,10 +1,9 @@
-package com.example.macjava.rest.restaurantes.modelos;
+package com.example.macjava.rest.restaurants.modelos;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,7 +15,7 @@ import java.time.LocalDate;
 @Getter
 @Entity
 @Table(name="RESTAURANTS")
-public class Restaurante {
+public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

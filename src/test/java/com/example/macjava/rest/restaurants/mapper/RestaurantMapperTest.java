@@ -1,10 +1,9 @@
-package com.example.macjava.rest.restaurantes.mapper;
+package com.example.macjava.rest.restaurants.mapper;
 
 
-import com.example.macjava.rest.restaurantes.dto.NewRestaurantDTO;
-import com.example.macjava.rest.restaurantes.dto.UpdatedRestaurantDTO;
-import com.example.macjava.rest.restaurantes.mapper.RestaurantMapper;
-import com.example.macjava.rest.restaurantes.modelos.Restaurante;
+import com.example.macjava.rest.restaurants.dto.NewRestaurantDTO;
+import com.example.macjava.rest.restaurants.dto.UpdatedRestaurantDTO;
+import com.example.macjava.rest.restaurants.modelos.Restaurant;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,7 +19,7 @@ public class RestaurantMapperTest {
         restaurantDTO.setNumber("number");
 
         // Run the test
-        final Restaurante result = restaurantMapperUnderTest.toRestaurantNew(restaurantDTO);
+        final Restaurant result = restaurantMapperUnderTest.toRestaurantNew(restaurantDTO);
 
         // Verify the results
         assertAll("toRestaurant",
@@ -36,13 +35,13 @@ public class RestaurantMapperTest {
         restaurantDTO.setNumber("number");
         restaurantDTO.setDeleted(false);
 
-        final Restaurante restaurant = new Restaurante();
+        final Restaurant restaurant = new Restaurant();
         restaurant.setId(1L);
         restaurant.setName("name");
         restaurant.setNumber("number");
         restaurant.setDeleted(false);
 
-        final Restaurante result = restaurantMapperUnderTest.toRestaurantUpdate(restaurantDTO, restaurant);
+        final Restaurant result = restaurantMapperUnderTest.toRestaurantUpdate(restaurantDTO, restaurant);
 
         assertAll("toRestaurantUpdate",
                 () -> assertEquals("name", result.getName()),

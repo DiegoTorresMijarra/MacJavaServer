@@ -1,4 +1,4 @@
-package com.example.macjava.rest.restaurantes.exceptions;
+package com.example.macjava.rest.restaurants.exceptions;
 
 public class RestaurantBadRequest extends RestaurantException{
     public RestaurantBadRequest(String message){
