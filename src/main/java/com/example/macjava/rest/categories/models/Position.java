@@ -2,6 +2,7 @@ package com.example.macjava.rest.categories.models;
 
 import com.example.macjava.rest.workers.models.Workers;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -29,33 +30,40 @@ public class Position {
             .build();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "Identificador de la categoria", example = "1")
     private Long id;
 
     @NotBlank(message = "El nombre no puede estar vacío")
     @Column(nullable = false,columnDefinition = "VARCHAR (13) CONSTRAINT CHECK_NAME CHECK name IN ('MANAGER','COOKER','CLEANER','WAITER','NOT_ASSIGNED')") //podria ser unique
+    @Schema(description = "Nombre de la categoria", example = "MANAGER")
     private String name;
 
     @NotNull
     @DecimalMin(value = "1000.00", message = "El salario no puede ser menor de 1000.00")
+    @Schema(description = "Salario de la categoria", example = "1000.00")
     private Double salary;
 
     @Column(nullable = false,columnDefinition = "BOOLEAN DEFAULT FALSE")
     @Builder.Default
+    @Schema(description = "Indica si la categoria ha sido eliminada", example = "false")
     private Boolean isDeleted=false;
 
     @CreatedBy
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     @Column ( nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Schema(description = "Fecha de creación de la categoria", example = "2022-01-01 00:00:00")
     private LocalDateTime createdAt=LocalDateTime.now();
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     @Column (columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Schema(description = "Fecha de actualización de la categoria", example = "2022-01-01 00:00:00")
     private LocalDateTime updatedAt=LocalDateTime.now();
 
     @OneToMany(mappedBy = "position")
     @JsonBackReference
+    @Schema(description = "Lista de trabajadores")
     private List<Workers> workers;
 }

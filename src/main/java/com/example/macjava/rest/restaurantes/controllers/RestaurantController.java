@@ -2,6 +2,12 @@ package com.example.macjava.rest.restaurantes.controllers;
 
 import com.example.macjava.rest.restaurantes.servicios.RestaurantService;
 import com.example.macjava.rest.restaurantes.dto.NewRestaurantDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +33,7 @@ import java.util.Optional;
  */
 @RestController
 @PreAuthorize("hasRole('USER')")
+@Tag(name = "Restaurantes", description = "Endpoint de restaurantes de nuestra tienda")
 public class RestaurantController {
     RestaurantService service;
 
@@ -35,6 +42,19 @@ public class RestaurantController {
         this.service=service;
     }
 
+    @Operation(summary = "Obtener todos los restaurantes", description = "Obtener todos los restaurantes")
+    @Parameters({
+            @Parameter(name = "name", description = "Filtrar por nombre"),
+            @Parameter(name = "number", description = "Filtrar por numero de contacto"),
+            @Parameter(name = "isDeleted", description = "Filtrar por estado"),
+            @Parameter(name = "page", description = "Paginacion"),
+            @Parameter(name = "size", description = "Tamanio de la paginacion"),
+            @Parameter(name = "sortBy", description = "Ordenar por"),
+            @Parameter(name = "direction", description = "Ascendente o descendente")
+    })
+    @ApiResponses(value = {
+         @ApiResponse(responseCode = "200", description = "Pagina de restaurantes")
+    })
     @GetMapping("/restaurantes")
     public ResponseEntity<PageResponse<Restaurante>> getRestaurants(
             @RequestParam(required=false) Optional<String> name,
@@ -50,23 +70,55 @@ public class RestaurantController {
         return ResponseEntity.ok().body(PageResponse.of(pageResult,sortBy,direction));
     }
 
+    @Operation(summary = "Obtener un restaurante", description = "Obtener un restaurante")
+    @Parameters({
+            @Parameter(name = "id", description = "Id del restaurante")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Restaurante"),
+            @ApiResponse(responseCode = "404", description = "Restaurante no encontrado")
+    })
     @GetMapping ("/restaurantes/{id}")
     public ResponseEntity<Restaurante> getRestaurant(@PathVariable Long id){
         return ResponseEntity.ok(service.findById(id));
     }
 
+    @Operation(summary = "Crear un nuevo restaurante", description = "Crear un nuevo restaurante")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Restaurante a crear", required = true)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Restaurante creado"),
+            @ApiResponse(responseCode = "400", description = "Error de validacion")
+    })
     @PostMapping("/restaurantes")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Restaurante> createRestaurant(@Valid @RequestBody NewRestaurantDTO restaurantDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(restaurantDTO));
     }
 
+    @Operation(summary = "Actualizar un restaurante", description = "Actualizar un restaurante")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Restaurante a actualizar", required = true)
+    @Parameters({
+            @Parameter(name = "id", description = "Id del restaurante")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Restaurante actualizado"),
+            @ApiResponse(responseCode = "400", description = "Error de validacion"),
+            @ApiResponse(responseCode = "404", description = "Restaurante no encontrado")
+    })
     @PutMapping("/restaurantes/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Restaurante> updateRestaurant(@PathVariable Long id, @Valid @RequestBody UpdatedRestaurantDTO restaurantDTO){
         return ResponseEntity.ok(service.update(id, restaurantDTO));
     }
 
+    @Operation(summary = "Eliminar un restaurante", description = "Eliminar un restaurante")
+    @Parameters({
+            @Parameter(name = "id", description = "Id del restaurante")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Restaurante actualizado"),
+            @ApiResponse(responseCode = "404", description = "Restaurante no encontrado")
+    })
     @DeleteMapping("/restaurantes/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id){
