@@ -1,0 +1,15 @@
+
+i
+java:S1192Â"KDefine a constant instead of duplicating this literal " no existe" 3 times.(°Ş“8»¶§Â1
+]
+java:S1854Á":Remove this useless assignment to local variable "client".(¶æşúûÿÿÿÿ8Û¶§Â1
+]
+java:S1854Æ":Remove this useless assignment to local variable "worker".(èöó¨ûÿÿÿÿ8Û¶§Â1
+a
+java:S1854Ë">Remove this useless assignment to local variable "restaurant".(ñ­¶«ÿÿÿÿÿ8úÙ§Â1
+N
+java:S1481Á"+Remove this unused "client" local variable.(¶æşúûÿÿÿÿ8Ü¶§Â1
+N
+java:S1481Æ"+Remove this unused "worker" local variable.(èöó¨ûÿÿÿÿ8İ¶§Â1
+R
+java:S1481Ë"/Remove this unused "restaurant" local variable.(ñ­¶«ÿÿÿÿÿ8€Ú§Â1
