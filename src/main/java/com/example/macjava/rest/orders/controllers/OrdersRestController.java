@@ -4,6 +4,8 @@ import com.example.macjava.rest.orders.dto.OrderSaveDto;
 import com.example.macjava.rest.orders.dto.OrderUpdateDto;
 import com.example.macjava.rest.orders.models.Order;
 import com.example.macjava.rest.orders.services.OrdersServiceImpl;
+import com.example.macjava.rest.user.models.Role;
+import com.example.macjava.rest.user.models.User;
 import com.example.macjava.utils.pagination.PageResponse;
 import com.example.macjava.utils.pagination.PaginationLinksUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +33,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("${api.version}/orders")
 @Slf4j
-//@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('USER')")
 public class OrdersRestController {
     private final OrdersServiceImpl ordersService;
     private final PaginationLinksUtils paginationLinksUtils;
@@ -39,11 +43,14 @@ public class OrdersRestController {
         this.paginationLinksUtils = paginationLinksUtils;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/listAll")
     public ResponseEntity<List<Order>> findAll() {
         log.info("Obteniendo todos los pedidos");
         return ResponseEntity.ok(ordersService.findAll());
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     public ResponseEntity<PageResponse<Order>> findAll(
             @RequestParam(defaultValue = "0") int page,
@@ -67,12 +74,37 @@ public class OrdersRestController {
         return ResponseEntity.ok(ordersService.findById(idPedido));
     }
 
+    /**
+     * Permite al usuario(USER) crear un pedido, pero este debe estar creado obligatoriamente bajo su UUID. Si no, devuelve un HttpStatus.FORBIDDEN
+     * @param order OrderSaveDto a crear
+     * @param user User que crea el pedido
+     * @return ResponseEntity con el pedido creado, o forbidden si no tiene el uuid correcto
+     */
     @Transactional
     @PostMapping("/orders")
-    public ResponseEntity<Order> saveOrder(@RequestBody @Valid OrderSaveDto order){
+    public ResponseEntity<Order> saveOrder(@RequestBody @Valid OrderSaveDto order,
+                                           @AuthenticationPrincipal User user
+    ){
+        if(user.getId()!=order.getWorkerUUID()){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         log.info("Guardando pedido:{}", order);
         return ResponseEntity.status(HttpStatus.CREATED).body(ordersService.save(order));
     }
+    /**
+     * Permite al Administrador(ADMIN) crear un pedido, bajo la titularidad de cualquier otro empleado. <br>
+     * En un futuro, y si se añade un rol de SUPERADMIN, podria limitarse por restaurante, subordinados...
+     * @param order OrderSaveDto a crear
+     * @return ResponseEntity con el pedido creado
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    @PostMapping("/ordersAdmin")
+    public ResponseEntity<Order> saveOrderAdmin(@RequestBody @Valid OrderSaveDto order){
+        log.info("Guardando pedido:{}", order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ordersService.save(order));
+    }
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     @DeleteMapping("{id}")
     public ResponseEntity<Order> deleteOrder(@PathVariable("id") ObjectId idPedido) {
@@ -81,6 +113,7 @@ public class OrdersRestController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     @PutMapping("{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable("id") ObjectId idPedido, @RequestBody @Valid OrderUpdateDto dto){
@@ -110,18 +143,27 @@ public class OrdersRestController {
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
     @GetMapping("/workerExists/{id}")
-    public ResponseEntity<Boolean> existsByWorkerUUID(@PathVariable("id") UUID workerUUID){
+    public ResponseEntity<Boolean> existsByWorkerUUID(@PathVariable("id") UUID workerUUID,
+                                                      @AuthenticationPrincipal User user){
+        if(user.getId()!=workerUUID){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         log.info("Buscando si existe algun pedido del Trabajador con uuid: " + workerUUID);
         return ResponseEntity.ok(ordersService.existsByWorkerUUID(workerUUID));
     }
     @GetMapping("/worker/{id}")
     public ResponseEntity<PageResponse<Order>> findWorkerUUID(@PathVariable("id") UUID workerUUID,
-                                                                @RequestParam(defaultValue = "0") int page,
-                                                                @RequestParam(defaultValue = "10") int size,
-                                                                @RequestParam(defaultValue = "id") String sortBy,
-                                                                @RequestParam(defaultValue = "asc") String direction,
-                                                                HttpServletRequest request){
+                                                              @RequestParam(defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "10") int size,
+                                                              @RequestParam(defaultValue = "id") String sortBy,
+                                                              @RequestParam(defaultValue = "asc") String direction,
+                                                              HttpServletRequest request,
+                                                              @AuthenticationPrincipal User user){
+        if(user.getId()!=workerUUID){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         log.info("Buscando los pedido pageados del Trabajador con uuid: " + workerUUID);
+
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
 
@@ -152,6 +194,7 @@ public class OrdersRestController {
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     @PutMapping ("/isPaid/{id}")
     public ResponseEntity<Order> updateIsPaidById(
@@ -161,6 +204,7 @@ public class OrdersRestController {
         return ResponseEntity.ok(ordersService.updateIsPaidById(objectId, isPaid));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     @PutMapping ("/isDeleted/{id}")
     public ResponseEntity<Order> updateisDeletedById(

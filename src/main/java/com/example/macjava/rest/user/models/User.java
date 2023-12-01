@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
@@ -30,9 +31,11 @@ import java.util.stream.Collectors;
 @EntityListeners(AuditingEntityListener.class) // Para que sea auditada y se autorellene
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(description = "Identificar del usuario", example = "1")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Schema(description = "Identificar del usuario", example = "12345678-1234-1234-1234-123456789012")
+    @Column(columnDefinition = "UUID DEFAULT RANDOM_UUID()")
+    @Builder.Default
+    private UUID id=UUID.randomUUID();
     @Schema(description = "Nombre del usuario", example = "Jaime")
     @NotBlank(message = "nombre no puede estar vacío")
     @Column(nullable = false)

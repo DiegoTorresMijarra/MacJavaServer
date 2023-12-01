@@ -9,9 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UsersRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
+public interface UsersRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
 
     Optional<User> findByUsername(String username);
 
@@ -27,6 +28,6 @@ public interface UsersRepository extends JpaRepository<User, Long>, JpaSpecifica
     @Modifying // Para indicar que es una consulta de actualización
     @Query("UPDATE User p SET p.isDeleted = true WHERE p.id = :id")
         // Consulta de actualización
-    void updateIsDeletedToTrueById(Long id);
+    void updateIsDeletedToTrueById(UUID id);
 
 }

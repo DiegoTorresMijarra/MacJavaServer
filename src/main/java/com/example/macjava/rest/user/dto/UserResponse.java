@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -15,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserResponse {
     @Schema(description = "ID del usuario", example = "1")
-    private Long id;
+    private UUID id;
     @Schema(description = "Nombre del usuario", example = "John")
     private String nombre;
     @Schema(description = "Apellidos del usuario", example = "Doe")
