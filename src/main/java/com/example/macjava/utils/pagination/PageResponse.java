@@ -1,5 +1,6 @@
 package com.example.macjava.utils.pagination;
 
+import com.example.macjava.rest.orders.models.Order;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
