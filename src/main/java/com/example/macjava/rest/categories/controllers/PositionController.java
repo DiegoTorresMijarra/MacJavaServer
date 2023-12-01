@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import java.util.Optional;
 @Slf4j
 @PreAuthorize("hasRole('USER')")
 @RequestMapping(value = "/positions")
+@Tag(name = "Puestos", description = "Endpoint de Puestos de nuestra tienda")
 public class PositionController {
     private final PositionServiceImpl positionService;
 
