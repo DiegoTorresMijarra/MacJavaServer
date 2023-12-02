@@ -40,7 +40,7 @@ import java.util.UUID;
 
 @RestController
 @PreAuthorize("hasRole('USER')")
-@RequestMapping("${api.version}/users")
+@RequestMapping("/users")
 @Tag(name = "Usuarios", description = "Endpoint usuarios de la tienda")
 public class UsersRestController {
     private final UsersService usersService;
