@@ -64,13 +64,7 @@ class SwaggerConfig {
         return GroupedOpenApi.builder()
                 .group("https")
                 // Algunas rutas son JWT
-                .pathsToMatch("/positions/**")
-                .pathsToMatch("/workers/**")
-                .pathsToMatch("/products/**")
-                .pathsToMatch("/orders/**")
-                .pathsToMatch("/restaurant/**")
-                .pathsToMatch("/clientes/**")
-                .pathsToMatch("/storage/**")
+                .pathsToMatch("/**")
                 .displayName("API MacJavaServer Spring Boot DAW 2023/2024")
                 .build();
     }

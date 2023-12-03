@@ -1,0 +1,15 @@
+
+6
+java:S1170"!Make this final field static too.(ÀßÄ
+]
+java:S1128"BRemove this unused import 'io.swagger.v3.oas.models.info.Contact'.(ËÌ€Ñùÿÿÿÿ
+\
+java:S1128"ARemove this unused import 'org.springframework.http.HttpHeaders'.(ãŸñ×úÿÿÿÿ
+M
+java:S1128"2Remove this unused import 'java.util.Collections'.(¢³ïÓþÿÿÿÿ
+I
+java:S1128".Remove this unused import 'java.util.HashMap'.(™˜”€ùÿÿÿÿ
+E
+java:S1128"*Remove this unused import 'java.util.Map'.(¼è½Òþÿÿÿÿ
+D
+java:S1128".Remove this unused import 'java.util.Objects'.(¼¸õ›

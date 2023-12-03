@@ -155,3 +155,7 @@ Ssrc/test/java/com/example/macjava/rest/user/controller/UsersRestControllerTest.
 Tsrc/test/java/com/example/macjava/rest/user/controller/OrdersRestControllerTest.java,b\9\b9921a3fc738e046355bd00ac1051e5aafa50695
 A
 database/init.sql,a\4\a474777412607bdc43e7001b92e23c49ad62fb44
+s
+Csrc/main/java/com/example/macjava/config/swagger/SwaggerConfig.java,4\6\460d4521a725ed84bba840de297f03e88699ecc1
+ˆ
+Xsrc/main/java/com/example/macjava/rest/clients/storage/controller/storageController.java,9\8\98097a1d798e618ac4cfb94e3fbae2f1e178a522

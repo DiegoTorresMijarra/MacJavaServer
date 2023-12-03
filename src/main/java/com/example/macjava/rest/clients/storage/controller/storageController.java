@@ -3,6 +3,7 @@ package com.example.macjava.rest.clients.storage.controller;
 
 import com.example.macjava.rest.clients.service.ClientService;
 import com.example.macjava.rest.clients.storage.service.storageService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/storage")
+@Tag(name="Almacenamiento", description = "Almacenamiento de archivos")
 public class storageController {
     storageService service;
     ClientService clientService;

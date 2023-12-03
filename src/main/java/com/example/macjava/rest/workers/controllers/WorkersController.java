@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
@@ -37,6 +38,7 @@ import java.util.*;
 @Slf4j
 @RequestMapping(value = "/workers")
 @PreAuthorize("hasRole('ADMIN')")
+@Tag(name = "Trabajadores", description = "Endpoint de Trabajadores de nuestra tienda")
 public class WorkersController {
     private final WorkersServiceImpl workersService;
 

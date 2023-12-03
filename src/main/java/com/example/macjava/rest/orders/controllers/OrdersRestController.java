@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -42,6 +43,7 @@ import java.util.UUID;
 @RequestMapping("${api.version}/orders")
 @Slf4j
 @PreAuthorize("hasRole('USER')")
+@Tag(name = "Pedidos", description = "Endpoint de Pedidos de nuestra tienda")
 public class OrdersRestController {
     private final OrdersServiceImpl ordersService;
     private final PaginationLinksUtils paginationLinksUtils;
