@@ -271,14 +271,14 @@ public class OrdersRestController {
                 .header("link", paginationLinksUtils.createLinkHeader(pageResult, uriBuilder))
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
-    /*
 
-    /**
+    /*
      * Busca si existe algun pedido del Trabajador con el uuid dado
      * @param workerUUID uuid del trabajador
      * @param user User que realiza la peticion
      * @return ResponseEntity con un booleano
-     */
+
+
     @Operation(description = "Busca si existe algun pedido del Trabajador con el uuid dado")
     @Parameter(name = "workerUUID", description = "UUID del trabajador", example = "60f0b0b9e3b9f83f7c7e3b9f")
     @ApiResponses(value = {
@@ -296,7 +296,6 @@ public class OrdersRestController {
         return ResponseEntity.ok(ordersService.existsByWorkerUUID(workerUUID));
     }
 
-    /**
      * Busca los pedidos del Trabajador con el uuid dado
      * @param workerUUID uuid del trabajador
      * @param page numero de pagina
@@ -306,7 +305,7 @@ public class OrdersRestController {
      * @param request
      * @param user User que realiza la peticion
      * @return ResponseEntity con la lista de pedidos del trabajador
-     */
+
     @Operation(description = "Busca los pedidos del Trabajador con el uuid dado")
     @Parameter(name = "workerUUID", description = "UUID del trabajador", example = "60f0b0b9e3b9f83f7c7e3b9f")
     @Parameters({
@@ -341,7 +340,6 @@ public class OrdersRestController {
                 .header("link", paginationLinksUtils.createLinkHeader(pageResult, uriBuilder))
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
-
      */
 
     @GetMapping("/restaurantExists/{id}")

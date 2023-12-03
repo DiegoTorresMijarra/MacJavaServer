@@ -161,3 +161,5 @@ Fsrc/main/java/com/example/macjava/rest/categories/models/Position.java,e\3\e37
 Ksrc/main/java/com/example/macjava/rest/auth/service/jwt/JwtServiceImpl.java,f\6\f67cc2f38b91072c9f12b4a68f1db361866bc92e
 „
 Tsrc/test/java/com/example/macjava/rest/user/controller/OrdersRestControllerTest.java,b\9\b9921a3fc738e046355bd00ac1051e5aafa50695
+A
+database/init.sql,a\4\a474777412607bdc43e7001b92e23c49ad62fb44

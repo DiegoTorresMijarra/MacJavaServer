@@ -153,3 +153,5 @@ Ksrc/main/java/com/example/macjava/rest/auth/service/jwt/JwtServiceImpl.java,f\
 Ssrc/test/java/com/example/macjava/rest/user/controller/UsersRestControllerTest.java,c\f\cf9b82ed1f5e0c47dae4a0c5bd79f31ae8e9e1af
 „
 Tsrc/test/java/com/example/macjava/rest/user/controller/OrdersRestControllerTest.java,b\9\b9921a3fc738e046355bd00ac1051e5aafa50695
+A
+database/init.sql,a\4\a474777412607bdc43e7001b92e23c49ad62fb44

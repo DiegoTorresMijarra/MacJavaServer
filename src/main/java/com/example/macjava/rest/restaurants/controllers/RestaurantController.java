@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -109,9 +110,11 @@ public class RestaurantController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Restaurante guardado"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error en los parámetros del Restaurante"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autorizado")
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Restaurante a guardar", required=true)
     @PostMapping("/restaurant")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Restaurant> createRestaurant(@Valid @RequestBody NewRestaurantDTO restaurantDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(restaurantDTO));
     }
@@ -134,6 +137,7 @@ public class RestaurantController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Restaurante no encontrado"),
     })
     @PutMapping("/restaurant/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Restaurant> updateRestaurant(@PathVariable Long id, @Valid @RequestBody UpdatedRestaurantDTO restaurantDTO){
         return ResponseEntity.ok(service.update(id, restaurantDTO));
     }
@@ -146,8 +150,10 @@ public class RestaurantController {
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Restaurante eliminado"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Restaurante no encontrado"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "No autorizado")
     })
     @DeleteMapping("/restaurant/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id){
         service.deleteById(id);
         return ResponseEntity.noContent().build();
