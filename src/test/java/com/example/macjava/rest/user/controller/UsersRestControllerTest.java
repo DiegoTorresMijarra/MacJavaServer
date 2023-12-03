@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -48,7 +49,8 @@ class UsersRestControllerTest {
             .username("test")
             .email("test@test.com")
             .build();
-    private final User user = User.builder().id(99L)
+    private final User user = User.builder()
+            .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
             .nombre("test")
             .apellidos("test")
             .password("test1234")
@@ -56,14 +58,14 @@ class UsersRestControllerTest {
             .email("test@test.com")
             .build();
     private final UserResponse userResponse = UserResponse.builder()
-            .id(99L)
+            .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
             .nombre("test")
             .apellidos("test")
             .username("test")
             .email("test@test.com")
             .build();
     private final UserInfoResponse userInfoResponse = UserInfoResponse.builder()
-            .id(99L)
+            .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
             .nombre("test")
             .apellidos("test")
             .username("test")
@@ -130,10 +132,10 @@ class UsersRestControllerTest {
     @Test
     void findById() throws Exception {
         // Localpoint
-        var myLocalEndpoint = myEndpoint + "/1";
+        var myLocalEndpoint = myEndpoint + "/00000000-0000-0000-0000-000000000000";
 
         // Arrange
-        when(usersService.findById(anyLong())).thenReturn(userInfoResponse);
+        when(usersService.findById(any(UUID.class))).thenReturn(userInfoResponse);
 
         // Consulto el endpoint
         MockHttpServletResponse response = mockMvc.perform(
@@ -151,16 +153,16 @@ class UsersRestControllerTest {
         );
 
         // Verify
-        verify(usersService, times(1)).findById(anyLong());
+        verify(usersService, times(1)).findById(any(UUID.class));
     }
 
     @Test
     void findByIdNotFound() throws Exception {
         // Localpoint
-        var myLocalEndpoint = myEndpoint + "/1";
+        var myLocalEndpoint = myEndpoint + "/00000000-0000-0000-0000-000000000000";
 
         // Arrange
-        when(usersService.findById(anyLong())).thenThrow(new UserNotFound("No existe el usuario"));
+        when(usersService.findById(any(UUID.class))).thenThrow(new UserNotFound("No existe el usuario"));
 
         // Consulto el endpoint
         MockHttpServletResponse response = mockMvc.perform(
@@ -173,7 +175,7 @@ class UsersRestControllerTest {
         assertEquals(404, response.getStatus());
 
         // Verify
-        verify(usersService, times(1)).findById(anyLong());
+        verify(usersService, times(1)).findById(any(UUID.class));
     }
 
     @Test
@@ -268,10 +270,10 @@ class UsersRestControllerTest {
     @Test
     void updateUser() throws Exception {
         // Localpoint
-        var myLocalEndpoint = myEndpoint + "/1";
+        var myLocalEndpoint = myEndpoint + "/00000000-0000-0000-0000-000000000000";
 
         // Arrange
-        when(usersService.update(anyLong(), any(UserRequest.class))).thenReturn(userResponse);
+        when(usersService.update(any(UUID.class), any(UserRequest.class))).thenReturn(userResponse);
 
         MockHttpServletResponse response = mockMvc.perform(
                         put(myLocalEndpoint)
@@ -288,16 +290,16 @@ class UsersRestControllerTest {
         );
 
         // Verify
-        verify(usersService, times(1)).update(anyLong(), any(UserRequest.class));
+        verify(usersService, times(1)).update(any(UUID.class), any(UserRequest.class));
     }
 
     @Test
     void updateUserNotFound() throws Exception {
         // Localpoint
-        var myLocalEndpoint = myEndpoint + "/1";
+        var myLocalEndpoint = myEndpoint + "/00000000-0000-0000-0000-000000000000";
 
         // Arrange
-        when(usersService.update(anyLong(), any(UserRequest.class))).thenThrow(new UserNotFound("No existe el usuario"));
+        when(usersService.update(any(UUID.class), any(UserRequest.class))).thenThrow(new UserNotFound("No existe el usuario"));
 
         MockHttpServletResponse response = mockMvc.perform(
                         put(myLocalEndpoint)
@@ -310,7 +312,7 @@ class UsersRestControllerTest {
         assertEquals(404, response.getStatus());
 
         // Verify
-        verify(usersService, times(1)).update(anyLong(), any(UserRequest.class));
+        verify(usersService, times(1)).update(any(UUID.class), any(UserRequest.class));
     }
 
     // Hacer un test para cada una de las validaciones del update
@@ -318,10 +320,10 @@ class UsersRestControllerTest {
     @Test
     void deleteUser() throws Exception {
         // Localpoint
-        var myLocalEndpoint = myEndpoint + "/1";
+        var myLocalEndpoint = myEndpoint + "/00000000-0000-0000-0000-000000000000";
 
         // Arrange
-        doNothing().when(usersService).deleteById(anyLong());
+        doNothing().when(usersService).deleteById(any(UUID.class));
 
         MockHttpServletResponse response = mockMvc.perform(
                         delete(myLocalEndpoint)
@@ -333,16 +335,16 @@ class UsersRestControllerTest {
         assertEquals(204, response.getStatus());
 
         // Verify
-        verify(usersService, times(1)).deleteById(anyLong());
+        verify(usersService, times(1)).deleteById(any(UUID.class));
     }
 
     @Test
     void deleteUserNotFound() throws Exception {
         // Localpoint
-        var myLocalEndpoint = myEndpoint + "/1";
+        var myLocalEndpoint = myEndpoint + "/00000000-0000-0000-0000-000000000000";
 
         // Arrange
-        doThrow(new UserNotFound("No existe el usuario")).when(usersService).deleteById(anyLong());
+        doThrow(new UserNotFound("No existe el usuario")).when(usersService).deleteById(any(UUID.class));
 
         MockHttpServletResponse response = mockMvc.perform(
                         delete(myLocalEndpoint)
@@ -354,7 +356,7 @@ class UsersRestControllerTest {
         assertEquals(404, response.getStatus());
 
         // Verify
-        verify(usersService, times(1)).deleteById(anyLong());
+        verify(usersService, times(1)).deleteById(any(UUID.class));
     }
 
     @Test
@@ -367,7 +369,7 @@ class UsersRestControllerTest {
         var myLocalEndpoint = myEndpoint + "/me/profile";
 
         // Arrange
-        when(usersService.findById(anyLong())).thenReturn(userInfoResponse);
+        when(usersService.findById(any(UUID.class))).thenReturn(userInfoResponse);
 
         MockHttpServletResponse response = mockMvc.perform(
                         get(myLocalEndpoint)

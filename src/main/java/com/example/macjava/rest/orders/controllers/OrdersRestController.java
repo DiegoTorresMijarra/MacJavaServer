@@ -85,7 +85,7 @@ public class OrdersRestController {
     public ResponseEntity<Order> saveOrder(@RequestBody @Valid OrderSaveDto order,
                                            @AuthenticationPrincipal User user
     ){
-        if(user.getId()!=order.getWorkerUUID()){
+        if(user==null||user.getId()!=order.getWorkerUUID()){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         log.info("Guardando pedido:{}", order);
@@ -142,6 +142,7 @@ public class OrdersRestController {
                 .header("link", paginationLinksUtils.createLinkHeader(pageResult, uriBuilder))
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
+    /*
     @GetMapping("/workerExists/{id}")
     public ResponseEntity<Boolean> existsByWorkerUUID(@PathVariable("id") UUID workerUUID,
                                                       @AuthenticationPrincipal User user){
@@ -172,6 +173,9 @@ public class OrdersRestController {
                 .header("link", paginationLinksUtils.createLinkHeader(pageResult, uriBuilder))
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
+
+     */
+
     @GetMapping("/restaurantExists/{id}")
     public ResponseEntity<Boolean> existsByRestaurantId(@PathVariable("id") Long clientId){
         log.info("Buscando si existe algun pedido del cliente con uuid: " + clientId);

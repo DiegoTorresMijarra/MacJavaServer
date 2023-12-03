@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
+@WithMockUser(username = "admin", password = "admin", roles = {"ADMIN", "USER"})
 class WorkersControllerTest {
     private final Position position1=Position.builder()
             .id(1L)
@@ -125,7 +127,6 @@ class WorkersControllerTest {
 
         // Arrange
         when(workersService.findAll(any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(Optional.class), any(PageRequest.class))).thenReturn(page);
-        System.out.println(mapper.writeValueAsString(page));
         // Consulto el endpoint
         MockHttpServletResponse response = mockMvc.perform(
                         get(localEndPoint)
@@ -483,7 +484,11 @@ class WorkersControllerTest {
         String localEndPoint=myEndpoint+"/worker/"+uuid;
         WorkersUpdateDto workersUpdateDto = WorkersUpdateDto.builder()
                 .name("Juan")
+                .surname("NuevoApellido")
                 .positionId(2L)
+                .age(20)
+                .dni("12345678Q")
+                .phone("123456789")
                 .build();
 
         Workers newWorkers=WorkersMapper.toModel(worker1,workersUpdateDto,position2);

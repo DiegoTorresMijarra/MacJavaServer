@@ -149,3 +149,15 @@ y
 Isrc/main/java/com/example/macjava/rest/workers/mappers/WorkersMapper.java,9\d\9da0e55fac4d30648f860fe6fa5e34b4c9441b58
 x
 Hsrc/main/java/com/example/macjava/rest/workers/dto/WorkersUpdateDto.java,6\c\6cfb1e5f1a8db1663033aabc4dcdb485a93fb2ec
+m
+=src/main/java/com/example/macjava/config/cors/CorsConfig.java,2\7\27cf4a88df7ccb9a4520616cc5ceaea97fea39eb
+
+Osrc/main/java/com/example/macjava/rest/workers/services/WorkersServiceImpl.java,5\c\5c37c14e8cb693a042ab36ab3aeb1be5f770a064
+}
+Msrc/main/java/com/example/macjava/rest/categories/mappers/PositionMapper.java,4\2\4210953e49d7102ebd386f68f023f8cefbd9d7ab
+v
+Fsrc/main/java/com/example/macjava/rest/categories/models/Position.java,e\3\e377d94ce2d13b1bf968b6c993950a7c4c80f129
+{
+Ksrc/main/java/com/example/macjava/rest/auth/service/jwt/JwtServiceImpl.java,f\6\f67cc2f38b91072c9f12b4a68f1db361866bc92e
+„
+Tsrc/test/java/com/example/macjava/rest/user/controller/OrdersRestControllerTest.java,b\9\b9921a3fc738e046355bd00ac1051e5aafa50695
