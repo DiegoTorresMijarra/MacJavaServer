@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DesarrolloWebServidor.MacJavaServer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/DesarrolloWebServidor.MacJavaServer.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MacJavaServer.iml" filepath="$PROJECT_DIR$/.idea/modules/MacJavaServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MacJavaServer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/MacJavaServer.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MacJavaServer.test.iml" filepath="$PROJECT_DIR$/.idea/modules/MacJavaServer.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.MacJavaServer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.MacJavaServer.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.MacJavaServer.test.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.MacJavaServer.test.iml" />
     </modules>
   </component>
 </project>
