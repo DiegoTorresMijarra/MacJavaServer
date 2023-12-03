@@ -88,6 +88,7 @@ public class ProductServiceImp implements ProductService{
      * Método que devuelve un producto dado su ID.
      * @param id ID del producto a buscar
      * @return Producto con el ID indicado
+     * @throws ProductNotFound Excepción que se lanza si no se encuentra el producto
      */
     @Override
     @Cacheable

@@ -72,6 +72,7 @@ public class RestaurantServiceImpl implements RestaurantService{
      * Método que obtiene un restaurante por su ID
      * @param id ID del restaurante a buscar
      * @return Restaurante que coincida con el ID
+     * @throws RestaurantNotFound Excepción que se lanza si no se encuentra el restaurante
      */
     @Override
     @Cacheable

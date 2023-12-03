@@ -4,6 +4,9 @@ import com.example.macjava.rest.orders.dto.OrderSaveDto;
 import com.example.macjava.rest.orders.dto.OrderUpdateDto;
 import com.example.macjava.rest.orders.models.Order;
 
+/**
+ * Mapeador de pedidos
+ */
 public class OrderMapper {
     public static Order saveToModel(OrderSaveDto dto) {
         Order res= Order.builder()

@@ -90,6 +90,7 @@ public class UsersServiceImp implements UsersService{
      * Devuelve un usuario por su ID
      * @param id ID del usuario a buscar
      * @return Usuario
+     * @throws UserNotFound Excepción que se lanza si no se encuentra el usuario
      */
     @Override
     @Cacheable(key = "#id")

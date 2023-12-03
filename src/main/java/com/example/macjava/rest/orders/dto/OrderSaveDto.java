@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Modelo de datos para ALMACENAR los pedidos
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

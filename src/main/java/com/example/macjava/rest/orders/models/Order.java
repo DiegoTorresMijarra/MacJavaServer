@@ -22,6 +22,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Modelo de datos para los pedidos
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -30,6 +30,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
+
+/**
+ * Implementación de la interfaz ClientService
+ */
 @CacheConfig(cacheNames = {"clientes"})
 @Service
 public class ClientServiceImp implements ClientService{
@@ -49,6 +53,20 @@ public class ClientServiceImp implements ClientService{
         this.clientNotificationMapper = clientNotificationMapper;
         webSocketService = webSocketConfig.webSocketClientsHandler();
     }
+
+    /**
+     * Método que devuelve todos los clientes de la base de datos.
+     * @param dni opcional dni del cliente
+     * @param name opcional nombre del cliente
+     * @param last_name opcional apellidos del cliente
+     * @param age opcional edad del cliente
+     * @param ageMax opcional edad maxima del cliente
+     * @param ageMin opcional edad minima del cliente
+     * @param phone opcional telefono del cliente
+     * @param deleted  opcional eliminado del cliente
+     * @param pageable Paginacion
+     * @return pagina de clientes encontrados
+     */
     @Override
     public Page<Client> findAll(Optional<String> dni, Optional<String> name, Optional<String> last_name, Optional<Integer> age, Optional<Integer> ageMax, Optional<Integer> ageMin, Optional<String> phone, Optional<Boolean> deleted, Pageable pageable) {
         // Criterio de búsqueda por dni
@@ -95,12 +113,23 @@ public class ClientServiceImp implements ClientService{
         return repository.findAll(criterio, pageable);
     }
 
+    /**
+     * Método que devuelve un cliente dado su ID.
+     * @param id id del cliente a buscar
+     * @return cliente con el ID indicado
+     */
     @Override
     @Cacheable
     public Client findById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ClientNotFound(id));
     }
 
+    /**
+     * Guarda un cliente en la base de datos.
+     * Envia una notificacion de que se ha creado un cliente.
+     * @param client cliente a guardar
+     * @return cliente guardado
+     */
     @Override
     @CachePut
     public Client save(ClientdtoNew client) {
@@ -108,6 +137,14 @@ public class ClientServiceImp implements ClientService{
         onChange(Notification.Tipo.CREATE, ClientSave);
         return repository.save(ClientSave);
     }
+
+    /**
+     *  Actualiza un cliente dado su ID.
+     *  Envia una notificacion de que se ha actualizado un cliente.
+     * @param id id del cliente a actualizar
+     * @param client cliente con los datos a actualizar
+     * @return cliente actualizado
+     */
     @Override
     @CachePut
     @Transactional
@@ -118,6 +155,11 @@ public class ClientServiceImp implements ClientService{
         return repository.save(ClientUpdate);
     }
 
+    /**
+     * Elimina un cliente dado su ID. Borra la imagen del cliente si tiene.
+     * Envia una notificacion de que se ha eliminado un cliente.
+     * @param id id del cliente a eliminar
+     */
     @Override
     @CacheEvict
     @Transactional
@@ -130,6 +172,15 @@ public class ClientServiceImp implements ClientService{
         repository.updateIsDeletedToTrueById(id);
     }
 
+    /**
+     * Actualiza la imagen de un cliente
+     * Borra la anterior imagen del cliente si tiene y enviara una notificacion de que se ha actualizado el cliente.
+     * @param id id del cliente a actualizar
+     * @param image imagen a actualizar
+     * @param withUrl si se quiere obtener la url de la imagen
+     * @return cliente actualizado
+     * @throws ClientNotFound Excepción que se lanza si no se encuentra el cliente
+     */
     @Override
     @CachePut
     @Transactional
@@ -160,6 +211,11 @@ public class ClientServiceImp implements ClientService{
         return clientUpdated;
     }
 
+    /**
+     * Envía una notificación a los clientes suscritos a los cambios de los clientes
+     * @param tipo
+     * @param data
+     */
     void onChange(Notification.Tipo tipo, Client data) {
 
         if (webSocketService == null) {

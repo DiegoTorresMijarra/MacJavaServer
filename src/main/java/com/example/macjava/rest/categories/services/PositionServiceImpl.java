@@ -74,6 +74,7 @@ public class PositionServiceImpl implements PositionService{
      * Obtiene la posición con el id dado
      * @param id id de la posición a obtener
      * @return Posicion con ese id
+     * @throws PositionNotFound Excepción que se lanza si no se encuentra la posición
      */
     @Override
     @Cacheable(key="#id")
