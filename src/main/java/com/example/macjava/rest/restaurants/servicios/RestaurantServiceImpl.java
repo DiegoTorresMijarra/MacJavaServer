@@ -18,18 +18,37 @@ import com.example.macjava.rest.restaurants.repositories.RestaurantRepository;
 
 import java.util.Optional;
 
+/**
+ * Implementación de la interfaz RestaurantService
+ * Proporciona los métodos para gestionar los restaurantes
+ * Anotamos la clase con @Service para indicar que es un servicio
+ * Anotamos la clase con @CacheConfig para indicar que el nombre de la cache es "restaurants"
+ * @Parameter repository Repositorio de restaurantes
+ * @Parameter map Mapeador de restaurantes
+ */
 @CacheConfig(cacheNames = {"restaurants"})
 @Service
 public class RestaurantServiceImpl implements RestaurantService{
     RestaurantRepository repository;
     RestaurantMapper map =new RestaurantMapper();
 
-
+    /**
+     * Constructor de la clase
+     * @param repository Repositorio de restaurantes
+     */
     @Autowired
     public RestaurantServiceImpl(RestaurantRepository repository){
         this.repository=repository;
     }
 
+    /**
+     * Método que obtiene todos los restaurantes que cumplan con los parámetros de búsqueda
+     * @param name Opcional: nombre del restaurante
+     * @param number Opcional: número de teléfono del restaurante
+     * @param isDeleted Opcional: indica si el restaurante está eliminado
+     * @param page informacion de la paginación
+     * @return Pagina de restaurantes que cumplan con los parámetros de búsqueda
+     */
     @Override
     public Page<Restaurant> findAll(Optional<String> name, Optional<String> number, Optional<Boolean> isDeleted, Pageable page) {
         //Criterio busqueda nombre
@@ -49,6 +68,12 @@ public class RestaurantServiceImpl implements RestaurantService{
         return repository.findAll(criterio,page);
     }
 
+    /**
+     * Método que obtiene un restaurante por su ID
+     * @param id ID del restaurante a buscar
+     * @return Restaurante que coincida con el ID
+     * @throws RestaurantNotFound Excepción que se lanza si no se encuentra el restaurante
+     */
     @Override
     @Cacheable
     public Restaurant findById(Long id) {
@@ -56,6 +81,11 @@ public class RestaurantServiceImpl implements RestaurantService{
         return repository.findById(id).orElseThrow(()->new RestaurantNotFound(id));
     }
 
+    /**
+     * Método que guarda un restaurante con la información de un RestauranteDTO
+     * @param restau RestauranteDTO con la informacion del restaurante a guardar
+     * @return Restaurante guardado
+     */
     @Override
     @CachePut
     public Restaurant save(NewRestaurantDTO restau) {
@@ -63,9 +93,14 @@ public class RestaurantServiceImpl implements RestaurantService{
         return repository.save(savedRestaurant);
     }
 
+    /**
+     * Método que actualiza un restaurante con la información de un RestauranteDTO
+     * @param id ID del restaurante a actualizar
+     * @param restau RestauranteDTO con la información a actualizar
+     * @return Restaurante actualizado
+     */
     @Override
     @CachePut
-
     @Transactional
     public Restaurant update(Long id, UpdatedRestaurantDTO restau) {
         Restaurant optionalRestaurant= findById(id);
@@ -73,6 +108,11 @@ public class RestaurantServiceImpl implements RestaurantService{
         return repository.save(updatedRestaurant);
     }
 
+    /**
+     * Método que llama a un metodo del repositorio
+     * para actualizar el campo isDeleted a true de un restaurante (realizar un borrado lógico)
+     * @param id ID del restaurante a eliminar
+     */
     @Override
     @Transactional
     public void deleteById(Long id) {

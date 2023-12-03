@@ -9,6 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+/**
+ * Petición de registro de usuario
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

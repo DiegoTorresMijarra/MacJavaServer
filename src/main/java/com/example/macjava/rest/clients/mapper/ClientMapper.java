@@ -7,8 +7,16 @@ import com.example.macjava.rest.clients.models.Client;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/**
+ * Mapeador de clientes
+ */
 public class ClientMapper {
-public Client toClientNew(ClientdtoNew client) {
+    /**
+     * Convierte un objeto de transferencia de datos de cliente nuevo a un modelo de cliente
+     * @param client Objeto de transferencia de datos de cliente nuevo
+     * @return Modelo de cliente
+     */
+    public Client toClientNew(ClientdtoNew client) {
     return Client.builder()
             .id(UUID.randomUUID())
             .dni(client.getDni())
@@ -22,6 +30,12 @@ public Client toClientNew(ClientdtoNew client) {
             .fecha_act(LocalDate.now())
     .build();
 }
+     /**
+     * Convierte un objeto de transferencia de datos de cliente actualizado a un modelo de cliente
+     * @param clientdto Objeto de transferencia de datos de cliente actualizado
+     * @param client Modelo de cliente
+     * @return Modelo de cliente
+     */
 public Client toClientUpdate(ClientdtoUpdated clientdto,Client client) {
     return Client.builder()
             .id(client.getId())

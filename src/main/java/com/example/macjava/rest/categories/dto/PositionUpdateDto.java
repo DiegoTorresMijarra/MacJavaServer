@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Objeto de transferencia de datos para la actualización de la categoria
+ */
 @Data
 @Builder
 @NoArgsConstructor

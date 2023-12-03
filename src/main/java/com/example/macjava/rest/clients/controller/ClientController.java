@@ -28,6 +28,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+/**
+ * Controlador para la entidad Clientes
+ */
 @RestController
 @PreAuthorize("hasRole('USER')")
 @Tag(name = "Clientes", description = "Endpoint de Clientes de nuestra tienda")
@@ -37,6 +40,23 @@ public class ClientController {
     public ClientController(ClientService service) {
         this.service = service;
     }
+
+    /**
+     * Obtiene todos los clientes con los filtros opcionales
+     * @param dni opcional dni del cliente
+     * @param name  opcional nombre del cliente
+     * @param last_name opcional apellidos del cliente
+     * @param age opcional edad del cliente
+     * @param ageMax opcional edad maxima del cliente
+     * @param ageMin opcional edad minima del cliente
+     * @param phone  opcional telefono del cliente
+     * @param deleted opcional eliminado del cliente
+     * @param page numero de pagina
+     * @param size tamaño de la pagina
+     * @param sortBy ordenamiento
+     * @param direction direccion del ordenamiento
+     * @return pagina de clientes encontrados
+     */
     @Operation(summary = "Obtiene todos los Clientes", description = "Obtiene todos los Clientes")
     @Parameters({
             @Parameter(name = "dni", description = "DNI del cliente", required = false),
@@ -82,24 +102,39 @@ public class ClientController {
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente"),
-            @ApiResponse(responseCode = "404", description = "No se encuentra el cliente")
+            @ApiResponse(responseCode = "404", description = "No se encuentra el cliente"),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para ver el cliente")
     })
     @GetMapping("/clientes/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Client> getProduct(@PathVariable UUID id) {
         return ResponseEntity.ok(service.findById(id));
     }
+
+    /**
+     * Crea un nuevo cliente
+     * @param client cliente a crear
+     * @return cliente creado
+     */
     @Operation(summary = "Crea un nuevo cliente", description = "Crea un nuevo cliente")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Cliente a crear", required = true)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cliente creado"),
-            @ApiResponse(responseCode = "400", description = "Error al crear el cliente")
+            @ApiResponse(responseCode = "400", description = "Error al crear el cliente"),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para crear el cliente")
     })
     @PostMapping("/clientes")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Client> createProduct(@Valid @RequestBody ClientdtoNew client)  {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
     }
+
+    /**
+     * Actualiza un cliente
+     * @param id id del cliente a actualizar
+     * @param client cliente con los datos a actualizar
+     * @return cliente actualizado
+     */
     @Operation(summary = "Actualiza un cliente", description = "Actualiza un cliente")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Cliente a actualizar", required = true)
     @Parameters({
@@ -108,20 +143,27 @@ public class ClientController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente actualizado"),
             @ApiResponse(responseCode = "400", description = "Error al actualizar el cliente"),
-            @ApiResponse(responseCode = "404", description = "No se encuentra el cliente")
+            @ApiResponse(responseCode = "404", description = "No se encuentra el cliente"),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para actualizar el cliente")
     })
     @PutMapping("/clientes/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Client> updateProduct(@PathVariable UUID id, @Valid @RequestBody ClientdtoUpdated client) {
         return ResponseEntity.ok(service.update(id,client));
     }
+
+    /**
+     * Elimina un cliente
+     * @param id id del cliente a eliminar
+     */
     @Operation(summary = "Elimina un cliente", description = "Elimina un cliente")
     @Parameters({
             @Parameter(name = "id", description = "Id del cliente", required = true)
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Cliente eliminado"),
-            @ApiResponse(responseCode = "404", description = "No se encuentra el cliente")
+            @ApiResponse(responseCode = "404", description = "No se encuentra el cliente"),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para eliminar el cliente")
     })
     @DeleteMapping("/clientes/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -130,6 +172,12 @@ public class ClientController {
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Actualiza la imagen de un cliente
+     * @param id id del cliente a actualizar
+     * @param file imagen a actualizar
+     * @return cliente actualizado
+     */
     @Operation(summary = "Actualiza la imagen de un cliente", description = "Actualiza la imagen de un cliente")
     @Parameters({
             @Parameter(name = "id", description = "Id del cliente", required = true),
@@ -138,7 +186,8 @@ public class ClientController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Imagen actualizada"),
             @ApiResponse(responseCode = "400", description = "Error al actualizar la imagen"),
-            @ApiResponse(responseCode = "404", description = "No se encuentra el cliente")
+            @ApiResponse(responseCode = "404", description = "No se encuentra el cliente"),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para cambiar la imagen")
     })
     @PatchMapping(value = "/image/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
@@ -158,6 +207,12 @@ public class ClientController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No se puede saber el tipo de la imagen");
         }
     }
+
+    /**
+     * Maneja las excepciones de validación
+     * @param ex excepción
+     * @return Mapa con los errores
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(

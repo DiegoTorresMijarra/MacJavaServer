@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+/**
+ * Respuesta de autenticación de usuario
+ */
 @Data
 @Builder
 @NoArgsConstructor

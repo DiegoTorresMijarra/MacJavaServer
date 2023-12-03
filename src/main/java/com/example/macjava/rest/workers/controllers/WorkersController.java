@@ -28,6 +28,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+/**
+ * Controlador para el recurso de Empleados
+ */
 @RestController
 @Slf4j
 @RequestMapping(value = "/workers")
@@ -39,6 +42,12 @@ public class WorkersController {
     public WorkersController(WorkersServiceImpl workersService) {
         this.workersService = workersService;
     }
+
+    /**
+     * Busca un Empleado por su UUID
+     * @param uuid UUID del Empleado
+     * @return Empleado encontrado
+     */
     @Operation(summary = "Busca Empleado por su UUID", description = "Busca un Empleado por su UUID")
     @Parameters({
             @Parameter(name = "uuid", description = "UUID del Empleado", required = true)
@@ -53,6 +62,23 @@ public class WorkersController {
         log.info("Buscando Empleado con UUID: " + uuid);
         return ResponseEntity.ok(workersService.findByUUID(uuid));
     }
+
+    /**
+     * Busca todos los Empleados con paginación filtrados por los parámetros
+     * @param name opcional: nombre del Empleado
+     * @param surname opcional: apellidos del Empleado
+     * @param age opcional: edad del Empleado
+     * @param phone opcional: teléfono del Empleado
+     * @param isDeleted opcional: si esta borradp
+     * @param antiquierityMin opcional: antiguedad minima del Empleado
+     * @param antiquierityMax opcional: antiguedad maxima del Empleado
+     * @param positionId opcional: id de la posicion del Empleado
+     * @param page número de página
+     * @param size tamaño de la página
+     * @param sortBy criterio de ordenamiento
+     * @param direction dirección del ordenamiento
+     * @return lista de Empleados paginados y filtrado
+     */
     @Operation(summary = "Busca todos los Empleados", description = "Busca todos los Empleados")
     @Parameters({
             @Parameter(name = "name", description = "Nombre del Empleado"),
@@ -69,7 +95,8 @@ public class WorkersController {
             @Parameter(name = "direction", description = "Dirección del ordenamiento")
     })
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Not Found")
     })
     @GetMapping("/workers")
     public ResponseEntity<PageResponse<Workers>> findAll(
@@ -93,6 +120,11 @@ public class WorkersController {
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
 
+    /**
+     * Crea un nuevo Empleado
+     * @param worker Empleado a crear
+     * @return Empleado creado
+     */
     @Operation(summary = "Crea un nuevo Empleado", description = "Crea un nuevo Empleado")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Empleado a crear", required = true)
     @ApiResponses(value = {
@@ -105,6 +137,12 @@ public class WorkersController {
         return ResponseEntity.ok(WorkersMapper.toWorkersResponseDto(workersService.save(worker)));
     }
 
+    /**
+     * Actualiza un Empleado
+     * @param uuid UUID del Empleado
+     * @param worker DTO con los datos a actualizar
+     * @return Empleado actualizado
+     */
     @Operation(summary = "Actualiza un Empleado", description = "Actualiza un Empleado")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Empleado a actualizar", required = true)
     @Parameters({
@@ -121,6 +159,10 @@ public class WorkersController {
         return ResponseEntity.ok(WorkersMapper.toWorkersResponseDto(workersService.update(uuid, worker)));
     }
 
+    /**
+     * Elimina un Empleado
+     * @param uuid UUID del Empleado
+     */
     @Operation(summary = "Elimina un Empleado", description = "Elimina un Empleado")
     @Parameters({
             @Parameter(name = "uuid", description = "UUID del Empleado", required = true)
@@ -136,6 +178,11 @@ public class WorkersController {
         workersService.deleteByUUID(uuid);
     }
 
+    /**
+     * Busca un Empleado por su dni
+     * @param dni dni del Empleado
+     * @return Empleado encontrado
+     */
     @Operation(summary = "Busca Empleado por su dni", description = "Busca un Empleado por su dni")
     @Parameters({
             @Parameter(name = "dni", description = "DNI del Empleado", required = true)
@@ -150,6 +197,10 @@ public class WorkersController {
         return ResponseEntity.ok(WorkersMapper.toWorkersResponseDto(workersService.findByDni(dni)));
     }
 
+    /**
+     * Actualiza el valor de isDeleted a TRUE por su UUID
+     * @param uuid UUID del Empleado
+     */
     @Operation(summary = "Actualiza el valor de isDeleted a TRUE por su UUID", description = "Actualiza el valor de isDeleted a TRUE por su UUID")
     @Parameters({
             @Parameter(name = "uuid", description = "UUID del Empleado", required = true)
@@ -164,6 +215,11 @@ public class WorkersController {
         workersService.updateIsDeletedToTrueById(uuid);
     }
 
+    /**
+     * Busca Empleados por su isDeleted
+     * @param isDeleted isDeleted del Empleado
+     * @return Lista de Empleados encontrados
+     */
     @Operation(summary = "Busca Empleados por su isDeleted", description = "Busca Empleados por su isDeleted")
     @Parameters({
             @Parameter(name = "isDeleted", description = "isDeleted del Empleado", required = true)
@@ -178,6 +234,11 @@ public class WorkersController {
         return ResponseEntity.ok(workers);
     }
 
+    /**
+     * Maneja las excepciones de validación
+     * @param ex excepción
+     * @return mapa con los errores de validación
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
