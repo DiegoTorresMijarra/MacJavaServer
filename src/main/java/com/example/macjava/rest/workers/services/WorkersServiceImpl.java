@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Servicio para la entidad Workers
+ */
 @Service
 @Slf4j
 @CacheConfig(cacheNames = "workers")
@@ -36,7 +39,19 @@ public class WorkersServiceImpl implements WorkersService{
         this.positionService = positionService;
     }
 
-
+    /**
+     * Busca todos los trabajadores con los criterios de búsqueda
+     * @param name opcional: nombre del trabajador
+     * @param surname opcional: apellido del trabajador
+     * @param age opcional: edad del trabajador
+     * @param phone opcional: telefono del trabajador
+     * @param isDeleted opcional: indica si el trabajador esta borrado o no
+     * @param antiquierityMin opcional: antiguedad minima del trabajador
+     * @param antiquierityMax opcional: antiguedad maxima del trabajador
+     * @param positionId opcional: id de la posición del trabajador
+     * @param pageable paginación
+     * @return lista de trabajadores encontrados
+     */
     @Override
     public Page<Workers> findAll(Optional<String> name, Optional<String> surname, Optional<Integer> age, Optional<String> phone,
                                  Optional<Boolean> isDeleted, Optional<Integer> antiquierityMin, Optional<Integer> antiquierityMax,
@@ -89,6 +104,12 @@ public class WorkersServiceImpl implements WorkersService{
         return workersCrudRepository.findAll(specification, pageable);
     }
 
+    /**
+     * Busca un trabajador por su id
+     * @param uuid id del trabajador a buscar
+     * @return trabajador encontrado
+     * @throws WorkersNotFound si no se encuentra el trabajador
+     */
     @Override
     @Cacheable(key="#uuid")
     public Workers findByUUID(UUID uuid) {
@@ -96,6 +117,11 @@ public class WorkersServiceImpl implements WorkersService{
         return workersCrudRepository.findById(uuid).orElseThrow(()->new WorkersNotFound("UUID: "+ uuid));
     }
 
+    /**
+     * Crea un trabajador
+     * @param worker dto con los datos del trabajador
+     * @return trabajador creado
+     */
     @Override
     @Cacheable(key="#result.uuid")
     public Workers save(WorkersSaveDto worker) {
@@ -104,6 +130,12 @@ public class WorkersServiceImpl implements WorkersService{
         return workersCrudRepository.save(WorkersMapper.toModel(worker, position));
     }
 
+    /**
+     * Actualiza un trabajador
+     * @param uuid id del trabajador a actualizar
+     * @param worker dto con los datos a actualizar
+     * @return trabajador actualizado
+     */
     @Override
     @Transactional
     @Cacheable(key="#result.uuid")
@@ -124,6 +156,10 @@ public class WorkersServiceImpl implements WorkersService{
         return workersCrudRepository.save(WorkersMapper.toModel(original,worker, position));
     }
 
+    /**
+     * Borra un trabajador
+     * @param uuid  id del trabajador a borrar
+     */
     @Override
     @Transactional
     public void deleteByUUID(UUID uuid) {
@@ -132,6 +168,11 @@ public class WorkersServiceImpl implements WorkersService{
         workersCrudRepository.deleteById(uuid);
     }
 
+    /**
+     *  Busca un trabajador por su dni
+     * @param dni   dni del trabajador a buscar
+     * @return trabajador encontrado
+     */
     @Override
     @Cacheable(key="#result.uuid")
     public Workers findByDni(String dni) {
@@ -139,12 +180,21 @@ public class WorkersServiceImpl implements WorkersService{
         return workersCrudRepository.findByDni(dni).orElseThrow(()-> new WorkersNotFound("DNI: " + dni));
     }
 
+    /**
+     * Busca todos los trabajadores con isDeleted
+     * @param isDeleted indica si los trabajadores buscados estan borrados o no
+     * @return Lista de trabajadores encontrados
+     */
     @Override
     public List<Workers> findByIsDeleted(Boolean isDeleted) {
         log.info("Buscando Empleados con isDeleted: " + isDeleted);
         return workersCrudRepository.findByIsDeleted(isDeleted);
     }
 
+    /**
+     * Actualiza el campo isDeleted a true (elimina lógicamente)
+     * @param uuid id del trabajador a actualizar
+     */
     @Override
     @Transactional
     public void updateIsDeletedToTrueById(UUID uuid) {

@@ -10,6 +10,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Servicio para los pedidos
+ */
 public interface OrdersService {
     List<Order> findAll();
     Page<Order> findAll(Pageable pageable);

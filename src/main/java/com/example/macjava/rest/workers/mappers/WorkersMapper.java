@@ -7,8 +7,16 @@ import com.example.macjava.rest.workers.dto.WorkersSaveDto;
 import com.example.macjava.rest.workers.dto.WorkersUpdateDto;
 import jakarta.validation.Valid;
 
+/**
+ * Mapeador para la entidad Workers
+ */
 public class WorkersMapper {
-
+    /**
+     * Mapea los datos del dto a la entidad
+     * @param workersSaveDto   dto con los datos del trabajador
+     * @param position        posición del trabajador
+     * @return entidad creada con los datos del dto
+     */
     public static Workers toModel(WorkersSaveDto workersSaveDto, Position position) {
         return Workers.builder()
                 .dni(workersSaveDto.getDni())
@@ -20,6 +28,13 @@ public class WorkersMapper {
                 .build();
     }
 
+    /**
+     * Mapea los datos del dto a la entidad
+     * @param workersOriginal  entidad original
+     * @param workersUpdate   dto con los datos a actualizar
+     * @param position       posición del trabajador
+     * @return entidad actualizada con los datos del dto
+     */
     public static Workers toModel(Workers workersOriginal, WorkersUpdateDto workersUpdate, Position position) {
         return Workers.builder()
                 .uuid(workersOriginal.getUuid())
@@ -33,6 +48,12 @@ public class WorkersMapper {
                 .isDeleted(workersOriginal.getIsDeleted())
                 .build();
     }
+
+    /**
+     * Mapea los datos de la entidad a la respuesta
+     * @param workers entidad con los datos del trabajador
+     * @return dto con los datos de la entidad
+     */
     public static WorkersResponseDto toWorkersResponseDto(Workers workers){
         return WorkersResponseDto.builder()
                 .uuid(workers.getUuid())

@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Modelo de datos para los productos de un pedido
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,6 +45,10 @@ public class OrderedProduct {
         this.productPrice = productPrice;
         this.calculateTotalPrice();
     }
+
+    /**
+     * Calcula el precio total del producto
+     */
     public void calculateTotalPrice (){
         setTotalPrice(productPrice * quantity);
     }

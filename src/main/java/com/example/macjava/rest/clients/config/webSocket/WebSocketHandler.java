@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * Manejador del WebSocket
+ */
 @Slf4j
 public class WebSocketHandler extends TextWebSocketHandler implements SubProtocolCapable, WebSocketSender{
     private final String entity; // Entidad que se notifica

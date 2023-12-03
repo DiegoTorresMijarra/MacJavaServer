@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controlador de autenticación
+ */
 @RestController
 @Slf4j
 @RequestMapping("${api.version}/auth") // Es la ruta del controlador

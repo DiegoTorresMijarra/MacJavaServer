@@ -29,6 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Implementación del servicio para los pedidos
+ */
 @Service
 @Slf4j
 @CacheConfig(cacheNames = {"orders"})
@@ -47,18 +50,33 @@ public class OrdersServiceImpl implements OrdersService{
         this.restaurantRepository = restaurantRepository;
         this.workersCrudRepository = workersCrudRepository;
     }
-
+    /**
+     * Busca todos los pedidos
+     * @return todos los pedidos
+     */
     @Override
     public List<Order> findAll() {
         log.info("Listando todos los pedidos");
         return ordersCrudRepository.findAll();
     }
+
+    /**
+     * Busca todos los pedidos pageados
+     * @param pageable
+     * @return todos los pedidos pageados
+     */
     @Override
     public Page<Order> findAll(Pageable pageable) {
         log.info("Listando todos los pedidos pageados");
         return ordersCrudRepository.findAll(pageable);
     }
 
+    /**
+     * Busca un pedido por su id
+     * @param objectId id del pedido
+     * @return pedido
+     * @throws OrderNotFound si no existe el pedido
+     */
     @Override
     @Cacheable(key = "#objectId")
     public Order findById(ObjectId objectId) {
@@ -66,6 +84,11 @@ public class OrdersServiceImpl implements OrdersService{
         return ordersCrudRepository.findById(objectId).orElseThrow(()->new OrderNotFound(objectId.toHexString()));
     }
 
+    /**
+     * Guarda un pedido
+     * @param order pedido a guardar
+     * @return pedido guardado
+     */
     @Override
     @Transactional //no se si es necesario repetirlo en controller tb
     @CachePut(key = "#result.id")
@@ -76,6 +99,11 @@ public class OrdersServiceImpl implements OrdersService{
         return ordersCrudRepository.save(OrderMapper.saveToModel(order));
     }
 
+    /**
+     * Elimina un pedido por su id
+     * Llama al metodo findById para encontrar y comprobar que existe el pedido
+     * @param objectId id del pedido
+     */
     @Override
     @CacheEvict(key = "#objectId")
     public void deleteById(ObjectId objectId) {
@@ -85,12 +113,13 @@ public class OrdersServiceImpl implements OrdersService{
     }
 
     /**
-     * Como puede recibir en orderedProducts tanto un null, como una lista vacia ({}) o invalida (solo checkea que sea valida). Vamos a trabajar con que si le pasamos un null, no hay que validar la lista, porque el mapper guardara el valor original. <br>
+     * Como puede recibir en orderedProducts tanto un null, como una lista vacia ({}) o invalida (solo checkea que sea valida).
+     * Vamos a trabajar con que si le pasamos un null, no hay que validar la lista, porque el mapper guardara el valor original. <br>
      * En caso contrario, la valida antes de actualizar y el actualizar, no dejara que pase una lista vacia
      *
-     * @param objectId
-     * @param dto
-     * @return
+     * @param objectId id del pedido
+     * @param dto pedido a actualizar
+     * @return pedido actualizado
      */
     @Override
     @CachePut(key = "#result.id")
@@ -106,42 +135,82 @@ public class OrdersServiceImpl implements OrdersService{
         return ordersCrudRepository.save(updated);
     }
 
+    /**
+     * Busca los pedidos de un cliente
+     * Para encontrar al cliente, llama al metodo findById del repositorio de clientes
+     * @param clientUUID uuid del cliente
+     * @param pageable paginacion
+     * @return pedidos del cliente
+     */
     @Override
     public Page<Order> findByClientUUID(UUID clientUUID, Pageable pageable) {
         log.info("Buscando los pedidos del cliente con uuid: " + clientUUID);
         return ordersCrudRepository.findByClientUUID(clientUUID, pageable);
     }
 
+    /**
+     * Comprueba si existe algun pedido del cliente
+     * @param clientUUID uuid del cliente
+     * @return true si existe algun pedido del cliente, false en caso contrario
+     */
     @Override
     public Boolean existsByClientUUID(UUID clientUUID) {
         log.info("Comprobando si existe algun pedido del cliente con uuid: " + clientUUID);
         return ordersCrudRepository.existsByClientUUID(clientUUID);
     }
 
+    /**
+     * Busca los pedidos de un trabajador y los pagina
+     * @param workerUUID  uuid del trabajador
+     * @param pageable paginacion
+     * @return pedidos del trabajador
+     */
     @Override
     public Page<Order> findByWorkerUUID(UUID workerUUID, Pageable pageable) {
         log.info("Buscando los pedidos del trabajador con uuid: " + workerUUID);
         return ordersCrudRepository.findByWorkerUUID(workerUUID, pageable);
     }
 
+    /**
+     * Comprueba si existe algun pedido del trabajador
+     * @param workerUUID uuid del trabajador
+     * @return true si existe algun pedido del trabajador, false en caso contrario
+     */
     @Override
     public Boolean existsByWorkerUUID(UUID workerUUID) {
         log.info("Comprobando si existe algun pedido del cliente con uuid: " + workerUUID);
         return ordersCrudRepository.existsByWorkerUUID(workerUUID);
     }
 
+    /**
+     * Busca los pedidos de un restaurante y los pagina
+     * @param restaurantId id del restaurante
+     * @param pageable paginacion
+     * @return pedidos del restaurante
+     */
     @Override
     public Page<Order> findByRestaurantId(Long restaurantId, Pageable pageable) {
         log.info("Buscando los pedidos del restaurante con id: "+restaurantId);
         return ordersCrudRepository.findByRestaurantId(restaurantId, pageable);
     }
 
+    /**
+     * Comprueba si existe algun pedido del restaurante
+     * @param restaurantId id del restaurante
+     * @return true si existe algun pedido del restaurante, false en caso contrario
+     */
     @Override
     public Boolean existsByRestaurantId(Long restaurantId) {
         log.info("Comprobando si existe algun pedido en el restaurante con id: "+restaurantId);
         return ordersCrudRepository.existsByRestaurantId(restaurantId);
     }
 
+    /**
+     * Actualiza si el pedido ha sido pagado
+     * @param objectId id del pedido
+     * @param isPaid indica si el pedido ha sido pagado
+     * @return pedido actualizado
+     */
     @Override
     public Order updateIsPaidById(ObjectId objectId, Boolean isPaid) {
         log.info("Actualizando isPaid del pedido con id: "+objectId.toHexString()+" a "+ isPaid);
@@ -149,6 +218,13 @@ public class OrdersServiceImpl implements OrdersService{
         original.setIsPaid(isPaid);
         return ordersCrudRepository.save(original);
     }
+
+    /**
+     * Actualiza si el pedido ha sido eliminado
+     * @param objectId id del pedido
+     * @param isDeleted indica si el pedido quiere ser eliminado
+     * @return pedido actualizado
+     */
     @Override
     public Order updateIsDeletedById(ObjectId objectId, Boolean isDeleted) {
         log.info("Actualizando isDeleted del pedido con id: "+objectId.toHexString()+" a "+ isDeleted);
@@ -186,6 +262,11 @@ public class OrdersServiceImpl implements OrdersService{
         }
     }
 
+    /**
+     * Verifica que los ids del pedido sean validos
+     * @param order pedido
+     * @param <T>
+     */
     public <T extends OrderType> void checkOrderIds(T order) {
         log.info("Validando las referencias del pedido {}",order);
         UUID clientUUID = order.getClientUUID();

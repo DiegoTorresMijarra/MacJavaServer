@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Implementación del servicio de Posiciones
+ */
 @Service
 @Slf4j
 @Cacheable(cacheNames = "positions")
@@ -30,6 +33,15 @@ public class PositionServiceImpl implements PositionService{
         this.positionCrudRepository = positionCrudRepository;
     }
 
+    /**
+     * Obtiene todas las posiciones que coincidan con los parámetros
+     * @param name opcional: nombre de la posición
+     * @param salaryMin opcional: salario mínimo de la posición
+     * @param salaryMax opcional: salario máximo de la posición
+     * @param isDeleted opcional: si la posición está eliminada
+     * @param pageable paginación
+     * @return Page de las posiciones que coinciden con los parámetros
+     */
     @Override
     public Page<Position> findAll(Optional<String> name, Optional<Integer> salaryMin, Optional<Integer> salaryMax, Optional<Boolean> isDeleted, Pageable pageable) {
         log.info("Buscando todas las Posiciones");
@@ -58,6 +70,12 @@ public class PositionServiceImpl implements PositionService{
         return positionCrudRepository.findAll(specification,pageable);
     }
 
+    /**
+     * Obtiene la posición con el id dado
+     * @param id id de la posición a obtener
+     * @return Posicion con ese id
+     * @throws PositionNotFound Excepción que se lanza si no se encuentra la posición
+     */
     @Override
     @Cacheable(key="#id")
     public Position findById(Long id) {
@@ -65,6 +83,11 @@ public class PositionServiceImpl implements PositionService{
         return positionCrudRepository.findById(id).orElseThrow(() -> new PositionNotFound(id));
     }
 
+    /**
+     * Guarda una posición
+     * @param position posición a guardar
+     * @return posición guardada
+     */
     @Override
     @Cacheable(key="#result.id")
     public Position save(PositionSaveDto position) {
@@ -72,6 +95,12 @@ public class PositionServiceImpl implements PositionService{
         return positionCrudRepository.save(PositionMapper.toModel(position));
     }
 
+    /**
+     * Actualiza una posición
+     * @param id id de la posición a actualizar
+     * @param position posición con los datos a actualizar
+     * @return posición actualizada
+     */
     @Override
     @Transactional
     @Cacheable(key="#result.id")
@@ -81,6 +110,10 @@ public class PositionServiceImpl implements PositionService{
         return positionCrudRepository.save(PositionMapper.toModel(original,position));
     }
 
+    /**
+     * Elimina una posición si no tiene empleados asignados
+     * @param id id de la posición a eliminar
+     */
     @Override
     @Transactional
     public void deleteById(Long id) {
@@ -92,6 +125,10 @@ public class PositionServiceImpl implements PositionService{
         positionCrudRepository.deleteById(id);
     }
 
+    /**
+     * Actualiza el campo isDeleted a true (elimina lógicamente)
+     * @param id id de la posición a actualizar
+     */
     @Override
     @Transactional
     public void updateIsDeletedToTrueById(Long id) {

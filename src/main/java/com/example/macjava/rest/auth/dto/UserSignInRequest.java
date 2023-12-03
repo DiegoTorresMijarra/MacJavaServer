@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
+/**
+ * Petición de autenticación de usuario
+ */
 @Data
 @Builder
 @NoArgsConstructor

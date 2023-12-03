@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementación de la interfaz AuthUsersService
+ */
 @Service("userDetailsService")
 public class AuthUsersServiceImpl implements AuthUsersService{
     private final AuthUsersRepository authUsersRepository;
@@ -15,7 +18,12 @@ public class AuthUsersServiceImpl implements AuthUsersService{
         this.authUsersRepository = authUsersRepository;
     }
 
-
+    /**
+     * Carga los datos de un usuario a partir de su username
+     * @param username nombre de usuario
+     * @return usuario
+     * @throws UserNotFound si no se encuentra el usuario
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UserNotFound {
         return authUsersRepository.findByUsername(username)

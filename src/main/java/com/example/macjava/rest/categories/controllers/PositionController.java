@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Controlador para la entidad Position
+ */
 @RestController
 @Slf4j
 @PreAuthorize("hasRole('USER')")
@@ -42,6 +45,12 @@ public class PositionController {
     public PositionController(PositionServiceImpl positionService) {
         this.positionService = positionService;
     }
+
+    /**
+     * Obtiene una categoria por su id
+     * @param id id de la categoria a obtener
+     * @return Categoria con ese id
+     */
     @Operation(summary = "Obtiene una categoria por su id", description = "Obtiene una categoria por su id")
     @Parameters({
             @Parameter(name = "id", description = "Identificador de la categoria", example = "1", required = true)
@@ -56,6 +65,18 @@ public class PositionController {
         return ResponseEntity.ok(positionService.findById(id));
     }
 
+    /**
+     * Obtiene todas las categorias
+     * @param name opcional: nombre de la categoria
+     * @param salaryMin opcional: salario minimo de la categoria
+     * @param salaryMax  opcional: salario maximo de la categoria
+     * @param isDeleted opcional: si la categoria esta eliminada
+     * @param page numero de pagina
+     * @param size tamaño de la pagina
+     * @param sortBy campo por el que se ordena
+     * @param direction ascendente o descendente
+     * @return Page de las categorias que coinciden con los parametros
+     */
     @Operation(summary = "Obtiene todas las categorias", description = "Obtiene todas las categorias")
     @Parameters({
             @Parameter(name = "name", description = "Nombre de la categoria", example = "Programador"),
@@ -68,7 +89,8 @@ public class PositionController {
             @Parameter(name = "direction", description = "Ascendente o descendente", example = "asc")
     })
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Categorias")
+            @ApiResponse(responseCode = "200", description = "Categorias"),
+            @ApiResponse(responseCode = "404", description = "Categorias no encontradas")
     })
     @GetMapping("/positions")
     public ResponseEntity<PageResponse<Position>> findAll(
@@ -87,6 +109,12 @@ public class PositionController {
         return ResponseEntity.ok()
                 .body(PageResponse.of(pageResult, sortBy, direction));
     }
+
+    /**
+     * Crea una nueva categoria
+     * @param position categoria con los datos a crear
+     * @return categoria creada
+     */
     @Operation(summary = "Crea una nueva categoria", description = "Crea una nueva categoria")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Categoria a crear", required = true)
     @ApiResponses({
@@ -107,7 +135,8 @@ public class PositionController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Actualizado"),
             @ApiResponse(responseCode = "400", description = "Error de validacion"),
-            @ApiResponse(responseCode = "404", description = "No encontrado")
+            @ApiResponse(responseCode = "404", description = "No encontrado"),
+            @ApiResponse(responseCode= "403", description = "No autorizado")
     })
     @PutMapping("position/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -116,13 +145,18 @@ public class PositionController {
         return ResponseEntity.ok(PositionMapper.toPositionResponseDto(positionService.update(id, position)));
     }
 
+    /**
+     * Elimina una categoria
+     * @param id id de la categoria a eliminar
+     */
     @Operation(summary = "Elimina una categoria", description = "Elimina una categoria")
     @Parameters({
             @Parameter(name = "id", description = "Identificador de la categoria", example = "1", required = true)
     })
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Eliminado"),
-            @ApiResponse(responseCode = "404", description = "No encontrado")
+            @ApiResponse(responseCode = "404", description = "No encontrado"),
+            @ApiResponse(responseCode= "403", description = "No autorizado")
     })
     @DeleteMapping("position/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -131,6 +165,10 @@ public class PositionController {
         positionService.deleteById(id);
     }
 
+    /**
+     * Actualiza el campo isDeleted de una categoria
+     * @param id id de la categoria a actualizar
+     */
     @Operation(summary = "Actualiza el campo isDeleted de una categoria", description = "Actualiza el campo isDeleted de una categoria")
     @Parameters({
             @Parameter(name = "id", description = "Identificador de la categoria", example = "1", required = true)
@@ -145,7 +183,11 @@ public class PositionController {
         positionService.updateIsDeletedToTrueById(id);
     }
 
-
+    /**
+     * Maneja las excepciones de validación
+     * @param ex Excepción de validación
+     * @return Mapa con los errores de validación
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(

@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Implementación del servicio de jwt
+ */
 @Service
 @Slf4j
 public class JwtServiceImpl implements JwtService {
