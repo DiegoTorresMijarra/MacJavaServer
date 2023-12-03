@@ -1,5 +1,6 @@
 package com.example.macjava.rest.workers.controllers;
 
+import com.example.macjava.rest.workers.exceptions.WorkersBadRequest;
 import com.example.macjava.rest.workers.services.WorkersServiceImpl;
 import com.example.macjava.utils.pagination.PageResponse;
 import com.example.macjava.rest.workers.dto.WorkersResponseDto;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

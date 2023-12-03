@@ -16,9 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,10 +30,27 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UsersServiceImpTest {
-    private final UserRequest userRequest = UserRequest.builder().username("test").email("test@test.com").build();
-    private final User user = User.builder().id(UUID.fromString("12345678-1234-1234-1234-123456789012")).username("test").email("test@test.com").build();
-    private final UserResponse userResponse = UserResponse.builder().username("test").email("test@test.com").build();
-    private final UserInfoResponse userIResponse = UserInfoResponse.builder().username("test").email("test@test.com").build();
+    private final UserRequest userRequest = UserRequest.builder()
+            .username("test")
+            .email("test@test.com").build();
+    private final User user = User.builder()
+            .id(UUID.fromString("00000000-0000-0000-0000-000000000000"))
+            .username("test")
+            .email("test@test.com")
+            .build();
+    private final User user2=User.builder()
+            .id(UUID.fromString("00000000-0000-0000-0000-000000000001"))
+            .username("user2")
+            .email("f3ZDz@example.com")
+            .build();
+    private final UserResponse userResponse = UserResponse.builder()
+            .username("test")
+            .email("test@test.com")
+            .build();
+    private final UserInfoResponse userIResponse = UserInfoResponse.builder()
+            .username("test")
+            .email("test@test.com")
+            .build();
     @Mock
     private UsersRepository usersRepository;
     @Mock
@@ -73,10 +88,9 @@ class UsersServiceImpTest {
     @Test
     void testFindById() {
         // Arrange
-
-        UUID userId = UUID.fromString("12345678-1234-1234-1234-123456789012");
+        UUID userId = UUID.randomUUID();
         when(usersRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(pedidosRepository.findByWorkerUUID(userId,any(Pageable.class))).thenReturn(Page.empty());
+        when(pedidosRepository.findByWorkerUUID(eq(userId),any(Pageable.class))).thenReturn(Page.empty());
         when(usersMapper.toUserInfoResponse(any(User.class), anyList())).thenReturn(userIResponse);
         // Act
         UserInfoResponse result = usersService.findById(userId);
@@ -89,7 +103,6 @@ class UsersServiceImpTest {
 
         // Verify
         verify(usersRepository, times(1)).findById(userId);
-        verify(pedidosRepository, times(1)).findPedidosIdsByIdUsuario(userId);
         verify(usersMapper, times(1)).toUserInfoResponse(user, List.of());
 
     }
@@ -97,7 +110,7 @@ class UsersServiceImpTest {
     @Test
     public void testFindById_UserNotFound_ThrowsUserNotFound() {
         // Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000000");
         when(usersRepository.findById(userId)).thenReturn(Optional.empty());
 
         // Act and Assert
@@ -147,7 +160,7 @@ class UsersServiceImpTest {
     @Test
     public void testUpdate_ValidUserRequest_ReturnsUserResponse() {
         // Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000000");
         when(usersRepository.findById(userId)).thenReturn(Optional.of(user));
         when(usersRepository.findByUsernameEqualsIgnoreCaseOrEmailEqualsIgnoreCase(anyString(), anyString())).thenReturn(Optional.empty());
         when(usersMapper.toUser(userRequest, userId)).thenReturn(user);
@@ -175,9 +188,10 @@ class UsersServiceImpTest {
     @Test
     public void testUpdate_DuplicateUsernameOrEmail_ThrowsUserNameOrEmailExists() {
         // Arrange
-        Long userId = 1L;
+        UUID userId = user.getId();
         when(usersRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(usersRepository.findByUsernameEqualsIgnoreCaseOrEmailEqualsIgnoreCase(anyString(), anyString())).thenReturn(Optional.of(user));
+
+        when(usersRepository.findByUsernameEqualsIgnoreCaseOrEmailEqualsIgnoreCase(userRequest.getUsername(), userRequest.getEmail())).thenReturn(Optional.of(user2));
 
         // Act and Assert
         assertThrows(UserNameOrEmailExists.class, () -> usersService.update(userId, userRequest));
@@ -186,7 +200,7 @@ class UsersServiceImpTest {
     @Test
     public void testUpdate_UserNotFound_ThrowsUserNotFound() {
         // Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000000");
         when(usersRepository.findById(userId)).thenReturn(Optional.empty());
 
         // Act and Assert
@@ -196,24 +210,24 @@ class UsersServiceImpTest {
     @Test
     public void testDeleteById_PhisicalDelete() {
         // Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000000");
         when(usersRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(pedidosRepository.existsByIdUsuario(userId)).thenReturn(false);
+        when(pedidosRepository.existsByWorkerUUID(userId)).thenReturn(false);
 
         // Act
         usersService.deleteById(userId);
 
         // Verify
         verify(usersRepository, times(1)).delete(user);
-        verify(pedidosRepository, times(1)).existsByIdUsuario(userId);
+        verify(pedidosRepository, times(1)).existsByWorkerUUID(userId);
     }
 
     @Test
     public void testDeleteById_LogicalDelete() {
         // Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000000");
         when(usersRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(pedidosRepository.existsByIdUsuario(userId)).thenReturn(true);
+        when(pedidosRepository.existsByWorkerUUID(userId)).thenReturn(true);
         doNothing().when(usersRepository).updateIsDeletedToTrueById(userId);
 
         // Act
@@ -223,22 +237,22 @@ class UsersServiceImpTest {
 
         // Verify
         verify(usersRepository, times(1)).updateIsDeletedToTrueById(userId);
-        verify(pedidosRepository, times(1)).existsByIdUsuario(userId);
+        verify(pedidosRepository, times(1)).existsByWorkerUUID(userId);
     }
 
     @Test
     public void testDeleteByIdNotExists() {
         // Arrange
-        Long userId = 1L;
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000000");
         User user = new User();
         when(usersRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(pedidosRepository.existsByIdUsuario(userId)).thenReturn(true);
+        when(pedidosRepository.existsByWorkerUUID(userId)).thenReturn(true);
 
         // Act
         usersService.deleteById(userId);
 
         // Verify
         verify(usersRepository, times(1)).updateIsDeletedToTrueById(userId);
-        verify(pedidosRepository, times(1)).existsByIdUsuario(userId);
+        verify(pedidosRepository, times(1)).existsByWorkerUUID(userId);
     }
 }

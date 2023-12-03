@@ -1,4 +1,4 @@
 
-h	java:S116!"TRename this field "last_name" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¥À¶f
-n	java:S1161"TRename this field "fecha_cre" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ö‚íµýÿÿÿÿ
-i	java:S1163"TRename this field "fecha_act" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(À•“Ÿ
+h	java:S116&"TRename this field "last_name" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¥À¶f
+n	java:S116;"TRename this field "fecha_cre" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ö‚íµýÿÿÿÿ
+i	java:S116>"TRename this field "fecha_act" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(À•“Ÿ

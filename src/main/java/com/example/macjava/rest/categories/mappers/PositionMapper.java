@@ -15,10 +15,10 @@ public class PositionMapper {
     public static Position toModel(Position original, PositionUpdateDto positionUpdateDto) {
         return Position.builder()
                 .id(original.getId())
-                .salary((positionUpdateDto.getSalary()==null) ? original.getSalary() : positionUpdateDto.getSalary())
-                .name((positionUpdateDto.getName()==null) ? original.getName() : positionUpdateDto.getName())
-                .isDeleted((positionUpdateDto.getIsDeleted()==null) ? original.getIsDeleted() : positionUpdateDto.getIsDeleted())
+                .salary(positionUpdateDto.getSalary())
+                .name(positionUpdateDto.getName())
                 .createdAt(original.getCreatedAt())
+                .isDeleted(original.getIsDeleted())
                 .build();
     }
     public static PositionResponseDto toPositionResponseDto(Position position){

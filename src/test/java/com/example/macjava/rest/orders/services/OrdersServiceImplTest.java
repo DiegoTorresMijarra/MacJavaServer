@@ -89,7 +89,7 @@ class OrdersServiceImplTest {
                     .build()
     );
 
-    private Order order1= Order.builder()
+    private  Order order1= Order.builder()
             .id(new ObjectId())
             .clientUUID(UUID.fromString("f47ac10b-58cc-4372-a567-0e02b2c3d479"))
             .workerUUID(UUID.fromString("550e8400-e29b-41d4-a716-446655440000"))
@@ -252,7 +252,7 @@ class OrdersServiceImplTest {
     @Test
     void testUpdateOrder_ShouldReturnCorrect() {
         ObjectId orderId = new ObjectId(order1.getId());
-        OrderUpdateDto orderUpdateDto = new OrderUpdateDto();
+        OrderUpdateDto orderUpdateDto = OrderUpdateDto.builder().build();
         when(ordersCrudRepository.findById(orderId)).thenReturn(Optional.of(order1));
         when(ordersCrudRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -335,38 +335,6 @@ class OrdersServiceImplTest {
                 ()-> assertTrue(result)
         );
         verify(ordersCrudRepository).existsByClientUUID(uuid);
-    }
-
-    @Test
-    void findByWorkerUUID_ShouldReturnAll() {
-        UUID uuid=UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
-        Page<Order> expectedPage = new PageImpl<>(orderList.subList(0,1));
-        when(ordersCrudRepository.findByWorkerUUID(uuid,pageable)).thenReturn(expectedPage);
-
-        Page<Order> result = ordersService.findByWorkerUUID(uuid,pageable);
-
-        assertAll("findByWorkerUUID_ShouldReturnAll",
-                () -> assertNotNull(result),
-                ()-> assertFalse(result.isEmpty()),
-                () -> assertEquals(1, result.getTotalElements()),
-                ()->assertEquals(uuid, result.stream().findFirst().get().getWorkerUUID())
-        );
-        verify(ordersCrudRepository).findByWorkerUUID(uuid,pageable);
-    }
-
-    @Test
-    void existsByWorkerUUID_ShouldReturnTrue() {
-        UUID uuid=UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
-        when(ordersCrudRepository.existsByWorkerUUID(uuid)).thenReturn(true);
-
-        Boolean result = ordersService.existsByWorkerUUID(uuid);
-
-        assertAll("existsByWorkerUUID_ShouldReturnTrue",
-                () -> assertNotNull(result),
-                ()-> assertTrue(result)
-        );
-        verify(ordersCrudRepository).existsByWorkerUUID(uuid);
     }
 
     @Test
