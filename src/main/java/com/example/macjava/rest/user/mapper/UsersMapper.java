@@ -8,9 +8,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * Clase que se encarga de mapear los objetos de usuario.
+ */
 @Component
 public class UsersMapper {
+    /**
+     * Método que mapea un objeto UserRequest a un objeto User.
+     * @param request Objeto UserRequest a mapear
+     * @return Objeto User mapeado
+     */
     public User toUser(UserRequest request) {
         return User.builder()
                 .nombre(request.getNombre())
@@ -23,6 +30,12 @@ public class UsersMapper {
                 .build();
     }
 
+    /**
+     * Método que mapea un objeto UserRequest a un objeto User.
+     * @param request Objeto UserRequest a mapear
+     * @param id ID del usuario
+     * @return Objeto User mapeado
+     */
     public User toUser(UserRequest request, UUID id) {
         return User.builder()
                 .id(id)
@@ -36,6 +49,11 @@ public class UsersMapper {
                 .build();
     }
 
+    /**
+     * Método que mapea un objeto User a un objeto UserResponse.
+     * @param user  Objeto User a mapear
+     * @return Objeto UserResponse mapeado
+     */
     public UserResponse toUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
@@ -48,6 +66,12 @@ public class UsersMapper {
                 .build();
     }
 
+    /**
+     * Método que mapea un objeto User a un objeto UserInfoResponse.
+     * @param user Objeto User a mapear
+     * @param pedidos Lista de pedidos del usuario
+     * @return Objeto UserInfoResponse mapeado
+     */
     public UserInfoResponse toUserInfoResponse(User user, List<String> pedidos) {
         return UserInfoResponse.builder()
                 .id(user.getId())

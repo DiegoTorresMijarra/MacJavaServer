@@ -1,7 +1,7 @@
 package com.example.macjava.rest.restaurants.exceptions;
 
 /**
- * Clase que representa una excepción de un restaurante
+ * Excepción para cuando la petición es incorrecta
  * Extiendo la clase base RestaurantException
  */
 public class RestaurantBadRequest extends RestaurantException{

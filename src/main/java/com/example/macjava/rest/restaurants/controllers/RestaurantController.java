@@ -47,20 +47,22 @@ public class RestaurantController {
      * @param name Opcional: nombre del restaurante
      * @param number Opcional: número de teléfono del restaurante
      * @param isDeleted Opcional: indica si el restaurante está eliminado
-     * @param page informacion de la paginación
-     * @return Pagina de restaurantes que cumplan con los parámetros de búsqueda
+     * @param page numero de página a recuperar
+     * @param size tamaño de la página
+     * @param sortBy campo por el que ordenar
+     * @param direction dirección de la ordenación
+     * @return ResponseEntity con una pagina de restaurantes que cumplan con los parámetros de búsqueda
      */
     @Operation(summary = "Obtiene todos los restaurantes que cumplan con los parámetros de búsqueda")
     @Parameters({
-            @io.swagger.v3.oas.annotations.Parameter(name = "name", description = "Nombre del restaurante", example = "Restaurante"),
-            @io.swagger.v3.oas.annotations.Parameter(name = "number", description = "Número de teléfono del restaurante", example = "123456789"),
-            @io.swagger.v3.oas.annotations.Parameter(name = "isDeleted", description = "Indica si el restaurante está eliminado", example = "false"),
+            @io.swagger.v3.oas.annotations.Parameter(name = "name", description = "Filtrar por nombre", example = "Restaurante"),
+            @io.swagger.v3.oas.annotations.Parameter(name = "number", description = "Filtrar por nº de teléfono", example = "123456789"),
+            @io.swagger.v3.oas.annotations.Parameter(name = "isDeleted", description = "Filtrar por restaurante eliminado", example = "false"),
             @io.swagger.v3.oas.annotations.Parameter(name = "page", description = "Número de página a recuperar", example = "0"),
             @io.swagger.v3.oas.annotations.Parameter(name = "size", description = "Tamaño de la página", example = "10"),
             @io.swagger.v3.oas.annotations.Parameter(name = "sortBy", description = "Campo por el que ordenar", example = "id"),
             @io.swagger.v3.oas.annotations.Parameter(name = "direction", description = "Dirección de la ordenación", example = "asc"),
     })
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Información de la paginación", required=false)
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Lista de restaurantes que cumplan con los parámetros de búsqueda"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error en los parámetros de búsqueda"),
@@ -87,7 +89,7 @@ public class RestaurantController {
      * @return Restaurante que coincida con el ID
      */
     @Operation(summary = "Obtiene un restaurante por su ID")
-    @io.swagger.v3.oas.annotations.Parameter(name = "id", description = "ID del restaurante a buscar", example = "1L")
+    @io.swagger.v3.oas.annotations.Parameter(name = "id", description = "ID del restaurante a buscar", example = "1")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Restaurante encontrado"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Restaurante no encontrado"),
@@ -122,7 +124,7 @@ public class RestaurantController {
      */
     @Operation(summary = "Actualiza un restaurante con la información de un RestauranteDTO")
     @Parameters({
-            @io.swagger.v3.oas.annotations.Parameter(name = "id", description = "ID del restaurante a actualizar", example = "1L",required = true),
+            @io.swagger.v3.oas.annotations.Parameter(name = "id", description = "ID del restaurante a actualizar", example = "1",required = true),
             @io.swagger.v3.oas.annotations.Parameter(name = "restaurantDTO", description = "RestauranteDTO con información actualizada", required = true)
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Restaurante a actualizar", required=true)
@@ -140,11 +142,10 @@ public class RestaurantController {
      * @param id ID del restaurante a eliminar
      */
     @Operation(summary = "Elimina un restaurante por su ID")
-    @io.swagger.v3.oas.annotations.Parameter(name = "id", description = "ID del restaurante a eliminar", example = "1L",required = true)
+    @io.swagger.v3.oas.annotations.Parameter(name = "id", description = "ID del restaurante a eliminar", example = "1",required = true)
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "Restaurante eliminado"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Restaurante no encontrado"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error en el id del restaurante"),
     })
     @DeleteMapping("/restaurant/{id}")
     public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id){

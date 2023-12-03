@@ -6,10 +6,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Clase que genera encabezados de enlace de paginación segun el estandar http
- * @operation createLinkHeader Crea el encabezado de paginacion
- * @operation constructUri Construye la url de la paginación
- * @operation buildLinkHeader Construye el link de la paginación
- * @opeartion appendCommaIfNecessary Añade una coma la encabezado si ya contiene enlaces
  */
 @Component
 public class PaginationLinksUtils {

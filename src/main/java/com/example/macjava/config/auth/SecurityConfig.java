@@ -19,7 +19,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
+/**
+ * Configuración de seguridad
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -33,6 +35,12 @@ public class SecurityConfig {
         this.userService = userService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
+    /**
+     * Configuración de seguridad
+     * @param http Petición HTTP
+     * @return SecurityFilterChain
+     * @throws Exception Excepción
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -76,11 +84,18 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Codificador de contraseñas
+     * @return PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    /**
+     * Configuración de autenticación
+     * @return AuthenticationProvider
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -89,6 +104,12 @@ public class SecurityConfig {
         return authProvider;
     }
 
+    /**
+     * Configuración de autenticación
+     * @param config Configuración de autenticación
+     * @return AuthenticationManager
+     * @throws Exception
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {

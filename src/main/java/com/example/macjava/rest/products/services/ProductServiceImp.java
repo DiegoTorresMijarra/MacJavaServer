@@ -18,15 +18,39 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+/**
+ * Implementación de la interfaz ProductService.
+ * Se utiliza la anotación @Service para indicar que es un servicio de Spring.
+ * Se utiliza la anotación @CacheConfig para indicar el nombre de la caché.
+ */
 @Service
 @CacheConfig(cacheNames = {"productos"})
 public class ProductServiceImp implements ProductService{
     ProductRepository repository;
     ProductMapper mapper= new ProductMapper();
+    /**
+     * Constructor de la clase
+     * @param repository Repositorio de productos
+     * (se utiliza la anotación @Autowired para indicar que se trata de una inyección de dependencia).
+     */
     @Autowired
     public ProductServiceImp(ProductRepository repository){
         this.repository = repository;
     }
+
+    /**
+     * Método que devuelve todos los productos de la base de datos.
+     * @param nombre Nombre del producto
+     * @param stockMax Stock máximo del producto
+     * @param stockMin Stock mínimo del producto
+     * @param precioMax Precio máximo del producto
+     * @param precioMin Precio mínimo del producto
+     * @param gluten indica si el producto tiene gluten
+     * @param is_deleted indica si el producto está eliminado
+     * @param pageable Información de la paginación
+     * @return Página de productos que cumplan con los parámetros de búsqueda
+     */
     @Override
     public Page<Product> findAll(Optional<String> nombre, Optional<Integer> stockMax, Optional<Integer> stockMin, Optional<Double> precioMax, Optional<Double> precioMin, Optional<Boolean> gluten, Optional<Boolean> is_deleted, Pageable pageable) {
         Specification<Product> specNombre = (root, query, criteriaBuilder) ->
@@ -60,12 +84,22 @@ public class ProductServiceImp implements ProductService{
         return repository.findAll(criterio, pageable);
     }
 
+    /**
+     * Método que devuelve un producto dado su ID.
+     * @param id ID del producto a buscar
+     * @return Producto con el ID indicado
+     */
     @Override
     @Cacheable
     public Product findById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ProductNotFound(id));
     }
 
+    /**
+     * Método que guarda un producto en la base de datos.
+     * @param productdtoNew dto de Producto a guardar
+     * @return Producto guardado
+     */
     @Override
     @CachePut
     public Product save(ProductdtoNew productdtoNew) {
@@ -73,6 +107,12 @@ public class ProductServiceImp implements ProductService{
         return repository.save(newProduct);
     }
 
+    /**
+     * Método que actualiza un producto dado su ID.
+     * @param id ID del producto a actualizar
+     * @param productdtoUpdate dto de Producto con la información a actualizar
+     * @return Producto actualizado
+     */
     @Override
     @CachePut
     @Transactional
@@ -82,6 +122,10 @@ public class ProductServiceImp implements ProductService{
         return repository.save(updateProduct);
     }
 
+    /**
+     * Hace llamada a otro metodo para cambiar el estado del atributo is_deleted a true (borrado lógico)
+     * @param id ID del producto a eliminar
+     */
     @Override
     @CacheEvict
     @Transactional

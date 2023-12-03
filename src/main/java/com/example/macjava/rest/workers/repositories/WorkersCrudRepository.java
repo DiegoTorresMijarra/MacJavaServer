@@ -11,15 +11,32 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Repositorio para la entidad Workers
+ */
 @Repository
 public interface WorkersCrudRepository extends JpaRepository<Workers, UUID>, JpaSpecificationExecutor<Workers> {
 
+    /**
+     * Busca un trabajador por su dni
+     * @param dni  dni del trabajador a buscar
+     * @return trabajador encontrado
+     */
     @Query("SELECT w FROM Workers w WHERE w.dni LIKE :dni")
     Optional<Workers> findByDni(String dni);
 
+    /**
+     * Busca trabajadores borrados o no (borrado logico)
+     * @param isDeleted  indica si los trabajadores buscados estan borrados o no
+     * @return Lista de trabajadores encontrados
+     */
     @Query("SELECT w FROM Workers w WHERE w.isDeleted=:isDeleted")
     List<Workers> findByIsDeleted(Boolean isDeleted);
-    // Actualizar el producto con isDeleted a true
+
+    /**
+     * Actualiza el campo isDeleted a true
+     * @param uuid id del trabajador a actualizar
+     */
     @Modifying // Para indicar que es una consulta de actualización
     @Query("UPDATE Workers w SET w.isDeleted = true WHERE w.uuid = :uuid")
     // Consulta de actualización

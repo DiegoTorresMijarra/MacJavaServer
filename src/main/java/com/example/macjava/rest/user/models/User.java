@@ -22,6 +22,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Clase que representa el modelo de datos de un usuario
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -77,6 +80,10 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    /**
+     * Devuelve los roles del usuario
+     * @return Roles del usuario
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
@@ -84,27 +91,45 @@ public class User implements UserDetails {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Devuelve el password del usuario
+     * @return Password del usuario
+     */
     @Override
     public String getUsername() {
         // email in our case
         return username;
     }
 
+    /**
+     * Devuelve si la cuenta del usuario ha expirado
+     * @return Si la cuenta del usuario ha expirado
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
-
+    /**
+     * Devuelve si la cuenta del usuario está bloqueada
+     * @return Si la cuenta del usuario está bloqueada
+     */
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    /**
+     * Devuelve si las credenciales del usuario han expirado
+     * @return Si las credenciales del usuario han expirado
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
+    /**
+     * Devuelve si el usuario está habilitado
+     * @return Si el usuario está habilitado
+     */
     @Override
     public boolean isEnabled() {
         return !isDeleted;

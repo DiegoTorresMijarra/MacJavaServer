@@ -11,6 +11,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Objeto de transferencia de datos para la actualización del cliente
+ */
 @Data
 @Builder
 @AllArgsConstructor

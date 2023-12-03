@@ -26,6 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Implementación de la interfaz UsersService
+ * Anotada con @Service para indicar que es un servicio
+ */
 @Service
 @CacheConfig(cacheNames = {"users"})
 public class UsersServiceImp implements UsersService{
@@ -34,12 +38,28 @@ public class UsersServiceImp implements UsersService{
     OrdersCrudRepository ordersCrudRepository;
     private final UsersMapper usersMapper;
 
+    /**
+     * Constructor de la clase
+     * @param usersRepository Repositorio de usuarios
+     * @param pedidosRepository Repositorio de pedidos
+     * @param usersMapper Mapper de usuarios
+     * @param passwordEncoder Codificador de contraseñas
+     */
     public UsersServiceImp(UsersRepository usersRepository, OrdersCrudRepository pedidosRepository, UsersMapper usersMapper, PasswordEncoder passwordEncoder) {
         this.usersRepository = usersRepository;
         this.ordersCrudRepository = pedidosRepository;
         this.usersMapper = usersMapper;
         this.passwordEncoder = passwordEncoder;
     }
+
+    /**
+     * Devuelve una lista de usuarios paginada y filtrada
+     * @param username opcional: nombre de usuario
+     * @param email opcional: email
+     * @param isDeleted opcional: si el usuario está eliminado
+     * @param pageable objeto pageable
+     * @return Lista de usuarios paginada y filtrada
+     */
     @Override
     public Page<UserResponse> findAll(Optional<String> username, Optional<String> email, Optional<Boolean> isDeleted, Pageable pageable) {
         // Criterio de búsqueda por nombre
@@ -66,6 +86,11 @@ public class UsersServiceImp implements UsersService{
         return usersRepository.findAll(criterio, pageable).map(usersMapper::toUserResponse);
     }
 
+    /**
+     * Devuelve un usuario por su ID
+     * @param id ID del usuario a buscar
+     * @return Usuario
+     */
     @Override
     @Cacheable(key = "#id")
     public UserInfoResponse findById(UUID id) {
@@ -78,6 +103,11 @@ public class UsersServiceImp implements UsersService{
         return usersMapper.toUserInfoResponse(user, pedidos);
     }
 
+    /**
+     * Guarda un usuario
+     * @param userRequest  UserRequest con los datos del usuario a guardar
+     * @return UserResponse con los datos del usuario guardado
+     */
     @Override
     @CachePut(key = "#result.id")
     public UserResponse save(UserRequest userRequest) {
@@ -90,6 +120,12 @@ public class UsersServiceImp implements UsersService{
         return usersMapper.toUserResponse(usersRepository.save(usersMapper.toUser(userRequest)));
     }
 
+    /**
+     * Actualiza un usuario
+     * @param id ID del usuario a actualizar
+     * @param userRequest UserRequest con los datos del usuario a actualizar
+     * @return UserResponse con los datos del usuario actualizado
+     */
     @Override
     @CachePut(key = "#result.id")
     public UserResponse update(UUID id, UserRequest userRequest) {
@@ -106,6 +142,10 @@ public class UsersServiceImp implements UsersService{
         return usersMapper.toUserResponse(usersRepository.save(usersMapper.toUser(userRequest, id)));
     }
 
+    /**
+     * Borra un usuario por su ID (borrado lógico)
+     * @param id ID del usuario a borrar
+     */
     @Override
     @Transactional
     @CacheEvict(key = "#id")

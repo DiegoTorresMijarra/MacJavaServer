@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Objeto de transferencia de datos para la respuesta de la categoria
+ */
 @Builder
 @Data
 @NoArgsConstructor

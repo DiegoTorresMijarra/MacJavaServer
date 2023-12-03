@@ -18,12 +18,6 @@ import java.time.LocalDate;
 @Table(name="RESTAURANTS")
 /**
  * Clase que representa el modelo de datos de un restaurante
- * @param id Identificador del restaurante
- * @param name Nombre del restaurante
- * @param number Numero de telefono del restaurante
- * @param isDeleted Boolean que indica si el restaurante ha sido eliminado
- * @param creationD Fecha de creación del restaurante
- * @param modificationD Fecha de modificación del restaurante
  */
 public class Restaurant {
     @Id

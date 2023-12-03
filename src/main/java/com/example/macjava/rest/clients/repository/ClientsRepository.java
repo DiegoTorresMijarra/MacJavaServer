@@ -8,8 +8,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
+
+/**
+ * Repositorio para la entidad Client
+ */
 @Repository
 public interface ClientsRepository extends JpaRepository<Client, UUID>, JpaSpecificationExecutor<Client> {
+    /**
+     * Actualiza el campo deleted a true
+     * @param id id del cliente a actualizar
+     */
     @Modifying
     @Query("UPDATE Client p SET p.deleted = true WHERE p.id = :id")
     void updateIsDeletedToTrueById(UUID id);

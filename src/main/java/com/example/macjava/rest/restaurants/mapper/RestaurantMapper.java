@@ -7,8 +7,6 @@ import com.example.macjava.rest.restaurants.modelos.Restaurant;
 import java.time.LocalDate;
 /**
  * Clase que mapea los datos de un restaurante
- * @operation toRestaurantNew Mapea los datos de un restaurantedto a un nuevo restaurante
- * @operation toRestaurantUpdate Mapea los datos de un restaurante actualizado
  */
 public class RestaurantMapper {
     /**

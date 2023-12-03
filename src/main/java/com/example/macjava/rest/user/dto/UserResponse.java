@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 import java.util.UUID;
-
+/**
+ * Objeto de transferencia de datos para la respuesta del usuario
+ */
 @Data
 @Builder
 @NoArgsConstructor

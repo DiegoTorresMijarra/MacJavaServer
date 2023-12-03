@@ -7,18 +7,6 @@ import java.util.List;
 
 /**
  * Es un compnente de paginación standard
- * @param content Lista de elementos
- * @param totalPages Total de páginas que tiene la paginación
- * @param totalElements Total de elementos que tiene la paginación
- * @param pageSize Tamaño de la página
- * @param pageNumber Número de la página
- * @param totalPageElements Total de elementos que tiene la página
- * @param empty Muestra si la página está vacía
- * @param first Indica si es la primera página
- * @param last Indica si es la última página
- * @param sortBy Ordena por el campo que se le indique
- * @param direction Indica la dirección de la paginación
- * @param <T> Tipo de dato que se va a paginar
  */
 public record PageResponse<T> (
         List<T> content,

@@ -13,6 +13,9 @@ import org.hibernate.validator.constraints.Length;
 
 import java.util.Set;
 
+/**
+ * Objeto de transferencia de datos para la creación del usuario
+ */
 @Data
 @Builder
 @NoArgsConstructor

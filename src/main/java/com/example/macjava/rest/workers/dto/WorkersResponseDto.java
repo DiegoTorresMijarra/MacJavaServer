@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Objeto de transferencia de datos para la respuesta del trabajador
+ */
 @Data
 @Builder
 @NoArgsConstructor
