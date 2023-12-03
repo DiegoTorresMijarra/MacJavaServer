@@ -102,7 +102,7 @@ class WorkersControllerTest {
             .position(position1)
             .build();
 
-    private final String myEndpoint = "http://localhost:8080/workers";
+    private final String myEndpoint = "http://localhost:3000/workers";
     private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Autowired

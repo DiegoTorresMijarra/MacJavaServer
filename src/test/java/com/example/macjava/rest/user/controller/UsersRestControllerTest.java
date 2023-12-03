@@ -72,7 +72,7 @@ class UsersRestControllerTest {
             .email("test@test.com")
             .build();
 
-    private final String myEndpoint = "/v1/users";
+    private final String myEndpoint = "/users";
     private final ObjectMapper mapper = new ObjectMapper();
     @Autowired
     MockMvc mockMvc; // Cliente MVC
