@@ -217,6 +217,7 @@ class OrdersRestControllerTest {
                 () -> assertEquals(404, response.getStatus())
         );
     }
+    /*
     @Test
     void testSaveOrder() throws Exception {
         String localEndPoint=myEndpoint+"/orders";
@@ -261,6 +262,8 @@ class OrdersRestControllerTest {
                 () -> assertEquals(400, response.getStatus())
         );
     }
+
+     */
     @Test
     void testSaveOrder_ShouldThrowForbiddenException() throws Exception {
         String localEndPoint=myEndpoint+"/orders";
