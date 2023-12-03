@@ -7,6 +7,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+/**
+ * Clase que representa el modelo de datos de un producto
+ */
 @Data
 @Builder
 @Getter

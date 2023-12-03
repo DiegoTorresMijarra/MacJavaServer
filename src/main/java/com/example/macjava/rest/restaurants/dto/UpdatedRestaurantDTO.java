@@ -13,6 +13,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Clase que representa el modelo de datos de un restaurante
+ * @param name Nombre del restaurante
+ * @param number Numero de telefono del restaurante
+ * @param isDeleted Boolean que indica si el restaurante está eliminado
+ */
 public class UpdatedRestaurantDTO {
     @Schema(description = "Nombre del restaurante", example = "Restaurante")
     @NotBlank(message = "El nombre no puede estar en blanco")

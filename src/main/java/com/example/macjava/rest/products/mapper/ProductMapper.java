@@ -6,7 +6,15 @@ import com.example.macjava.rest.products.models.Product;
 
 import java.time.LocalDate;
 
+/**
+ * Mapeo de un producto
+ */
 public class ProductMapper {
+    /**
+     * Mapeo de un producto nuevo
+     * @param productdtoNew Producto nuevo
+     * @return Producto
+     */
     public Product toProductNew(ProductdtoNew productdtoNew) {
         return Product.builder()
                 .nombre(productdtoNew.getNombre())
@@ -18,6 +26,12 @@ public class ProductMapper {
                 .build();
 
     }
+    /**
+     * Mapeo de un producto actualizado
+     * @param productdtoUpdate Producto actualizado
+     * @param product Producto
+     * @return Producto
+     */
     public Product toProductUpdate(ProductdtoUpdate productdtoUpdate, Product product){
         return Product.builder()
                 .id(product.getId())

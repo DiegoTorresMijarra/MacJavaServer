@@ -16,6 +16,15 @@ import java.time.LocalDate;
 @Getter
 @Entity
 @Table(name="RESTAURANTS")
+/**
+ * Clase que representa el modelo de datos de un restaurante
+ * @param id Identificador del restaurante
+ * @param name Nombre del restaurante
+ * @param number Numero de telefono del restaurante
+ * @param isDeleted Boolean que indica si el restaurante ha sido eliminado
+ * @param creationD Fecha de creación del restaurante
+ * @param modificationD Fecha de modificación del restaurante
+ */
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,12 +50,5 @@ public class Restaurant {
     @Schema(description = "Fecha de modificacion del restaurante",example = "2022-01-01")
     private LocalDate modificationD;
 
-    //@Column
-    //@OneToMany
-    //private Personal  worker;
-
-    //@Column(unique=true)
-    //@NotBlank(message="La direccion no debe estar vacía")
-    //private Adress adress;
 
 }

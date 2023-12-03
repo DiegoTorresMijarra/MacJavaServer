@@ -9,10 +9,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * Clase que representa el modelo de datos de un restaurante
+ * @param name Nombre del restaurante
+ * @param number Numero de telefono del restaurante
+ */
 public class NewRestaurantDTO {
     @Schema(description = "Nombre del restaurante", example = "McDonalds")
     @NotBlank(message = "El nombre no puede estar en blanco")
