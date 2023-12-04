@@ -16,6 +16,8 @@ CREATE TABLE "public"."position" (
                                      "id" bigint DEFAULT nextval('position_id_seq') NOT NULL,
                                      "name" character varying(255),
                                      "salary" double precision,
+                                     "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+                                     "updated_at" timestamp DEFAULT CURRENT_TIMESTAMP,
                                      CONSTRAINT "position_pkey" PRIMARY KEY ("id")
 ) WITH (oids = false);
 -- Insertar datos en la tabla position
@@ -28,18 +30,20 @@ VALUES
     (5, 'NOT_ASSIGNED', 1000.00);
 -- Crear la tabla workers
 CREATE TABLE "public"."workers" (
-                                    "id" uuid DEFAULT uuid_generate_v4() NOT NULL,
+                                    "uuid" uuid DEFAULT uuid_generate_v4() NOT NULL,
                                     "dni" character varying(255),
                                     "name" character varying(255),
                                     "surname" character varying(255),
                                     "age" integer,
                                     "phone" character varying(255),
                                     "position_id" bigint,
-                                    CONSTRAINT "workers_pkey" PRIMARY KEY ("id"),
+                                    "created_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+                                    "updated_at" timestamp DEFAULT CURRENT_TIMESTAMP,
+                                    CONSTRAINT "workers_pkey" PRIMARY KEY ("uuid"),
                                     CONSTRAINT "fk2fwq10nwymfv7fumctxt9vpgb" FOREIGN KEY ("position_id") REFERENCES "position" ("id") NOT DEFERRABLE
 ) WITH (oids = false);
 -- Insertar datos en la tabla workers
-INSERT INTO "workers" ("id", "dni", "name", "surname", "age", "phone", "position_id")
+INSERT INTO "workers" ("uuid", "dni", "name", "surname", "age", "phone", "position_id")
 VALUES
     (uuid_generate_v4(), '12345678A', 'John', 'Doe', 25, '123456789', 1),
     (uuid_generate_v4(), '12345678B', 'Jane', 'Doe', 30, '987654321', 2),

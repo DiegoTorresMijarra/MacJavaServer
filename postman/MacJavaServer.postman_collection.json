@@ -1560,7 +1560,7 @@
 			]
 		},
 		{
-			"name": "Auth Copy",
+			"name": "Auth",
 			"item": [
 				{
 					"name": "Sign Up",
@@ -1685,7 +1685,7 @@
 			]
 		},
 		{
-			"name": "Users Copy",
+			"name": "Users",
 			"item": [
 				{
 					"name": "Me",
@@ -2101,7 +2101,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTQ1MjI2NCwiZXhwIjoxNzAxNTM4NjY0LCJleHRyYUNsYWltcyI6e319.6mfuw65DFfTsIVWFdw5Rlz0teRxPwd-mrtHAHodk9ydjrp2xeFL11jKDnNFPdAgNmLHjaaJNSahhV-2vfo4m-g",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTYzOTIxNCwiZXhwIjoxNzAxNzI1NjE0LCJleHRyYUNsYWltcyI6e319.yvnhbkB1ghzz5SNsL1bq579sMIehrjPzmAkx50IdxIEmQTGsTTx9wzNMuuX-W0oYw4OmSjWCNJrhaUb7_dXeRg",
 				"type": "string"
 			}
 		]

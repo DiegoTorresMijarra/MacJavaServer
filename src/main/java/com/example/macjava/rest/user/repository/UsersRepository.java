@@ -45,6 +45,8 @@ public interface UsersRepository extends JpaRepository<User, UUID>, JpaSpecifica
      */
     Optional<User> findByUsernameEqualsIgnoreCaseOrEmailEqualsIgnoreCase(String username, String email);
 
+
+
     /**
      * Devuelve una lista de usuarios que contengan en su nombre de usuario el parámetro pasado
      * ignorando mayúsculas y minúsculas
