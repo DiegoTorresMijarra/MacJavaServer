@@ -46,7 +46,7 @@ import java.util.UUID;
  */
 @RestController
 @PreAuthorize("hasRole('USER')")
-@RequestMapping("/users")
+@RequestMapping("${api.version}/users")
 @Tag(name = "Usuarios", description = "Endpoint usuarios de la tienda")
 public class UsersRestController {
     private final UsersService usersService;
@@ -308,7 +308,7 @@ public class UsersRestController {
             @PathVariable("id") ObjectId idPedido
     ) {
         var pedido = ordersService.findById(idPedido);
-        if (pedido.getWorkerUUID().equals(user.getId())) {
+        if (!pedido.getWorkerUUID().equals(user.getId())) { //todo he cambiado la condicion !
             throw new OrderNotFound(idPedido.toHexString());
         }
         return ResponseEntity.ok(pedido);
@@ -336,7 +336,7 @@ public class UsersRestController {
             @AuthenticationPrincipal User user,
             @Valid @RequestBody OrderSaveDto pedido
     ) {
-        if (!pedido.getWorkerUUID().equals(user.getId())) {
+        if (user.getId()==null||!pedido.getWorkerUUID().equals(user.getId())) {
             throw new OrderBadRequest(" El usuario no puede crear un pedido a nombre de otro user");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(ordersService.save(pedido));
