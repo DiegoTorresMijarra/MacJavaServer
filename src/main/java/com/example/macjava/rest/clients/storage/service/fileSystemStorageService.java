@@ -44,7 +44,7 @@ public class fileSystemStorageService implements storageService{
     public String store(MultipartFile file) {
         String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String extension = StringUtils.getFilenameExtension(filename);
-        String justFilename = filename.replace("." + extension, "_");
+        String justFilename = filename.replace("." + extension, "_").replace(" ","_");
         // Nombre del fichero almacenado aleatorio para evitar duplicados y sin espacios
         String storedFilename = System.currentTimeMillis() + "_" + justFilename.replaceAll("\\s+", "") + "." + extension;
 
