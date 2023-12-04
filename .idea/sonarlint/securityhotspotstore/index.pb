@@ -172,3 +172,5 @@ Ssrc/main/java/com/example/macjava/rest/auth/service/users/AuthUsersServiceImpl.
 Osrc/main/java/com/example/macjava/rest/auth/repository/AuthUsersRepository.java,f\2\f258210a8d1d002a93e628a0a838eff3330a87e5
 v
 Fsrc/main/java/com/example/macjava/rest/auth/dto/UserSignUpRequest.java,7\5\75fdb7b89d489fe0cfe8c024a2460f0323bec7e5
+9
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
