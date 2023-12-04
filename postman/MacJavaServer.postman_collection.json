@@ -1285,7 +1285,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"clientUUID\": \"168ecf01-a6b6-4a56-ba5a-cb26199f21ab\",\r\n  \"workerUUID\": \"550e8400-e29b-41d4-a716-446655440000\",\r\n  \"restaurantId\": 2,\r\n  \"orderedProducts\": [\r\n    {\r\n      \"quantity\": 4,\r\n      \"productId\":1,\r\n      \"productPrice\": 10.50,\r\n      \"totalPrice\": 42.00\r\n    }\r\n  ]\r\n}\r\n",
+							"raw": "{\r\n  \"clientUUID\": \"00000000-0000-0000-0000-000000000099\",\r\n  \"workerUUID\": \"00000000-0000-0000-0000-000000000001\",\r\n  \"restaurantId\": 2,\r\n  \"orderedProducts\": [\r\n    {\r\n      \"quantity\": 4,\r\n      \"productId\":1,\r\n      \"productPrice\": 10.50,\r\n      \"totalPrice\": 42.00\r\n    }\r\n  ]\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1696,6 +1696,16 @@
 								{
 									"name": "Me",
 									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTY1MTAzOSwiZXhwIjoxNzAxNzM3NDM5LCJleHRyYUNsYWltcyI6e319.YTmygYTAnAwYx1n8rHqGY9qPqwoR4AgrTNrJoirfIxt8emkH4kosQPE5cnFYo_6jdFVinBSpbwyStbr42w8lwA",
+													"type": "string"
+												}
+											]
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
@@ -1776,10 +1786,20 @@
 								{
 									"name": "GET Pedidos",
 									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNzAxNjUyMDc5LCJleHAiOjE3MDE3Mzg0NzksImV4dHJhQ2xhaW1zIjp7fX0._PBU6llQeMWD-WaNaIRdfErDuURTRFH9kmK5Top7VFXysPhW5vJXklpYgHRpbYZ3moxYz9CcW59q63EHaVPA8A",
+													"type": "string"
+												}
+											]
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "https://localhost:3000/v1/users/me/pedidos",
+											"raw": "https://localhost:3000/v1/users/me/orders",
 											"protocol": "https",
 											"host": [
 												"localhost"
@@ -1789,7 +1809,7 @@
 												"v1",
 												"users",
 												"me",
-												"pedidos"
+												"orders"
 											]
 										}
 									},
@@ -1798,10 +1818,20 @@
 								{
 									"name": "GET Pedidos by Id",
 									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNzAxNjUyMDc5LCJleHAiOjE3MDE3Mzg0NzksImV4dHJhQ2xhaW1zIjp7fX0._PBU6llQeMWD-WaNaIRdfErDuURTRFH9kmK5Top7VFXysPhW5vJXklpYgHRpbYZ3moxYz9CcW59q63EHaVPA8A",
+													"type": "string"
+												}
+											]
+										},
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "https://localhost:3000/v1/users/me/pedidos/65376a9522702a195b2d983d",
+											"raw": "https://localhost:3000/v1/users/me/orders/656d258cba7613cad7b59200",
 											"protocol": "https",
 											"host": [
 												"localhost"
@@ -1811,8 +1841,8 @@
 												"v1",
 												"users",
 												"me",
-												"pedidos",
-												"65376a9522702a195b2d983d"
+												"orders",
+												"656d258cba7613cad7b59200"
 											]
 										}
 									},
@@ -1825,7 +1855,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"idUsuario\": 1,\r\n    \"cliente\": {\r\n        \"nombreCompleto\": \"Juan Perez\",\r\n        \"email\": \"juanperez@gmail.com\",\r\n        \"telefono\": \"+34123456789\",\r\n        \"direccion\": {\r\n            \"calle\": \"Calle Mayor\",\r\n            \"numero\": \"10\",\r\n            \"ciudad\": \"Madrid\",\r\n            \"provincia\": \"Madrid\",\r\n            \"pais\": \"España\",\r\n            \"codigoPostal\": \"28001\"\r\n        }\r\n    },\r\n    \"lineasPedido\": [\r\n        {\r\n            \"id\": \"123e4567-e89b-12d3-a456-426614174001\",\r\n            \"idProducto\": 2,\r\n            \"precioProducto\": 19.99,\r\n            \"cantidad\": 1\r\n        },\r\n        {\r\n            \"id\": \"123e4567-e89b-12d3-a456-426614174002\",\r\n            \"idProducto\": 3,\r\n            \"precioProducto\": 15.99,\r\n            \"cantidad\": 2\r\n        }\r\n    ]\r\n}\r\n",
+											"raw": "{\r\n    \"clientUUID\": \"00000000-0000-0000-0000-000000000099\",\r\n    \"workerUUID\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"restaurantId\": 1,\r\n    \"orderedProducts\": [\r\n        {\r\n            \"quantity\": 2,\r\n            \"productId\": 1,\r\n            \"productPrice\": 10.5,\r\n            \"totalPrice\": 21.0\r\n        },\r\n        {\r\n            \"quantity\": 3,\r\n            \"productId\": 3,\r\n            \"productPrice\": 20.0,\r\n            \"totalPrice\": 60.0\r\n        }\r\n    ]\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1833,7 +1863,7 @@
 											}
 										},
 										"url": {
-											"raw": "https://localhost:3000/v1/users/me/pedidos",
+											"raw": "https://localhost:3000/v1/users/me/orders",
 											"protocol": "https",
 											"host": [
 												"localhost"
@@ -1843,7 +1873,7 @@
 												"v1",
 												"users",
 												"me",
-												"pedidos"
+												"orders"
 											]
 										}
 									},
@@ -1856,7 +1886,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"idUsuario\": 1,\r\n    \"cliente\": {\r\n        \"nombreCompleto\": \"Juan Perez\",\r\n        \"email\": \"juanperez@gmail.com\",\r\n        \"telefono\": \"+34123456789\",\r\n        \"direccion\": {\r\n            \"calle\": \"Calle Mayor\",\r\n            \"numero\": \"10\",\r\n            \"ciudad\": \"Madrid\",\r\n            \"provincia\": \"Madrid\",\r\n            \"pais\": \"España\",\r\n            \"codigoPostal\": \"28001\"\r\n        }\r\n    },\r\n    \"lineasPedido\": [\r\n        {\r\n            \"id\": \"123e4567-e89b-12d3-a456-426614174001\",\r\n            \"idProducto\": 2,\r\n            \"precioProducto\": 19.99,\r\n            \"cantidad\": 1\r\n        },\r\n        {\r\n            \"id\": \"123e4567-e89b-12d3-a456-426614174002\",\r\n            \"idProducto\": 3,\r\n            \"precioProducto\": 15.99,\r\n            \"cantidad\": 2\r\n        }\r\n    ]\r\n}\r\n",
+											"raw": "{\r\n    \"clientUUID\": \"00000000-0000-0000-0000-000000000099\",\r\n    \"workerUUID\": \"00000000-0000-0000-0000-000000000000\",\r\n    \"restaurantId\": 3,\r\n    \"orderedProducts\": null\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -1864,7 +1894,7 @@
 											}
 										},
 										"url": {
-											"raw": "https://localhost:3000/v1/users/me/pedidos/6542c2c94efd947500a5a23e",
+											"raw": "https://localhost:3000/v1/users/me/orders/656d281a0009b56927bdfbe9",
 											"protocol": "https",
 											"host": [
 												"localhost"
@@ -1874,8 +1904,8 @@
 												"v1",
 												"users",
 												"me",
-												"pedidos",
-												"6542c2c94efd947500a5a23e"
+												"orders",
+												"656d281a0009b56927bdfbe9"
 											]
 										}
 									},
@@ -1896,7 +1926,7 @@
 											}
 										},
 										"url": {
-											"raw": "https://localhost:3000/v1/users/me/pedidos/6542c2c94efd947500a5a23e",
+											"raw": "https://localhost:3000/v1/users/me/orders/656d281a0009b56927bdfbe9",
 											"protocol": "https",
 											"host": [
 												"localhost"
@@ -1906,8 +1936,8 @@
 												"v1",
 												"users",
 												"me",
-												"pedidos",
-												"6542c2c94efd947500a5a23e"
+												"orders",
+												"656d281a0009b56927bdfbe9"
 											]
 										}
 									},
@@ -1923,6 +1953,16 @@
 						{
 							"name": "Get All",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTY0NjI0MiwiZXhwIjoxNzAxNzMyNjQyLCJleHRyYUNsYWltcyI6e319.BUPuilqvLgfEG1xUUAqeoWZIw8pnFJVHB-4qPjc4fUHfKDU7MAy1IXvV3wUwptP2grB_2HULJpux1Q5TJccEuA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
@@ -1943,10 +1983,20 @@
 						{
 							"name": "Get by ID",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTY0OTMwNiwiZXhwIjoxNzAxNzM1NzA2LCJleHRyYUNsYWltcyI6e319.yh-OCtLiiW9J-s6Zi6hWYAUOeEyoAb0S59pKJSuIdLyFljItullPFbzoNKdBK694LP5EwoOcy-OWv1NsMQHJOg",
+											"type": "string"
+										}
+									]
+								},
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:3000/v1/users/3",
+									"raw": "https://localhost:3000/v1/users/00000000-0000-0000-0000-000000000000",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -1955,7 +2005,7 @@
 									"path": [
 										"v1",
 										"users",
-										"3"
+										"00000000-0000-0000-0000-000000000000"
 									]
 								}
 							},
@@ -1964,11 +2014,21 @@
 						{
 							"name": "POST create",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTY1MDM0MSwiZXhwIjoxNzAxNzM2NzQxLCJleHRyYUNsYWltcyI6e319.qwRIWu16l8RZ7AAbdoNSEe01CmF-d3R3FpzUOXPbwXjOwcS_Dgrd9lWF-MSr8CZJyeCXkuTY-oU1DLUnS9TXiA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"nombre\": \"{{$randomFirstName}}\",\r\n    \"apellidos\": \"{{$randomLastName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"username\": \"user\",\r\n    \"password\": \"user1234\",\r\n    \"roles\": [\r\n        \"USER\",\r\n        \"ADMIN\"\r\n    ]\r\n}",
+									"raw": "{\r\n    \"nombre\": \"{{$randomFirstName}}\",\r\n    \"apellidos\": \"{{$randomLastName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"username\": \"aa\",\r\n    \"password\": \"user1234\",\r\n    \"roles\": [\r\n        \"USER\",\r\n        \"ADMIN\"\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1993,6 +2053,16 @@
 						{
 							"name": "POST by Id",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTY1MDM0MSwiZXhwIjoxNzAxNzM2NzQxLCJleHRyYUNsYWltcyI6e319.qwRIWu16l8RZ7AAbdoNSEe01CmF-d3R3FpzUOXPbwXjOwcS_Dgrd9lWF-MSr8CZJyeCXkuTY-oU1DLUnS9TXiA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "PUT",
 								"header": [],
 								"body": {
@@ -2005,7 +2075,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://localhost:3000/v1/users/2",
+									"raw": "https://localhost:3000/v1/users/00000000-0000-0000-0000-000000000001",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -2014,7 +2084,7 @@
 									"path": [
 										"v1",
 										"users",
-										"2"
+										"00000000-0000-0000-0000-000000000001"
 									]
 								}
 							},
@@ -2023,10 +2093,20 @@
 						{
 							"name": "Delete by ID",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTY1MDM0MSwiZXhwIjoxNzAxNzM2NzQxLCJleHRyYUNsYWltcyI6e319.qwRIWu16l8RZ7AAbdoNSEe01CmF-d3R3FpzUOXPbwXjOwcS_Dgrd9lWF-MSr8CZJyeCXkuTY-oU1DLUnS9TXiA",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:3000/v1/users/3",
+									"raw": "https://localhost:3000/v1/users/00000000-0000-0000-0000-000000000001",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -2035,7 +2115,7 @@
 									"path": [
 										"v1",
 										"users",
-										"3"
+										"00000000-0000-0000-0000-000000000001"
 									]
 								}
 							},
@@ -2101,7 +2181,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTYzOTIxNCwiZXhwIjoxNzAxNzI1NjE0LCJleHRyYUNsYWltcyI6e319.yvnhbkB1ghzz5SNsL1bq579sMIehrjPzmAkx50IdxIEmQTGsTTx9wzNMuuX-W0oYw4OmSjWCNJrhaUb7_dXeRg",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcwMTY0OTMwNiwiZXhwIjoxNzAxNzM1NzA2LCJleHRyYUNsYWltcyI6e319.yh-OCtLiiW9J-s6Zi6hWYAUOeEyoAb0S59pKJSuIdLyFljItullPFbzoNKdBK694LP5EwoOcy-OWv1NsMQHJOg",
 				"type": "string"
 			}
 		]

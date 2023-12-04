@@ -45,8 +45,8 @@ CREATE TABLE "public"."workers" (
 -- Insertar datos en la tabla workers
 INSERT INTO "workers" ("uuid", "dni", "name", "surname", "age", "phone", "position_id")
 VALUES
-    (uuid_generate_v4(), '12345678A', 'John', 'Doe', 25, '123456789', 1),
-    (uuid_generate_v4(), '12345678B', 'Jane', 'Doe', 30, '987654321', 2),
+    ('00000000-0000-0000-0000-000000000000', '12345678A', 'admin', 'admin', 25, '123456789', 1),
+    ('00000000-0000-0000-0000-000000000001', '12345678B', 'user', 'user', 30, '987654321', 2),
     (uuid_generate_v4(), '12345678C', 'Jim', 'Smith', 35, '555555555', 3),
     (uuid_generate_v4(), '12345678D', 'Sarah', 'Johnson', 40, '111111111', 4),
     (uuid_generate_v4(), '12345678E', 'Mike', 'Brown', 45, '999999999', 4);
@@ -69,7 +69,7 @@ CREATE TABLE "public"."clients" (
 -- Insertar datos en la tabla CLIENTS
 INSERT INTO "clients" ("id", "dni", "name", "last_name", "age", "phone", "image", "deleted", "fecha_cre", "fecha_act")
 VALUES
-    (uuid_generate_v4(), '12345678A', 'John', 'Doe', 30, '123456789', 'https://via.placeholder.com/150', false, '2022-12-12', '2022-12-12'),
+    ('00000000-0000-0000-0000-000000000099', '12345678A', 'John', 'Doe', 30, '123456789', 'https://via.placeholder.com/150', false, '2022-12-12', '2022-12-12'),
     (uuid_generate_v4(), '87654321B', 'Jane', 'Smith', 25, '987654321', 'https://via.placeholder.com/150', false, '2022-12-12', '2022-12-12'),
     (uuid_generate_v4(), '55555555C', 'Michael', 'Johnson', 40, '555555555', 'https://via.placeholder.com/150', false, '2022-12-12', '2022-12-12'),
     (uuid_generate_v4(), '99999999D', 'Sarah', 'Williams', 35, '999999999', 'https://via.placeholder.com/150', false, '2022-12-12', '2022-12-12'),
